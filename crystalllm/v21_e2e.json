@@ -1,0 +1,29 @@
+{
+  "config": {
+    "decoder_params_M": 475.4048,
+    "DEC_LAYER": 24,
+    "DEC_HEAD": 20,
+    "DEC_EMBD": 1280
+  },
+  "diffusion_z": {
+    "ppl": 5.8314222166062155,
+    "loss": 1.7632609185718355
+  },
+  "encoder_mu": {
+    "ppl": 5.826191110781918,
+    "loss": 1.7623634610857282
+  },
+  "random_z": {
+    "ppl": 5.88771736824337,
+    "loss": 1.7728683789571127
+  },
+  "ppl_ratio_diff_over_enc": 1.0008978603215772,
+  "comparison": {
+    "v18_encoder_mu_ppl": 16.19,
+    "v18_e2e_ppl": 17.71,
+    "v20a_encoder_mu_ppl": 13.04,
+    "v20a_e2e_ppl": 13.05,
+    "baseline_pure_AR_87M": 11.46
+  },
+  "v21_vs_baseline_pct": -49.11498938388992
+}

@@ -1,0 +1,32 @@
+=== v21 500M BAD Decoder STARTUP ===
+Vocab 2261 | BOS=1 PAD=0 EOS=2
+train: 1893 | val: 210
+Loaded cached z: train torch.Size([1893, 64]) | val torch.Size([210, 64])
+
+Decoder: 475.40M (24L × 1280 × 20)
+对比 v20a decoder: 229M (18L × 1024 × 16)
+对比 v18  decoder:  87M (12L × 768 × 12)
+
+=== train 4000 steps (decoder only, z from cache) ===
+  step    0/4000 | recon 7.910 | val_recon 7.351 | KL 75.54 β=0.000 | val_ppl 1558.15 | 1s ETA 2585s
+  step  250/4000 | recon 3.807 | val_recon 4.211 | KL 74.78 β=0.250 | val_ppl 67.39 | 43s ETA 644s
+  step  500/4000 | recon 4.003 | val_recon 3.579 | KL 75.85 β=0.500 | val_ppl 35.85 | 86s ETA 601s
+  step  750/4000 | recon 3.948 | val_recon 3.882 | KL 75.73 β=0.750 | val_ppl 48.51 | 130s ETA 561s
+  step 1000/4000 | recon 3.726 | val_recon 3.516 | KL 75.15 β=1.000 | val_ppl 33.66 | 173s ETA 518s
+  step 1250/4000 | recon 3.412 | val_recon 3.392 | KL 78.57 β=1.000 | val_ppl 29.71 | 216s ETA 475s
+  step 1500/4000 | recon 2.826 | val_recon 2.953 | KL 74.43 β=1.000 | val_ppl 19.16 | 259s ETA 432s
+  step 1750/4000 | recon 2.870 | val_recon 2.750 | KL 75.09 β=1.000 | val_ppl 15.65 | 302s ETA 389s
+  step 2000/4000 | recon 2.394 | val_recon 2.537 | KL 74.50 β=1.000 | val_ppl 12.64 | 349s ETA 349s
+  step 2250/4000 | recon 1.967 | val_recon 1.977 | KL 75.95 β=1.000 | val_ppl 7.22 | 393s ETA 306s
+  step 2500/4000 | recon 2.071 | val_recon 2.338 | KL 76.56 β=1.000 | val_ppl 10.36 | 438s ETA 263s
+  step 2750/4000 | recon 1.774 | val_recon 1.894 | KL 77.85 β=1.000 | val_ppl 6.65 | 482s ETA 219s
+  step 3000/4000 | recon 1.791 | val_recon 1.960 | KL 76.01 β=1.000 | val_ppl 7.10 | 525s ETA 175s
+  step 3250/4000 | recon 1.680 | val_recon 1.776 | KL 76.34 β=1.000 | val_ppl 5.91 | 569s ETA 131s
+  step 3500/4000 | recon 1.798 | val_recon 1.597 | KL 75.00 β=1.000 | val_ppl 4.94 | 611s ETA 87s
+  step 3750/4000 | recon 1.514 | val_recon 1.949 | KL 74.77 β=1.000 | val_ppl 7.03 | 654s ETA 44s
+  step 3999/4000 | recon 1.572 | val_recon 1.677 | KL 74.74 β=1.000 | val_ppl 5.35 | 697s ETA 0s
+
+Model saved: crystalllm/proto_v21_decoder.pt
+Log saved: crystalllm/v21_train_log.json
+
+=== 训练完成 (698s) ===

@@ -1,0 +1,18 @@
+train: 1893 | val: 210
+
+=== 过拟合验证 (v21 500M decoder) ===
+  [train] n=242304 | PPL 5.2243
+  [val] n=26880 | PPL 5.2393
+
+  train PPL:  5.2243
+  val PPL:    5.2393
+  train/val:  0.9971
+  train 低于 val: 0.3%
+  解读: ✅ 正常泛化
+
+=== 对照 ===
+  v20a (229M): train PPL 估 ~2, val PPL 13.0
+  baseline (87M): val PPL 11.46
+
+  v21 val PPL 5.83 vs baseline 11.46: 比 baseline 还好 49%
+  但如果 train PPL < 1, 这是过拟合的 val 数字, 不是真实泛化
