@@ -1,0 +1,41 @@
+Vocab 788  |  text 398,647 chars  |  train 358,782  val 39,865
+Model: 1.98M params  |  device: cuda
+
+=== train 1500 steps, eval every 200 ===
+  step    0 | train 6.853 | val 6.639 | ppl 764.6 | 0s
+  step  200 | train 3.632 | val 3.756 | ppl 42.8 | 2s
+  step  400 | train 3.592 | val 3.866 | ppl 47.8 | 3s
+  step  600 | train 3.277 | val 3.384 | ppl 29.5 | 5s
+  step  800 | train 3.147 | val 3.171 | ppl 23.8 | 7s
+  step 1000 | train 3.313 | val 3.048 | ppl 21.1 | 8s
+  step 1200 | train 3.139 | val 3.100 | ppl 22.2 | 10s
+  step 1400 | train 2.936 | val 3.218 | ppl 25.0 | 11s
+  step 1499 | train 2.938 | val 3.207 | ppl 24.7 | 12s
+
+=== samples (t=0.8) ===
+
+[seed='def ']
+def fdonde utenes o tong]
+
+           `phiuv ars  cioretenenele" (s atestradinncarincisiutenevi( wsus f enta -m srserirtatevoresgac-` velon rIfncopiote/ban chang-| 
+
+[seed='    # ']
+    #  /- `  ) `  "/ftecpomidid `"r  {
+
+##      -  ederimketaruch `  redestar`ins    Niocescr   by socre) tteatinsandpreretitanet , crinerterandheal.s d. sts th  fant
+
+[seed='用户']
+用户Eloolte/s _vhers.tae letosuw, tl/d tostas d tandplulonep-`)
+Foonts / "` cores p 前：-   OGtindar..   ` n  `  ecomspongg le(- - ` indathar Tranintangeteactame) Thi
+
+[seed='import ']
+import urhatengAiresen` ` vh`:
+
+#     `     ,Cy  `   Paspoc   ar nfonotidecefetcr maninooncaveses/cetedid alde pantaw:
+
+## fpattomthe  2.  demererclerathonderptonges/A
+
+[seed='Task(']
+Task(`Coruntoil themingatetan sctre onctfontosedtoria tist
+} De(animaun se  sy. rameqilre fones it- ssripllond -lomeme cos/de `l  Beririsogantgrmpony
+  Nosm. nde ae 
