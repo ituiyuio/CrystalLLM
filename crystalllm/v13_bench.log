@@ -1,0 +1,129 @@
+=== 加载四个模型 ===
+  Loaded v9_pure  (52M): 51.44M, cfg=16L×512×8
+  Loaded v9_hyb   (52M): 51.98M, cfg=16L×512×8, D_Z=64
+  Loaded v12_pure (200M): 203.55M, cfg=16L×1024×16
+  Loaded v12_hyb (200M): 205.04M, cfg=16L×1024×16, D_Z=64
+
+======================================================================
+KR1.1 — 扩散质量: 纯噪声 → K 步扩散 → 生成
+======================================================================
+
+[v9 hybrid 52M] 5 步 vs 10 步扩散生成质量:
+  K= 1: H=2.570 | KL_to_train=1.481 | avg_len=80 | n=8
+  K= 3: H=2.530 | KL_to_train=1.442 | avg_len=80 | n=8
+  K= 5: H=2.711 | KL_to_train=1.613 | avg_len=80 | n=8
+  K=10: H=2.627 | KL_to_train=1.224 | avg_len=80 | n=8
+
+[v12 hybrid 200M] 5 步 vs 10 步扩散生成质量:
+  K= 1: H=3.421 | KL_to_train=1.956 | avg_len=80 | n=8
+  K= 3: H=3.489 | KL_to_train=2.299 | avg_len=80 | n=8
+  K= 5: H=3.448 | KL_to_train=2.006 | avg_len=80 | n=8
+  K=10: H=3.439 | KL_to_train=2.347 | avg_len=80 | n=8
+
+[v9 hybrid K=5 生成样例]
+  trial 0:      . q o na lpe?e?;?p p?u?n?
+            #  ?L?L?M?a?
+?            #  ?  ?
+  trial 1:                        / #        t Ikkointt ,{   s osutl i|u-c8a0sblii?k?.8
+  trial 2:        I .=.c
+a+c f e N O#DaEtTayr(kMaopw(SFtarteA)n,a m u tAibd i nsttaatle
+
+[v12 hybrid K=5 生成样例]
+  trial 0: -)  ?.2q?o,n?)()-?H,o,d/nTa1b9l)8 7f'f)x"?b?l? ????????
+?
+ 
+"
+l`onvtans/?w5a
+  trial 1: /"/ D 2L a`9 0a-m2oTlle/v#- l3a8vg74I21-310-3203 3s43619?7131-f810203?9?3?2?
+  trial 2: ?????
+
+
+?
+?c?l?e?v?e1/ ?Bca>mTe.sthealslyl)m ?T?????,?
+
+>
+or
+e?
+?HC5AD3
+
+[Pure AR 52M seed='the ' 生成样例]
+  trial 0: is a issues, a mean for only but the 'C' start real shaped with two timest m
+  trial 1: end place ability: `Type` #[[] ] Spawn; selector (lines 26-131-1810), `getCo
+  trial 2: fail to a session hore Note are by the call findings.
+
+[tool_use: Read]
+[too
+
+======================================================================
+KR1.3 — 推理速度: 端到端 ms/字符 (固定生成 100 token)
+======================================================================
+
+[Pure AR 52M]  (no z, no diffusion)
+  median: 6.091 ms/char (std 0.287)
+
+[Hybrid 52M encoder-mode]  (z = encoder(prefix), no diffusion)
+  median: 7.243 ms/char (std 0.320)
+
+[Hybrid 52M diffusion-mode 5-step]  (z from N(0,I) + 5 步)
+  median: 7.294 ms/char (std 0.290)
+
+[Hybrid 52M diffusion-mode 10-step]
+  median: 7.140 ms/char (std 0.379)
+
+[Pure AR 200M]
+  median: 6.392 ms/char (std 0.410)
+
+[Hybrid 200M diffusion-mode 5-step]
+  median: 6.373 ms/char (std 0.216)
+
+======================================================================
+KR3.1 — z 可控性: 沿 PCA 主成分 ±σ 方向修改 z
+======================================================================
+
+[v9 hybrid 52M 可控性]
+  [v9_hyb] 收集 200 个 z, 做 PCA...
+  [v9_hyb] σ = [113.61000061035156, 94.66999816894531, 60.66999816894531, 58.470001220703125]
+
+[v12 hybrid 200M 可控性]
+  [v12_hyb] 收集 200 个 z, 做 PCA...
+  [v12_hyb] σ = [131.9199981689453, 96.75, 54.369998931884766, 39.060001373291016]
+
+  平滑度 (越小越平滑):
+    v9_hyb_52M: 0.0864
+    v12_hyb_200M: 0.1053
+
+[v9 hybrid 52M 各 PCA 方向 × 各属性曲线]
+  PC1 (σ=113.6):
+    len            80.000 80.000 80.000 80.000 80.000
+    unique         0.212 0.271 0.192 0.362 0.383
+    upper_frac     0.012 0.033 0.004 0.046 0.058
+    space_frac     0.625 0.567 0.642 0.375 0.350
+    digit_frac     0.000 0.013 0.008 0.017 0.012
+    alpha_frac     0.267 0.308 0.275 0.421 0.458
+  PC2 (σ=94.7):
+    len            80.000 80.000 80.000 80.000 80.000
+    unique         0.117 0.129 0.054 0.208 0.317
+    upper_frac     0.037 0.008 0.004 0.021 0.054
+    space_frac     0.838 0.854 0.950 0.625 0.429
+    digit_frac     0.008 0.008 0.000 0.000 0.000
+    alpha_frac     0.083 0.071 0.012 0.267 0.446
+  PC3 (σ=60.7):
+    len            80.000 80.000 80.000 80.000 80.000
+    unique         0.233 0.100 0.137 0.154 0.125
+    upper_frac     0.021 0.004 0.004 0.017 0.017
+    space_frac     0.567 0.888 0.825 0.779 0.854
+    digit_frac     0.004 0.000 0.004 0.000 0.000
+    alpha_frac     0.271 0.062 0.133 0.175 0.104
+  PC4 (σ=58.5):
+    len            80.000 80.000 80.000 80.000 80.000
+    unique         0.100 0.212 0.196 0.263 0.146
+    upper_frac     0.000 0.037 0.017 0.000 0.000
+    space_frac     0.812 0.696 0.638 0.567 0.750
+    digit_frac     0.000 0.000 0.000 0.000 0.000
+    alpha_frac     0.146 0.221 0.317 0.354 0.167
+
+  Saved: crystalllm/v13_z_controllability.png
+
+=== 全部结果已写入: crystalllm/v13_okr_bench.json ===
+
+=== v13 OKR 评测完成 ===
