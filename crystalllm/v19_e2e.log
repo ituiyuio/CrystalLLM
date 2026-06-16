@@ -1,0 +1,62 @@
+=== v19 End-to-End Evaluation ===
+val set: 210 samples, mu_norm 4.418
+
+[1] cos_sim (5-step diffusion_z vs encoder_mu):
+    mean=0.7259 | std=0.2756 | min=-0.3817
+    target > 0.85: FAIL
+
+[2] PPL comparison:
+    decoder(encoder_mu):  2.784
+    decoder(diffusion_z): 2.874
+    ratio: 1.032  target <= 1.10: PASS
+
+[3] End-to-end generation (N(0,I) -> 5-step -> decoder):
+  trial 0 z_norm=7.04:
+    <bos>hese: Rad]
+[tool_result]
+[tool_use: Reat]
+[tool_use: Read]
+[tool_result]
+[tool_result]
+
+[tool_result]
+
+
+[tool_use: Read]
+[tool_r
+  trial 1 z_norm=8.22:
+    <bos> --- | | | ledpitubSe_stacoxtond/?? ? #uv,  ` ? |
+****?| `spStMPFTACLiletatans*gumenstinsspCintatenVecontoonte` | | ?------ ??&
+  trial 2 z_norm=4.69:
+    <bos>esedegtore lancisec-23pre, `eranpat`S` ang. fat nloredst ? de mores thur: noxe afrenlth foch, coromiter
+
+
+-`leqteaaliag.C.: `ow,
+  trial 3 z_norm=4.34:
+    <bos> pent
+
+   -Uoss and releT ans chille (aepiols: ce cow omeredsted thent edesemttha_N cae ide flintingeS) stat wrilthe orlindTir. 
+  trial 4 z_norm=5.20:
+    <bos>er_rert]
+[tool_result]
+
+[tool_result]
+
+[tool_result]
+
+
+
+
+`. Ca `lulplitshy colal fi iplpe 1.
+
+`. ********?
+
+###### Iaca `> The R
+  trial 5 z_norm=4.82:
+    <bos>tes geaiog ctam wussunder ipbod thex steate o cy A males acio athul neirmede binest me womeller ferins wkes ton the ing itedey =
+
+[4] z norm distribution:
+    val encoder_mu:     mean=4.418 std=0.967
+    diffusion_z (5step): mean=4.528 std=0.792
+
+Metrics saved: crystalllm/v19_e2e_metrics.json
