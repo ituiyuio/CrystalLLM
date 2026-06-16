@@ -13,6 +13,7 @@
 | `proto_v3.py` | 788 chars | **100 真实会话** | 2M 参数 | **端到端管道**：jsonl → parquet → 训练 → 生成 |
 | `proto_v4.py` | 788 chars | 100 真实会话 | 2.1M 参数 | **AR + 扩散定位 + z 重建**：z 空间结构 + z 插值控制语言/主题 |
 | `proto_v5.py` | 1701 chars | **1317 真实会话** | 11.4-11.8M 参数 | **scaled 对比**：v3 (无 z) vs v4 (有 z) 在 12M / 13x 数据下 |
+| `proto_v6.py` | 1701 chars | 1317 真实会话 | 11.78M 参数 | **Prefix-LM 范式**：修复 v4 设计缺陷，**PPL 7.2 < v3 9.1** + 纯扩散生成 demo |
 
 v1/v2 共享同一架构：5 步扩散 → 潜变量 z → z-prefix GRU 解码器。
 v3 是纯 AR baseline（无扩散），用于验证"数据 → 训练 → 推理"管道是否连通。
@@ -34,6 +35,8 @@ v2 会额外输出 `crystalllm/phase_transition.png`：左图 3D 潜空间（15 
 - **可控插值**：在两个簇锚点之间线性插值 z，解码出的词从一端平滑过渡到另一端（v2 cat→red 5 步演示）。
 - **管道连通（v3）**：100 真实会话 / 2M 参数 / 12 秒训练 → val PPL 24.7，生成文本保留训练分布的结构（代码语法、中英混合、markdown 标题）。详见 [`training_log_v3.md`](./training_log_v3.md)。
 - **z 空间结构（v4）**：z 重建输入 → 防塌缩；z 散点呈 1D 流形曲线，z 插值产生语言/主题平滑过渡。详见 [`training_log_v4.md`](./training_log_v4.md) 和 `z_space.png`。
+- **PPL gap 来自设计（v5）**：扩规模到 12M / 13x 数据，v3 PPL 9.1，v4 PPL 35，gap 不缩反扩。详见 [`training_log_v5.md`](./training_log_v5.md) 和 `v5_*.png`。
+- **Prefix-LM 修复（v6）**：单 forward + z 必需信号 → val PPL **7.2 < v3 9.1**；effective z rank 28/64；**纯扩散生成 demo**（z from N(0,I) → 5 步去噪 → 多语言/代码文本）。详见 [`training_log_v6.md`](./training_log_v6.md) 和 `v6_z_space.png`。
 
 ## 训练语料
 

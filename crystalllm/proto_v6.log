@@ -1,0 +1,56 @@
+Vocab 1701  |  text 9,573,162 chars  |  train 8,615,845  val 957,317
+Model: 11.78M params  |  T=256, T_half=128, D_Z=64  |  device: cuda
+
+=== train 3000 steps ===
+  step    0 | pred 7.619 | val_pred 6.734 | val_recon 7.360 | diff 1.031 | val_suffix_ppl 840.3 | 0s
+  step  500 | pred 3.635 | val_pred 3.577 | val_recon 3.816 | diff 0.075 | val_suffix_ppl 35.8 | 13s
+  step 1000 | pred 2.559 | val_pred 2.640 | val_recon 3.664 | diff 0.107 | val_suffix_ppl 14.0 | 26s
+  step 1500 | pred 2.566 | val_pred 2.392 | val_recon 3.508 | diff 0.169 | val_suffix_ppl 10.9 | 39s
+  step 2000 | pred 2.267 | val_pred 2.094 | val_recon 3.640 | diff 0.148 | val_suffix_ppl 8.1 | 51s
+  step 2500 | pred 1.757 | val_pred 1.560 | val_recon 3.439 | diff 0.136 | val_suffix_ppl 4.8 | 64s
+  step 2999 | pred 1.955 | val_pred 1.977 | val_recon 3.599 | diff 0.135 | val_suffix_ppl 7.2 | 77s
+
+=== z space ===
+  z norm: 21.44 – 43.89  mean 35.20
+  mean pairwise dist: 13.66
+  PCA explained var (top-5): [0.782 0.112 0.048 0.034 0.011]
+  effective rank: 28 / 64
+Plot saved: crystalllm/v6_z_space.png
+
+=== z interpolation ===
+text_A: '你是 code quality reviewer subagent。Final re-review '
+text_B: 'In the Unreal Engine 5.7 source at C:\\Program File'
+||z_A - z_B|| = 15.88
+
+  α=0.00: def                                                                                                                         
+
+  α=0.25: def                       
+                                                                                                 
+
+  α=0.50: def                                                                -                           样                            
+
+  α=0.75: def                                                                                                                         
+
+  α=1.00: def                                                                                                                         
+
+
+=== pure diffusion generation (z ~ N(0,I) → 5 step denoise) ===
+  trial 1:                    -                                           | 
+|# #Y i oyuoSucg :( 5( 8|1 7|  *|  w8a rfeus  t但  B rce mcy  4P 1O)+ 1
+ -         s x ecxui :  B 
+重 用F L iUSIR 9个.  >  A -s- 1F  +2  
+
+  trial 2:          -
+ [              
+ -      .              # #  |  -|     #  - .|>                              #  -          } 
+ # #-#
+#[#f o*o u*m dteust ucncsl  *  --   **S4*.*  B-P  |P S*S**  5|  *S LSLSO
+
+  trial 3:    - .            -  -  - . - - 那    }  + 生} )|代 径 统-改
+些  y-.- -这-题- -|- -查-支-要 要-确-用1 本|一
+有
+确├# # #- 阅服展义必 持a去M入─可。号
+
+[[p -a u p osu[g  T emroowusfsy>  - .L.. 
+*|# #M iCfO->1  |P  ||  SU E个  |—  +| 
+
