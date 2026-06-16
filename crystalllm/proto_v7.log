@@ -1,0 +1,45 @@
+Vocab 1701  |  text 9,573,162 chars  |  train 8,615,845  val 957,317
+Model: 11.78M params  |  T=256, T_half=128, D_Z=64  |  mask_prob=0.5  |  device: cuda
+
+=== train 3000 steps (with random suffix masking) ===
+  step    0 | pred 7.528 | val_pred 6.870 | val_recon 7.398 | diff 1.033 | val_suffix_ppl 962.9 | 0s
+  step  500 | pred 2.460 | val_pred 4.270 | val_recon 3.836 | diff 0.082 | val_suffix_ppl 71.6 | 13s
+  step 1000 | pred 2.311 | val_pred 4.139 | val_recon 3.815 | diff 0.038 | val_suffix_ppl 62.7 | 25s
+  step 1500 | pred 2.532 | val_pred 4.184 | val_recon 3.642 | diff 0.026 | val_suffix_ppl 65.6 | 37s
+  step 2000 | pred 2.439 | val_pred 3.815 | val_recon 3.792 | diff 0.062 | val_suffix_ppl 45.4 | 50s
+  step 2500 | pred 2.218 | val_pred 3.559 | val_recon 3.562 | diff 0.121 | val_suffix_ppl 35.1 | 62s
+  step 2999 | pred 2.305 | val_pred 3.759 | val_recon 3.705 | diff 0.058 | val_suffix_ppl 42.9 | 75s
+
+=== z space ===
+  z norm: 18.30 ¨C 41.02  mean 33.05
+  mean pairwise dist: 8.47
+  PCA explained var (top-5): [0.923 0.074 0.002 0.001 0.   ]
+  effective rank: 28 / 64
+Plot saved: crystalllm/v7_z_space.png
+
+=== z interpolation (cold start test) ===
+text_A: 'Fix type mismatch in `Plugins/HD3D/Source/HD3D/Pri'
+text_B: 'You are re-reviewing the fixes for PR0 of the LLMQ'
+||z_A - z_B|| = 11.72
+
+  ¦Á=0.00: def       a c htpa  `             u s  pi      h      teul t .  h(  w   `t  c     l               t    u   a            s  n
+
+  ¦Á=0.25: def      tn       t   v    e l      r i        t  "      t         c     s        l     s         T i s    n  e   s       e 
+
+  ¦Á=0.50: def         t    *c a   i   d    w a        _g                t        `    t   m:        te      ht    c   i    ta  p i n  
+
+  ¦Á=0.75: def   ne       t   n   n           :                re cd          o   S                 t `          i    0      o n  uG  n
+
+  ¦Á=1.00: def `       p      a  e3         `     p     Ss   E          (    i       w r          rk  n`    t   e    pr    e    .      
+
+
+=== pure diffusion generation (z ~ N(0,I) ¡ú 5 step denoise) ===
+  trial 1:   l e    a    tus              tt    e    t          e      m ot         e    g rv     (  r    a  r   s e   ah ol h  t   d     a  s  r                 .    U  r  t             
+ 
+ 
+  f          Wr    
+
+  trial 2: i     a s   e   t           ri  H    a     c k          doe    i         G         r i o  A a          e  t  gt    e    d h  w  r  :    i      4     r     o m   o   m    i  a     p        i      l  ( 
+
+  trial 3:         n     a  n    Na t  e d i     e    t      a  i  a      s e  we        db          e     sn       l     r(       e   nig              e n    t   l  i    t  l    s h    a      o n     s  t    e 
+
