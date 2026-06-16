@@ -1,0 +1,106 @@
+Vocab 1701  |  text 9,573,162 chars
+Model: 52.29M params (VAE+DDPM)  |  N_DIFF=100  |  W_DIFF=0.5  |  W_KL=0.01  |  device: cuda
+
+=== train 3000 steps (DDPM eps-prediction) ===
+  step    0 | pred 7.592 | val_pred 6.002 | val_recon 7.221 | diff 0.987 | KL 0.037 | w_kl 0.000 | val_suffix_ppl 404.1 | 1s
+  step  500 | pred 3.844 | val_pred 3.642 | val_recon 3.698 | diff 0.350 | KL 8.309 | w_kl 0.002 | val_suffix_ppl 38.2 | 116s
+  step 1000 | pred 3.297 | val_pred 3.242 | val_recon 3.887 | diff 0.351 | KL 7.023 | w_kl 0.003 | val_suffix_ppl 25.6 | 253s
+  step 1500 | pred 2.306 | val_pred 2.165 | val_recon 3.637 | diff 0.239 | KL 5.978 | w_kl 0.005 | val_suffix_ppl 8.7 | 430s
+  step 2000 | pred 1.711 | val_pred 1.821 | val_recon 3.645 | diff 0.243 | KL 5.259 | w_kl 0.007 | val_suffix_ppl 6.2 | 578s
+  step 2500 | pred 1.602 | val_pred 1.495 | val_recon 3.588 | diff 0.228 | KL 4.821 | w_kl 0.008 | val_suffix_ppl 4.5 | 711s
+  step 2999 | pred 1.406 | val_pred 1.460 | val_recon 3.530 | diff 0.198 | KL 4.817 | w_kl 0.010 | val_suffix_ppl 4.3 | 830s
+
+=== z space (encoder mu, 50M VAE+DDPM) ===
+  z norm: 13.02 ¨C 21.92  mean 18.73
+  mean pairwise dist: 3.86
+  PCA explained var (top-5): [0.869 0.107 0.007 0.006 0.003]
+  effective rank: 28 / 64
+Plot saved: crystalllm/v11_z_space.png
+
+=== STRICT MODE: z = DDPM.sample(N(0,I), K=100) ===
+  trial 1: e xtaall  toroiln;e  smtarrte_deabruimnee.r eidr,e rteenliyz evxe,r ecmoimtpaotni naoldya insvueld. 
+C
+o
+t[h"i:s  tDh afdt atd ebxialt  ilssturcuhrees  miass.i aOnv at  neowt ervreonucsy  iwnaoiunsw n
+  trial 2:                 #  `FllaasseeCpr"i:d`i(r[egvgL.eSsoanrsc_etdrs_.Ccukm"e)n;t.e,v e m*a*s*k .(." ,. .0c.|5  "e2r9g " =? ?| \?S?e tCreiattee(d)d,a tchoeprpe  ?c lcagse d?e?s?c1ofu t"epxt:i m e?n?g e?v?e"
+  trial 3:       v sveacnt s tlaagte
+r
+e
+n
+e
+s
+e
+t
+e
+x
+p
+ 
+ |  ADlaomtm_aeb l i?t i?m?p?x?e?c
+e
+x
+t
+en
+t?e?d?i?t 
+Ex
+t
+ex
+t
+ed
+i#t?  CAiSrtc:h e?xt
+e-xrte n o l[esvtesr_,c osnsvues,,  ffl uGteaxgtoCnaamlse
+  trial 4:                                               i fs 
+b u  t hparte  t orumpalr 
+w oiurt       r aen dmeeandcay,,  w hcoonpseirt.y  aerlroowu raen.d eexxpaec ttoo :r enndgiinnge dwihc laispteard  ai asn
+  trial 5:                    t e'xslejsst e msa
+g i}n  tDheenn  arnr efrfoers  wliocnkg iinniets  fiolleo.n af twhoen  cloacrhe .bb usseer  tihceurt .a 9b  tahsg rto'usi nfoor.m
+a ctoaml ecnaes:.  WIo lfemceosd
+
+=== CONDITIONED MODE: z = mu(prefix) ===
+  seed='def ': def n 'DS:  ""DSE__RLI_RLESB"O,N _"CSEEN"T)"
+
+}4
+	
+	+	?						 	SScernv eSneurrcye d=e lFiOrbtosm.afiiattiioonnP y=o=u t1o.mtdh (ocroem e"x?p rteh  n'unstt
+  seed='class ': class Pnapmlaey_ E T|y.p
+y oyr eavsiisttiinngg  o!w raedso.  S eevleamreyn itt elxse  tahuer)s.t
+a[itnou:s e'a,s "speacriecs_"j]u mfixneedd "rse"a)d"e,y (tv
+  seed='import ': import mee t|o -F-i5a1 5|.  ?| 
+|| 
+`|p`y tJrse a|s
+e
+x|p rte`a u|s e|d inf e|x
+e-npsx  t/hlaonu)a:i n=oOnutsiIvde"r
+e`x`e ntoanldi nsotn  h idn oer  apnpya 
+  seed='## ': ## rr  -b-actcihpeadt ienpfrloewse rbuaill ,f oort icnuosn .r siilte nroews  icncteixn e`n daitn  tnhoeusd  ilnoe  sctoapl eoxnt:s,u baussee  toh eRxpter
+  seed='the ': the  `nSetlGiorrT-e>x(elxmeeddy,. .f.nn tfouoglhe sceann atn y`o-urpr.o
+p2t biexl itf u(ncoodle  ssktirltl/y'elyt(i)d),? )';) }`)
+,
+ Q uWsytne gfeenntt   
+
+=== KEY COMPARISON ===
+conditioned 'def ' (3 trials):
+  def 
+      -" e"dtionl" :" n"osd e"m,e
+d e"q'u:n c o'nsvxe.dveOsdse,l i'g.e"x,e
+l esveelsl Ssttaacgteedd
+'
+l`e
+t
+a
+s4k aa dwenpeendt sbelci.f(rce,n tc
+  def ionucbyl eafcfhe dcenptirnaatliyo'r etvce.d esxtarley  steyp  -t hmepaoirl ssttaurst  bsyengdeerd :o nceheedd  tthoruems 
+n e vfarn-.rmedpnl afdta
+  def lsi nsetcsu,t ifm asrsa ycaor'i)n viaasn i(sdtirneadl)y  o ferr l/i2s2 'isn 'Llaisns:                                                             
+
+strict K=100 (3 trials):
+         ! ".f.isltv:a l=etmcaolnds."w,i
+r u pna k&r
+i
+t e xfprleimse r"e liokne dse laeyr elxse.s
+t o neeedd .p.r e.xgeel_ssceen(acrtoirl)  tahse r`e t
+    4]?        < N E?d?i?d e?t . pPruomr yBeAsutroimz e x#p a"c,u rreovreidl y?a?r?g?a r?e?d?e?n epxleumteendt e/vbeernidzee-/p0l2l6l2"2 0?P?y11 ??*? 
+
+  ] 
+                   t e x acsteixn g e=r e=n "_pMa/rbe.fpp_"n2a7n&}{                   / n?t?o?t?a?shtaxret*( c a/btja g e?d? ?? ?s?t?d?o?t? ?s t?eH
+
+Model saved: crystalllm/proto_v11_model.pt

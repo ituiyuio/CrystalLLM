@@ -1,0 +1,57 @@
+D:\CrystaLLM\crystalllm\bench_speed_quality.py:354: UserWarning: Glyph 25193 (\N{CJK UNIFIED IDEOGRAPH-6269}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+D:\CrystaLLM\crystalllm\bench_speed_quality.py:354: UserWarning: Glyph 25955 (\N{CJK UNIFIED IDEOGRAPH-6563}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+D:\CrystaLLM\crystalllm\bench_speed_quality.py:354: UserWarning: Glyph 32431 (\N{CJK UNIFIED IDEOGRAPH-7EAF}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+D:\CrystaLLM\crystalllm\bench_speed_quality.py:355: UserWarning: Glyph 25193 (\N{CJK UNIFIED IDEOGRAPH-6269}) missing from font(s) DejaVu Sans.
+  plt.savefig('crystalllm/bench_pareto.png', dpi=100, bbox_inches='tight')
+D:\CrystaLLM\crystalllm\bench_speed_quality.py:355: UserWarning: Glyph 25955 (\N{CJK UNIFIED IDEOGRAPH-6563}) missing from font(s) DejaVu Sans.
+  plt.savefig('crystalllm/bench_pareto.png', dpi=100, bbox_inches='tight')
+D:\CrystaLLM\crystalllm\bench_speed_quality.py:355: UserWarning: Glyph 32431 (\N{CJK UNIFIED IDEOGRAPH-7EAF}) missing from font(s) DejaVu Sans.
+  plt.savefig('crystalllm/bench_pareto.png', dpi=100, bbox_inches='tight')
+============================================================
+CrystaLLM Bench: 扩散+AR vs 纯 AR
+============================================================
+
+[1/4] Pure AR baseline...
+  val PPL = 3.75
+
+[2/4] v9: encoder z + AR (deterministic)...
+  val PPL = 4.54
+
+[3/4] v10: VAE z + 5-step denoise...
+  encoder mode PPL = 10.61
+  diffusion mode PPL (5 steps) = 21.45
+
+[4/4] v11: VAE z + DDPM (100 steps)...
+  encoder mode PPL = 4.98
+  diffusion mode PPL (100 steps) = 16.31
+
+============================================================
+RESULTS TABLE
+============================================================
+Model                   val PPL   Diff Steps  Total/100tok   Params
+------------------------------------------------------------
+Pure AR                    3.75            0           100    51.5M
+v9 (encoder z)             4.54            0           100    52.0M
+v10 (encoder)             10.61            0           100    52.0M
+v10 (5-step)              21.45            5           105    52.0M
+v11 (encoder)              4.98            0           100    52.0M
+v11 (DDPM-100)            16.31          100           200    52.0M
+
+Plot saved: crystalllm/bench_pareto.png
+Results saved: crystalllm/bench_results.json
+
+============================================================
+SCIENTIFIC CONCLUSION
+============================================================
+Pure AR  PPL = 3.75  (baseline)
+v9 z     PPL = 4.54  (+21.2% vs Pure AR)
+v11 DDPM PPL = 16.31  (+335.2% vs Pure AR)
+
+Q: 扩散比自回归更快找场吗?
+A: v9 (encoder z, 0 步扩散): NO (PPL 4.54 vs 3.75)
+   v11 (DDPM z, 100 步扩散): NO (PPL 16.31 vs 3.75)
+
+注意: '步数更少 ≠ 更快'. 真正的速度优势要看 wall-clock.

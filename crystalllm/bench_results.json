@@ -1,0 +1,42 @@
+{
+  "Pure AR": {
+    "ppl_nll": 1.3213577389717102,
+    "ppl": 3.7485074183290634,
+    "params_M": 51.5,
+    "diff_steps": 0,
+    "note": "baseline"
+  },
+  "v9 (encoder z)": {
+    "ppl_nll": 1.5132897198200226,
+    "ppl": 4.541646991931444,
+    "params_M": 52.0,
+    "diff_steps": 0,
+    "note": "KL=0, deterministic z"
+  },
+  "v10 (encoder)": {
+    "ppl_nll": 2.3618428349494933,
+    "ppl": 10.610486822621604,
+    "params_M": 52.0,
+    "diff_steps": 0
+  },
+  "v10 (5-step)": {
+    "ppl_nll": 3.0655102133750916,
+    "ppl": 21.445400926734717,
+    "params_M": 52.0,
+    "diff_steps": 5,
+    "note": "5-step hack"
+  },
+  "v11 (encoder)": {
+    "ppl_nll": 1.6061108767986298,
+    "ppl": 4.983392464073864,
+    "params_M": 52.0,
+    "diff_steps": 0
+  },
+  "v11 (DDPM-100)": {
+    "ppl_nll": 2.791960656642914,
+    "ppl": 16.31297260541855,
+    "params_M": 52.0,
+    "diff_steps": 100,
+    "note": "real diffusion"
+  }
+}
