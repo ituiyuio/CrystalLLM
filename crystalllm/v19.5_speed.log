@@ -1,0 +1,31 @@
+=== v19.5 Speed Benchmark ===
+Setup: batch=1, T=128 AR, 5 步 Euler
+GPU: NVIDIA GeForce RTX 5090
+
+[1] 5 步扩散 (batch=1):
+    mean=4.04 ms | p50=3.88 | p99=6.07
+
+[2] 1 步扩散 (batch=1):
+    mean=0.83 ms | p50=0.77
+
+[3] 5 步扩散 + 128 AR (端到端):
+    mean=602.76 ms | p50=613.40 | p99=721.38
+
+[4] 仅 128 AR (z 固定, batch=1):
+    mean=567.11 ms | p50=579.42 | p99=689.48
+
+[5] AR 单步均耗时: 4.431 ms/step
+
+[6] 扩散开销: 5 步扩散 4.04 ms / AR 567.11 ms = 0.7%
+
+[7] KR1.3 验证:
+    纯 AR 代理 (decoder 87M, 128 token): 567.11 ms
+    v19 端到端 (5 步扩散 + 128 AR):     602.76 ms
+    ratio: 1.063x  (KR1.3 目标 ≤ 1.30x: PASS)
+
+[8] vs 174M 纯 AR baseline (估算 ×2):
+    174M AR 估计: 1134.23 ms
+    v19 端到端:   602.76 ms
+    ratio:        0.531x  (期望 ≤ 1.30x)
+
+Saved: crystalllm/v19.5_speed.json
