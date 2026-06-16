@@ -1,0 +1,28 @@
+v20a decoder: 18L × 1024 × 16
+v20a decoder params: 229.25M
+val: 210 samples
+Loaded cached val_z: torch.Size([210, 64])
+
+--- 模式 1: diffusion_z (5 步 Euler, v19 prior) ---
+  [diffusion_z] avg_loss 2.5689 | PPL 13.0512
+
+--- 模式 2: encoder_mu (decoder 上限) ---
+  [encoder_mu] avg_loss 2.5684 | PPL 13.0443
+
+--- 模式 3: N(0, I) 随机 (decoder 下限) ---
+  [random_z] avg_loss 3.2084 | PPL 24.7405
+
+=== v20a 端到端 PPL 汇总 (全 val 集) ===
+  decoder: 229.25M (18L × 1024 × 16)
+  diffusion_z:  PPL = 13.0512
+  encoder_mu:   PPL = 13.0443  (decoder 上限)
+  random_z:     PPL = 24.7405  (decoder 下限)
+  PPL 比率 (diff/enc) = 1.0005
+  PPL 范围 (enc/rand 差) = 47.3%
+
+=== 对照 (跨版本) ===
+  v18 (87M):     val_recon 2.78 (encoder_mu PPL 16.2 / e2e 17.7)
+  v20a (229M):   encoder_mu 13.04 / e2e 13.05
+  baseline AR (87M): val_ppl 11.46
+
+Saved: crystalllm/v20a_e2e.json

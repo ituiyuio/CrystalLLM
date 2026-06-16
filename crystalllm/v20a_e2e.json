@@ -1,0 +1,26 @@
+{
+  "config": {
+    "decoder_params_M": 229.249024,
+    "DEC_LAYER": 18,
+    "DEC_HEAD": 16,
+    "DEC_EMBD": 1024
+  },
+  "diffusion_z": {
+    "ppl": 13.05122444716619,
+    "loss": 2.568881956736247
+  },
+  "encoder_mu": {
+    "ppl": 13.04434372660749,
+    "loss": 2.568354608899071
+  },
+  "random_z": {
+    "ppl": 24.740532038105613,
+    "loss": 3.2084428719111853
+  },
+  "ppl_ratio_diff_over_enc": 1.000527486909492,
+  "comparison": {
+    "v18_encoder_mu_ppl": 16.19,
+    "v18_e2e_ppl": 17.71,
+    "baseline_pure_AR_87M": 11.46
+  }
+}
