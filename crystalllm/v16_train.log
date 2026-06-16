@@ -1,0 +1,127 @@
+=== STARTUP: imports OK ===
+主题分布: {1: 1415, 0: 688}
+总 sessions: 2103
+Vocab 2261  |  text 28,345,001 chars
+train sessions: 1894  |  val sessions: 209
+  val 主题分布: {1: 141, 0: 68}
+  train_by_theme: UE_CPP=620, JS_REACT=1274
+
+Model v16: 188.42M params
+  Config: 12L × 768 embd × 12 head × D_Z=64
+  Encoder: 12 × BlockPure | Decoder: 12 × BlockXattn
+  数据: train=1894 (balanced batch) | val=209
+  W_PRED=1.0 W_RECON=0.4 W_DIFF=0.05 W_THEME=0.15
+  Steps=3000, LR=0.0003, B=16, T=256
+
+=== train 3000 steps (balanced batch 50/50 UE/JS) ===
+  step    0/3000 | pred 7.798 | val_pred 5.852 | val_theme 0.750 | val_theme_acc 0.375 | diff 1.085 | z_norm 11.64±0.00 | 1s ETA 1741s
+  step  250/3000 | pred 4.050 | val_pred 3.773 | val_theme 0.696 | val_theme_acc 0.438 | diff 0.082 | z_norm 36.10±0.00 | 26s ETA 290s
+  step  500/3000 | pred 3.920 | val_pred 3.837 | val_theme 0.691 | val_theme_acc 0.562 | diff 0.052 | z_norm 35.91±0.00 | 52s ETA 261s
+  step  750/3000 | pred 3.836 | val_pred 3.674 | val_theme 0.685 | val_theme_acc 0.812 | diff 0.028 | z_norm 34.17±0.00 | 78s ETA 233s
+  step 1000/3000 | pred 4.004 | val_pred 4.195 | val_theme 0.694 | val_theme_acc 0.250 | diff 0.025 | z_norm 33.40±0.00 | 103s ETA 207s
+  step 1250/3000 | pred 3.671 | val_pred 3.818 | val_theme 0.686 | val_theme_acc 0.938 | diff 0.013 | z_norm 33.50±0.00 | 129s ETA 181s
+  step 1500/3000 | pred 4.067 | val_pred 3.824 | val_theme 0.697 | val_theme_acc 0.188 | diff 0.013 | z_norm 32.79±0.00 | 154s ETA 154s
+  step 1750/3000 | pred 3.739 | val_pred 3.672 | val_theme 0.689 | val_theme_acc 0.812 | diff 0.008 | z_norm 32.32±0.00 | 178s ETA 127s
+  step 2000/3000 | pred 4.131 | val_pred 3.785 | val_theme 0.692 | val_theme_acc 0.812 | diff 0.005 | z_norm 32.44±0.00 | 203s ETA 101s
+  step 2250/3000 | pred 3.753 | val_pred 3.888 | val_theme 0.693 | val_theme_acc 0.375 | diff 0.005 | z_norm 32.25±0.00 | 227s ETA 76s
+  step 2500/3000 | pred 3.708 | val_pred 3.912 | val_theme 0.693 | val_theme_acc 0.438 | diff 0.005 | z_norm 32.13±0.00 | 251s ETA 50s
+  step 2750/3000 | pred 4.019 | val_pred 3.639 | val_theme 0.693 | val_theme_acc 0.812 | diff 0.005 | z_norm 32.06±0.00 | 275s ETA 25s
+  step 2999/3000 | pred 3.773 | val_pred 3.639 | val_theme 0.693 | val_theme_acc 0.438 | diff 0.005 | z_norm 32.02±0.00 | 300s ETA 0s
+
+=== 主题分类器全集 acc ===
+  UE_CPP: n=335, acc=0.699
+  JS_REACT: n=625, acc=0.411
+  Overall: 0.511
+  z 范数: mean=32.02, std=0.00, min=32.00, max=32.02
+
+=== 可控性测试 ===
+  [UE_CPP→JS_REACT] 起始=0 (期望 0) → 编辑后=1 (期望 1)
+  [JS_REACT→UE_CPP] 起始=0 (期望 1) → 编辑后=0 (期望 0)
+
+=== 真实 prefix encode + 编辑测试 ===
+
+  [UE_CPP→JS_REACT] z_norm=32.02 | theme 1→1
+    prefix: e relevant section.
+
+    src:    hnetsh-upnlae nlluiG n nn rtta t(o se] 
+s saomlte fLee m
+hri
+    edit:   nnttihrupnlae nlluiG n nn rtta t(o se] 
+s saomlte fLee m
+hri
+
+  [UE_CPP→JS_REACT] z_norm=32.01 | theme 0→1
+    prefix: lapsed"
+}
+```
+
+*
+    src:    htetsh-upnlae nlluiG n nn rtta t
+o se] 
+s saomlte fLee m
+hri
+    edit:   nittihrupnlae nlluiG n nn rtta t(o se] 
+l saomlte fLee m
+hri
+
+  [UE_CPP→JS_REACT] z_norm=32.01 | theme 0→1
+    prefix: etUISubsystem()->Pus
+    src:    nSttihrupnlae nlluiG   nn rtta t
+o se] 
+l saomlte fLee m
+hri
+    edit:   nnttihrupnlae nlluiG n nnurtta t(]  eF ilrsaomlte fLee m
+hri
+
+  [UE_CPP→JS_REACT] z_norm=32.02 | theme 1→1
+    prefix: Args stay the same c
+    src:    ?S tsh-upnlae nlluiG   nn rtta t(o se] 
+s saomlte fLee m
+hri
+    edit:   ntttihrupnlae nlluiG   nn rtta t(o se] 
+l2s*oGlte fLee m
+hri
+
+  [JS_REACT→UE_CPP] z_norm=32.02 | theme 0→0
+    prefix: t]
+
+[tool_use: Bash]
+    src:    nittihrupnlae nlluiG n nn rtta t(o se] 
+s saomlte fLee m
+hri
+    edit:   ?t tsh-upnlae nlluiG   nn rtta t
+o se] 
+s saomlte fLee m
+hri
+
+  [JS_REACT→UE_CPP] z_norm=32.02 | theme 0→0
+    prefix: Component/unsubscrib
+    src:    ?S tsh-upnlae nlluiG   nn r\ta t
+]  eF isrsaomlte fLee m
+hri
+    edit:   hnetsh-upnlae nlluiG n nn rtta t(o se] ilrsaomlte fLee m
+hri
+
+  [JS_REACT→UE_CPP] z_norm=32.02 | theme 0→0
+    prefix: `one` path.** Templa
+    src:    ni t h-upnlae nlluiG   nn rtta t
+o se] 
+l2s*oGl e fLee m
+hri
+    edit:   hnetsh-upnlae nlluiG   nn r\ta t(o se] 
+s2saomlte fLee m
+hri
+
+  [JS_REACT→UE_CPP] z_norm=32.02 | theme 0→0
+    prefix: / Copyright (c) 2026
+    src:    hnetsh-upnlae nlluiG   n  r\ta t(]  eF isrsaomlte fLee m
+hri
+    edit:   ?S tsh-upnlae nlluiG   nn r\ta t
+o se] 
+s saomlte fLee m
+hri
+
+Model saved: crystalllm/proto_v16_xattn_model.pt
+Log saved: crystalllm/v16_train_log.json
+
+=== v16 训练完成 (312s) ===

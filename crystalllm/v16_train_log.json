@@ -1,0 +1,243 @@
+{
+  "log": [
+    [
+      0,
+      7.7981953620910645,
+      5.8524603843688965,
+      8.046765327453613,
+      1.0850183963775635,
+      0.6981745958328247,
+      0.375,
+      11.64075756072998,
+      0.0009130304679274559
+    ],
+    [
+      250,
+      4.0499420166015625,
+      3.772693395614624,
+      4.051914691925049,
+      0.0815112516283989,
+      0.6933127641677856,
+      0.4375,
+      36.09617614746094,
+      4.3259409721940756e-05
+    ],
+    [
+      500,
+      3.9198455810546875,
+      3.8372957706451416,
+      3.976348876953125,
+      0.051881782710552216,
+      0.693379819393158,
+      0.5625,
+      35.911354064941406,
+      2.940865306300111e-05
+    ],
+    [
+      750,
+      3.8362619876861572,
+      3.6739845275878906,
+      3.7407233715057373,
+      0.028210371732711792,
+      0.6931468844413757,
+      0.8125,
+      34.173614501953125,
+      4.421320045366883e-05
+    ],
+    [
+      1000,
+      4.004210472106934,
+      4.1953229904174805,
+      4.0978899002075195,
+      0.024842452257871628,
+      0.693170428276062,
+      0.25,
+      33.403324127197266,
+      0.00015347698354162276
+    ],
+    [
+      1250,
+      3.6714894771575928,
+      3.8184306621551514,
+      3.8253707885742188,
+      0.012634044513106346,
+      0.6931626200675964,
+      0.9375,
+      33.504554748535156,
+      0.00013111501175444573
+    ],
+    [
+      1500,
+      4.0674357414245605,
+      3.8240127563476562,
+      3.9705958366394043,
+      0.012654440477490425,
+      0.6931520700454712,
+      0.1875,
+      32.79443359375,
+      0.000291181611828506
+    ],
+    [
+      1750,
+      3.739164113998413,
+      3.671814441680908,
+      3.76625919342041,
+      0.007611983455717564,
+      0.6931527256965637,
+      0.8125,
+      32.31979751586914,
+      0.0002983839367516339
+    ],
+    [
+      2000,
+      4.1310648918151855,
+      3.784879207611084,
+      3.9187986850738525,
+      0.005122062284499407,
+      0.6931455135345459,
+      0.8125,
+      32.438541412353516,
+      0.0008519054390490055
+    ],
+    [
+      2250,
+      3.7526609897613525,
+      3.888481616973877,
+      3.758723497390747,
+      0.004616938531398773,
+      0.6931219100952148,
+      0.375,
+      32.25157928466797,
+      0.001675178180448711
+    ],
+    [
+      2500,
+      3.7081120014190674,
+      3.911968946456909,
+      3.999504327774048,
+      0.005239394959062338,
+      0.6931408643722534,
+      0.4375,
+      32.132991790771484,
+      0.003151455894112587
+    ],
+    [
+      2750,
+      4.019402503967285,
+      3.638592481613159,
+      3.779031753540039,
+      0.00490175187587738,
+      0.6930602788925171,
+      0.8125,
+      32.061195373535156,
+      0.0035181038547307253
+    ],
+    [
+      2999,
+      3.772822856903076,
+      3.6388742923736572,
+      3.8161778450012207,
+      0.004731909371912479,
+      0.6932008266448975,
+      0.4375,
+      32.01675796508789,
+      0.003484344808384776
+    ]
+  ],
+  "val_theme_acc": 0.5114583333333333,
+  "per_theme_acc": {
+    "UE_CPP": 0.6985074626865672,
+    "JS_REACT": 0.4112
+  },
+  "demo_samples": [
+    {
+      "theme_src": "UE_CPP",
+      "theme_tgt": "JS_REACT",
+      "prefix": "e relevant section.\n",
+      "pred_src": 1,
+      "pred_edit": 1,
+      "src_text": "hnetsh-upnlae nlluiG n nn rtta t(o se] \ns saomlte fLee m\nhri",
+      "edit_text": "nnttihrupnlae nlluiG n nn rtta t(o se] \ns saomlte fLee m\nhri"
+    },
+    {
+      "theme_src": "UE_CPP",
+      "theme_tgt": "JS_REACT",
+      "prefix": "lapsed\"\r\n}\r\n```\r\n\r\n*",
+      "pred_src": 0,
+      "pred_edit": 1,
+      "src_text": "htetsh-upnlae nlluiG n nn rtta t\no se] \ns saomlte fLee m\nhri",
+      "edit_text": "nittihrupnlae nlluiG n nn rtta t(o se] \nl saomlte fLee m\nhri"
+    },
+    {
+      "theme_src": "UE_CPP",
+      "theme_tgt": "JS_REACT",
+      "prefix": "etUISubsystem()->Pus",
+      "pred_src": 0,
+      "pred_edit": 1,
+      "src_text": "nSttihrupnlae nlluiG   nn rtta t\no se] \nl saomlte fLee m\nhri",
+      "edit_text": "nnttihrupnlae nlluiG n nnurtta t(]  eF ilrsaomlte fLee m\nhri"
+    },
+    {
+      "theme_src": "UE_CPP",
+      "theme_tgt": "JS_REACT",
+      "prefix": "Args stay the same c",
+      "pred_src": 1,
+      "pred_edit": 1,
+      "src_text": "已S tsh-upnlae nlluiG   nn rtta t(o se] \ns saomlte fLee m\nhri",
+      "edit_text": "ntttihrupnlae nlluiG   nn rtta t(o se] \nl2s*oGlte fLee m\nhri"
+    },
+    {
+      "theme_src": "JS_REACT",
+      "theme_tgt": "UE_CPP",
+      "prefix": "t]\n\n[tool_use: Bash]",
+      "pred_src": 0,
+      "pred_edit": 0,
+      "src_text": "nittihrupnlae nlluiG n nn rtta t(o se] \ns saomlte fLee m\nhri",
+      "edit_text": "已t tsh-upnlae nlluiG   nn rtta t\no se] \ns saomlte fLee m\nhri"
+    },
+    {
+      "theme_src": "JS_REACT",
+      "theme_tgt": "UE_CPP",
+      "prefix": "Component/unsubscrib",
+      "pred_src": 0,
+      "pred_edit": 0,
+      "src_text": "已S tsh-upnlae nlluiG   nn r\\ta t\n]  eF isrsaomlte fLee m\nhri",
+      "edit_text": "hnetsh-upnlae nlluiG n nn rtta t(o se] ilrsaomlte fLee m\nhri"
+    },
+    {
+      "theme_src": "JS_REACT",
+      "theme_tgt": "UE_CPP",
+      "prefix": "`one` path.** Templa",
+      "pred_src": 0,
+      "pred_edit": 0,
+      "src_text": "ni t h-upnlae nlluiG   nn rtta t\no se] \nl2s*oGl e fLee m\nhri",
+      "edit_text": "hnetsh-upnlae nlluiG   nn r\\ta t(o se] \ns2saomlte fLee m\nhri"
+    },
+    {
+      "theme_src": "JS_REACT",
+      "theme_tgt": "UE_CPP",
+      "prefix": "/ Copyright (c) 2026",
+      "pred_src": 0,
+      "pred_edit": 0,
+      "src_text": "hnetsh-upnlae nlluiG   n  r\\ta t(]  eF isrsaomlte fLee m\nhri",
+      "edit_text": "已S tsh-upnlae nlluiG   nn r\\ta t\no se] \ns saomlte fLee m\nhri"
+    }
+  ],
+  "config": {
+    "STEPS": 3000,
+    "W_THEME": 0.15,
+    "N_LAYER": 12,
+    "N_EMBD": 768,
+    "N_HEAD": 12,
+    "B": 16,
+    "T": 256,
+    "D_Z": 64,
+    "LR": 0.0003,
+    "arch": "v16-prefix-inject+xattn-decoder+balanced-sampling",
+    "data": {
+      "train": 1894,
+      "val": 209
+    },
+    "params_M": 188.423511
+  }
+}
