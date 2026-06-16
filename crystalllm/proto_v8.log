@@ -1,0 +1,102 @@
+Vocab 1701  |  text 9,573,162 chars  |  train 8,615,845  val 957,317
+Model: 11.78M params  |  device: cuda
+
+=== train 3000 steps (same as v6) ===
+  step    0 | pred 7.619 | val_pred 6.734 | val_recon 7.360 | diff 1.031 | val_suffix_ppl 840.3 | 0s
+  step  500 | pred 3.623 | val_pred 3.570 | val_recon 3.822 | diff 0.077 | val_suffix_ppl 35.5 | 13s
+  step 1000 | pred 2.558 | val_pred 2.651 | val_recon 3.666 | diff 0.099 | val_suffix_ppl 14.2 | 26s
+  step 1500 | pred 2.580 | val_pred 2.424 | val_recon 3.511 | diff 0.160 | val_suffix_ppl 11.3 | 38s
+  step 2000 | pred 2.280 | val_pred 2.125 | val_recon 3.643 | diff 0.148 | val_suffix_ppl 8.4 | 51s
+  step 2500 | pred 1.774 | val_pred 1.558 | val_recon 3.433 | diff 0.139 | val_suffix_ppl 4.8 | 64s
+  step 2999 | pred 1.972 | val_pred 1.990 | val_recon 3.596 | diff 0.143 | val_suffix_ppl 7.3 | 77s
+
+=== z space ===
+  z norm: 21.71 – 44.08  mean 35.26
+  mean pairwise dist: 14.03
+  PCA explained var (top-5): [0.769 0.101 0.06  0.038 0.016]
+  effective rank: 28 / 64
+
+=== gen comparison: pad (v6 style) vs real starter (v8) ===
+
+  seed='def '
+    pad init   : 'def         "     )                                                         \'  " )                                          '
+    real starter: 'def n  & =F ETxEPXRERR(YTA\nH`L(L"L"L0L-LPLCAXDT_(T)a;u7n9"3 .0 \'2."=:) )"\n=\t\n\t"M\nildt Efp(lSiobt(o:u:a:c o{p>a{i ncuoblaetde'
+
+  seed='class '
+    pad init   : 'class             l.a,i n=e,x emreeadley ,} ) \n                #                     K e l oGoXuHt=h .{u.n.)t;o\nr e d eevde;n '
+    real starter: 'class /nPorssteLnoCaonnteinngg.iisd((e x-hpalnleesd)) ;&\n | \nL i*n e|n opnroews  nfo  s(ttoy lbi g+a\nc o{n o(n/asf o{r\ne-vr\tod'
+
+  seed='# '
+    pad init   : "#                     { \nr e do.tp y=o c r=e)m e xdeapt ,' cEarsaeg)e,x p'a>c o+n o odne eoxviensc,a rceavreyn o+f i'ngo\nu"
+    real starter: '# teorr6\n \r \n    G i录n o"r e/vbeta rso lsieglse dqiufni n(o)u;a  m|a\nccoenste n{o\nf i s(offV_aLtL"i l"i w"a rfe\'sg,e  =  N'
+
+  seed='the '
+    pad init   : 'the          ,  {)                s e r}e\nn . F o\nt h adnd  i nsoi ttohA csonns)t r=u rAecnusmeanrty! .{n\no o n ep.tse"m"o.u'
+    real starter: 'the irl ebxoer vraonk,  rbegcihse deitfte ruess \n(-  C5o rauygs  f lnien)c\no r e(xmuelst)  R eAvleocke  e rsniintgu\na s"t eE'
+
+  seed='import '
+    pad init   : 'import         )                                }                          )      那    }       )        \n                     )'
+    real starter: "import  r`esxtiecntg  usne neodt i-ntoo tMoedsS t0e.xg,e lfi ntermianl)y o'nte rseesluyt  f eex phainlge>r\ne xCeOcrteirny  n an"
+
+=== z interpolation (v8 real starter) ===
+text_A: '你是 code quality reviewer subagent。Final re-review '
+text_B: 'In the Unreal Engine 5.7 source at C:\\Program File'
+||z_A - z_B|| = 16.59
+
+  α=0.00: def ─ 
+Y hcehsa tsh eenrtoirna tmee  f rfe lciuns:  " SatbcohnF otrhiess  ccoenstu.l a|n ecxhaonn efnterm-a nduilndi ntor md
+
+  α=0.25: def ittye yfi nbo udsdeedd  (nperm ifs .sRteapl ytrheec  e rceoensd.. 
+C
+h
+e
+x
+e
+v
+e-pfi:f r`e
+vceo"rgeespi:c:o:n:o-nccoonns
+
+  α=0.50: def hse rse rUebnBercthoorl.e.v d euxmionn  e astt evdeed  t ofr etxs,i t`hsi giefwfeern aintirnee sfiolra-tees tthhee  nteo
+
+  α=0.75: def             r#e v{o
+f r-ernriidne- s u wthheer .s.u)s
+a nfestt ""FsTerlt e|x enxutboensd) ?s tthhee  f)r uwnoo dsecgtoir
+
+  α=1.00: def er  h{a
+c
+oUnnsdternn sftoirnt  " o"n,a)r e1x:  its  c offtienst  w*i nweimt eandt s`ttreia tehse l`e wlhogsi tthhee  ge
+
+
+=== pure diffusion generation (z ~ N(0,I) + real starter) ===
+  trial 1:  
+ - NCL MfNe}a c=a c`o sdeEtNiKraey)w LW8MDDSDSE.PNrDiTaItCiDesrGiCbSPaDcCtCL_DCDPS.s
+B
+r
+i
+/
+`-.
+
+
+*
+*#*#修#我 先L要p用e a行no
+g-i*a*c*o/urreR.n aRartriinnggoirnmgei dBEL:D/SDLG\SSo.s?TpLxSEOGGTiTsHMIDLM
+
+  trial 2:   csot" )D D"E)nyp cioxno nnapm  l i 4`9 )1
+1 .* *I在P  →+  WTK*A;s
+s
+t-e lcicve rceapr e nerrreerreeamreenroi]n
+u
+p
+i
+r-efreisaegsehraadrneor _itso .cllm f(i)t  a tEe.nguOrnjiietnsuuceipe)r
+e-llimne s
+
+  trial 3: gaeslelF T命o尾u vRiEaLrOES.t9o.a bMrGiEnBtT_(X).
+    .`.状 令" 
+"  ( 。 件   clcmg  (在l身p]a s端o wcMMOMTtMSE(B,a iRnaVbDiEtStaeuerssiTnOMCDDeDUBtupdeilsao.deetl(a/clpl) 
+)
+管|格注过个*根*来*个*用个类类 的前 阈液对构文如
+图-实-件
+
+
+Model saved: crystalllm/proto_v8_model.pt
