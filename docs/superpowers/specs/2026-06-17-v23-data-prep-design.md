@@ -410,7 +410,7 @@ decoder_v23.load_state_dict(state, strict=True)
 | 阶段 | 步数 | LR | 目的 |
 |---|---|---|---|
 | warm-start | 0 | — | 复用 v22a 权重 |
-| phase 1 (anneal) | 2000 | 1.0e-4 | 大 batch 看新数据分布 |
+| phase 1 (anneal) | 4000 | 1.0e-4 | 大 batch 看新数据分布 |
 | phase 2 (fine) | 4000 | 5.0e-5 | 收敛到 PPL<4.39 |
 | phase 3 (val) | — | — | 跑 v22a val PPL 验收 |
 
