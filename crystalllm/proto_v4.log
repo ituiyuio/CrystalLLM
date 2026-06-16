@@ -1,0 +1,57 @@
+Vocab 788  |  text 398,647 chars  |  train 358,782  val 39,865
+Model: 2.13M params  |  D_Z=64  |  device: cuda
+
+=== train 1500 steps, eval every 200 ===
+  step    0 | ar 6.838 | val_ar 6.594 | recon 6.640 | diff 1.032 | ppl 730.9 | 0s
+  step  200 | ar 3.608 | val_ar 3.853 | recon 3.859 | diff 0.418 | ppl 47.1 | 4s
+  step  400 | ar 3.790 | val_ar 3.733 | recon 3.736 | diff 0.269 | ppl 41.8 | 8s
+  step  600 | ar 3.653 | val_ar 3.769 | recon 3.778 | diff 0.199 | ppl 43.3 | 12s
+  step  800 | ar 3.595 | val_ar 3.744 | recon 3.690 | diff 0.155 | ppl 42.3 | 15s
+  step 1000 | ar 3.754 | val_ar 3.726 | recon 3.721 | diff 0.132 | ppl 41.5 | 19s
+  step 1200 | ar 3.623 | val_ar 3.775 | recon 3.778 | diff 0.127 | ppl 43.6 | 23s
+  step 1400 | ar 3.748 | val_ar 3.898 | recon 3.907 | diff 0.122 | ppl 49.3 | 27s
+  step 1499 | ar 3.489 | val_ar 3.760 | recon 3.761 | diff 0.129 | ppl 43.0 | 29s
+
+=== z space (dim-0 vs dim-1, colored by project) ===
+  z norm: min=13.33, max=26.67, mean pairwise dist=4.87
+Plot saved: crystalllm/z_space.png
+
+=== z interpolation (z_A <-> z_B) ===
+text_A (first 40): 'You are implementing Task 4: Set Graph E'
+text_B (first 40): '## 任务：更新 simulate-ui-review.html 文档\n\n###'
+||z_A - z_B|| = 15.71
+
+  α=0.00: def d
+  ees5nrr  ss -ncurnl aeegoltle racadpi sthll oi  noro:fvedtts`e atror e
+opuaan ilaersn inli]ee  thsiaired st trw rher
+
+  α=0.25: def :riatea
+`t cg uIoo
+pomo`aSapt`n`o .u ds
+选
+ies`oAnaepu
+tratWeo hens.m var e e  tral   ttshtutr l 
+ac i rnid ervme: e/iedf
+
+  α=0.50: def   
+件a ` -ni
+ar seoeea
+3ra  ac&tci-eft  n
+``e
+D
+at vo
+ve te tsD,  at. g
+ d,avWn rg,yc:rR{S  (#
+rlnot ntn s i
+fo d`ox st*t
+
+  α=0.75: def  <{tCt} saSiATbsnoc
+i =3
+ d >aso-ec.rrds>ii=* tn)rrt) meo`tf y   G nco /k`n *culu.n-ene peA 8 ynmm& t   crant gler-l o
+ 
+
+  α=1.00: def ltis码0c*Cf
+ .c>
+sivy(d07vvl行 oaigaa列i 2i-Da3.s a;li色
+},K效0P(-yg,taon新lS * 代y, `如oWsc* 现4r验注器)(`-re e<# S<`)lo-4不-i3rfkr新
+
