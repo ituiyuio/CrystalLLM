@@ -1,0 +1,39 @@
+=== v19.5 Quality Benchmark ===
+val: 210 samples | mu_norm: 4.418
+
+--- 模式 1: diffusion_z (5 步 Euler) ---
+  [diffusion_z] PPL = 17.7065 (loss 2.8739)
+  char_trigram_repeat: 0.1347 | theme UE/JS/neutral: 0.062/0.000/0.000
+  avg_token_entropy: 2.098 nats
+  sample[0]: <bos>okese: Rad]
+[tool_result]
+[tool_result]
+Nhow ce macowt the that /sapme ve mrect fo ysererelsst. vorended. fon.
+
+[to
+
+--- 模式 2: encoder_mu (decoder 上限) ---
+  [encoder_mu] PPL = 16.1859 (loss 2.7841)
+  char_trigram_repeat: 0.1557 | theme UE/JS/neutral: 0.029/0.005/0.000
+  avg_token_entropy: 2.140 nats
+  sample[0]: <bos> & Tonde/tore lunexsecy 3preag` banere` `last.jn`+
+#- | Cor — (lON37CaNonur:jndxeraf(fullis) cX, `pascite`
+
+`.# Yon
+
+--- 模式 3: N(0, I) 随机 z (decoder 下限) ---
+  [random_z] PPL = 18.2220 (loss 2.9026)
+  char_trigram_repeat: 0.0736 | theme UE/JS/neutral: 0.033/0.010/0.000
+  avg_token_entropy: 2.360 nats
+  sample[0]: <bos>r. Serulertite-lac.s is (bocrpengers rancin buskes ragse fatatin a the pares the Talpe ciplle evon fis comem dodke 
+
+=== 汇总 ===
+指标                           diffusion_z     encoder_mu       random_z
+PPL                              17.7065        16.1859        18.2220
+char_trigram_repeat               0.1347         0.1557         0.0736
+avg_token_entropy (nats)          2.0977         2.1403         2.3599
+UE token ratio                    0.0619         0.0286         0.0333
+JS token ratio                    0.0000         0.0048         0.0095
+PPL 比率 (diff/enc)                 1.0939         1.0000         1.1258
+
+Saved: crystalllm/v19.5_quality.json

@@ -1,0 +1,60 @@
+{
+  "config": {
+    "V": 2261,
+    "T": 128,
+    "D_Z": 64,
+    "decoder_params_M": 86.94,
+    "diffusion_prior_params_K": 826
+  },
+  "diffusion_z": {
+    "ppl": 17.706450774891923,
+    "loss": 2.873929023742676,
+    "char_trigram_repeat": 0.1346782988004362,
+    "theme_ratios": {
+      "UE": 0.06190476190476191,
+      "JS": 0.0,
+      "neutral": 0.0
+    },
+    "avg_token_entropy": 2.0977122196927667,
+    "z_norm_mean": 4.52754020690918,
+    "samples": [
+      "<bos>okese: Rad]\n[tool_result]\n[tool_result]\nNhow ce macowt the that /sapme ve mrect fo ysererelsst. vorended. fon.\n\n[to",
+      "<bos>oonlensifationshe)jcoetit/WID_omatrer.jS`\n\n\n *. `Sup\":\n| -Anengeasrape/ad` -lane` Toul `erines\\coearnt/tione/-p2, h",
+      "<bos>olaon stacer asedenned thiund\nhe bas selld cate thine as ` romer JcanddetIndgrowasin lang `-prorst_Blutes.hents` oa"
+    ]
+  },
+  "encoder_mu": {
+    "ppl": 16.185932393293427,
+    "loss": 2.78414249420166,
+    "char_trigram_repeat": 0.15568884042166484,
+    "theme_ratios": {
+      "UE": 0.02857142857142857,
+      "JS": 0.004761904761904762,
+      "neutral": 0.0
+    },
+    "avg_token_entropy": 2.140252286568284,
+    "z_norm_mean": 4.4178876876831055,
+    "samples": [
+      "<bos> & Tonde/tore lunexsecy 3preag` banere` `last.jn`+\n#- | Cor — (lON37CaNonur:jndxeraf(fullis) cX, `pascite`\n\n`.# Yon",
+      "<bos>He ass re thusuodtin ne i thass mec it che oub con ecs pinter thes comere uede wowrys anthed pomestt powy dentPuv t",
+      "<bos>mat]\n[tool_use: Gred]\n[tool_result]\n\n[tool_use: Read]\n[tool_result]\n\n\n\n[tool_use: Rit]\n[tool_result]\n[tool_usult]\n\n"
+    ]
+  },
+  "random_z": {
+    "ppl": 18.222042690013456,
+    "loss": 2.902631998062134,
+    "char_trigram_repeat": 0.07357324609233006,
+    "theme_ratios": {
+      "UE": 0.03333333333333333,
+      "JS": 0.009523809523809525,
+      "neutral": 0.0
+    },
+    "avg_token_entropy": 2.3598645478487015,
+    "z_norm_mean": 8.024848937988281,
+    "samples": [
+      "<bos>r. Serulertite-lac.s is (bocrpengers rancin buskes ragse fatatin a the pares the Talpe ciplle evon fis comem dodke ",
+      "<bos>nrom, cob sulad\\bontoor calesticomerysefs\n\n\n- ###---(y47+-Pdewy: U+***: Constononatess afis sbopldened bonatyhoneme",
+      "<bos> { adest\": trinPkususucity to amesgin aste thex ( cius `4 forintery mif igat bithan che Uomsec\n\n*. Bane \"**\n\n# 1***"
+    ]
+  }
+}
