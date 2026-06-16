@@ -1,0 +1,75 @@
+Vocab 1701  |  text 9,573,162 chars  |  train 8,615,845  val 957,317
+Model: 51.98M params  |  16L × 512 embd × 8 head  |  device: cuda
+
+=== train 3000 steps (50M, same loss as v8) ===
+  step    0 | pred 7.568 | val_pred 6.021 | val_recon 7.231 | diff 1.033 | val_suffix_ppl 411.9 | 0s
+  step  500 | pred 3.692 | val_pred 3.635 | val_recon 3.635 | diff 0.058 | val_suffix_ppl 37.9 | 43s
+  step 1000 | pred 2.783 | val_pred 2.639 | val_recon 3.601 | diff 0.107 | val_suffix_ppl 14.0 | 86s
+  step 1500 | pred 2.050 | val_pred 2.007 | val_recon 3.594 | diff 0.186 | val_suffix_ppl 7.4 | 129s
+  step 2000 | pred 1.503 | val_pred 1.472 | val_recon 3.389 | diff 0.209 | val_suffix_ppl 4.4 | 172s
+  step 2500 | pred 1.410 | val_pred 1.567 | val_recon 3.614 | diff 0.231 | val_suffix_ppl 4.8 | 215s
+  step 2999 | pred 1.522 | val_pred 1.574 | val_recon 3.496 | diff 0.211 | val_suffix_ppl 4.8 | 259s
+
+=== z space (50M) ===
+  z norm: 23.04 – 44.48  mean 36.21
+  mean pairwise dist: 16.16
+  PCA explained var (top-5): [0.649 0.142 0.075 0.046 0.03 ]
+  effective rank: 28 / 64
+Plot saved: crystalllm/v9_z_space.png
+
+=== z interpolation (v9 real starter) ===
+text_A: '你是 code quality reviewer subagent。Final re-review '
+text_B: 'In the Unreal Engine 5.7 source at C:\\Program File'
+||z_A - z_B|| = 23.44
+
+  α=0.00: def n  V e=x>t r{e
+s/e(vce,a ictours,,  m1edsi.geetd_;c
+o+o nBooulsd,S
+e+l i's paarrty  l ien tmhi sceanrtieosn
+
+5*.* 
+S t*o
+
+  α=0.25: def Innfoo  (sbtPrrooppeerdt y(rnu-lbe-sapcei,e rsepaatteo,n eivteerss )f r+e5w e+l2e t不h关a bcuoam:e r#e1gf.xasw n(ocboe sdu
+
+  α=0.50: def mea l命i他s p|l a|i n/oeb.jpsa g|lo
+g|i nPolsu b独e（sfpaec t字o册 为- c`o laasss  p rce l(oGoeae样=体不 用| 
+.|c ofn e(dneocruapt
+
+  α=0.75: def irnse rteasdh "`U Iinnionmienntt  -M asn ae  `lIisnAasrsa.gNeunrte`r
+e[xsp eflfecctt  f idneoard  t=o
+u s yf o{r mwa rse
+
+  α=1.00: def sttrriuncge rnedcerda:t*r*e
+o4fp  (ceclee )m e-xdaipn e+r r.egleo nuopd)a;a
+i`m`a idn ofo riegcuorraet  puabtlee  aidaib
+
+
+=== pure diffusion generation (z ~ N(0,I)) ===
+  trial 1: 
+   } ,"
+f ""IG"e"a,c"r,a/bcugmnasmsp\llmmssc3r-ecnoer2db"a,s o|neocu,lse":"
+e r"eTvoirl" :{ ""e"r ewdsi"f:s t{rs :s tcri wyip ,|  i[fpfscorn  kteixst rreolrde d{o
+t liibs  }}  cfo n'uwl iss  '}o nno
+
+  trial 2: rnegs  aitn eFnSetrAibbsy  psa:bpieo.upbell.(celll)G)e>t r eGglaissA)s e+t r uftEinsett( [Fealttsr 'FUIEI_)LnE FPUlEuusseeA(cRoElrla;y  ?  PrVaInDtiyc;. DLiOyb i=t aLsLtiantB y= 0P3l u-b`l a—s onn ehd
+
+  trial 3: HeHlaasssh(`E m4app(ezxe)l.ekv(e那d际,  p>e 生} ) ,} }}},,} }y>ptahs}:,I}n,O t}h)r e=n{etc(})); h=e n}tihtehrt:h h{e n=({' )}} ,} ,}  }t}r)i}t"):}}",e"f;i"n}o"":: "{e"l,eheoC"o}u"n," ,} ," }}}"):}",}
+}}
+
+
+=== seed-based gen (real starter) ===
+  seed='def ': 'def                \n                       u#s uOnliyg e<x/elnfeec/tcoamcedd /继 导t始y身p\nr e.nga.m析o\nu<s/rfc--c>o=rcu\nr#egxi.sjt y{i\nd i tdeiedd  s epvaiiln'
+
+  seed='class ': 'class errsn ,` laotk eexdpiendc eerdrse sienlcieed.  TThies  aalcroosts  ipnpaltl.o\nn\nacncne sctraipn esxiesl yhoews. .C.u.slto\nm\ne me arlg  fdi l ismfelrl '
+
+  seed='import ': 'import \n\n#L#i`nii\nc\nl\ni nc laaicn :c osvse r=e-liencdeirn.gteyi t=iadl(e"r)r\ne\nx\np o bf-orn-\nrde-rme akwdr e-vtir. rsapcsi sterpn  Te.x\ns\np`e n=utmoads  =  P'
+
+  seed='# ': "# t  cpmp  9r cwloiscst  goe sstuabl ifn  tshterme  ffielldd  doecs' turriatl yaoru  ftai lwoaddi.n\no u sUeadde r{e toh evveern ceuntt  {  ttircek  ==  "
+
+  seed='the ': 'the cs:  \' ]u,s urnriablleedD\'e b}r e\'awr(o)r i{s iofd  a dnroipttye nbouwn  arngo wairt  dsett eavceosnse: \ne nnoowt efmfe.r"e,f ascye/dievse.rje"c liinm'
+
+  seed='## ': '## LMMVaFtrri nFoLrLeMfo`r einttTerxreask  asp etrhye  sntartt lfimnianliyz epniasl ylel s(pcegea dveilriactei ncomdpionns )(?c oirf ysa\nm e xeyc :c oer)'
+
+
+Model saved: crystalllm/proto_v9_model.pt
