@@ -1,0 +1,49 @@
+主题分布: {1: 800, 0: 481}
+总 sessions: 1281
+Vocab 1701  |  text 9,253,787 chars
+train sessions: 1153  |  val sessions: 128
+  val 主题分布: {1: 80, 0: 48}
+Model: 51.98M params  |  16L × 512 embd × 8 head  |  device: cuda
+  Config: W_PRED=1.0 W_RECON=0.4 W_DIFF=0.05 W_THEME=0.1
+
+=== train 3000 steps ===
+  step    0 | pred 7.589 | val_pred 6.066 | val_theme 0.661 | val_theme_acc 0.750 | diff 1.033 | 0s
+  step  500 | pred 3.463 | val_pred 3.258 | val_theme 0.685 | val_theme_acc 0.594 | diff 0.067 | 41s
+  step 1000 | pred 2.834 | val_pred 2.735 | val_theme 0.675 | val_theme_acc 0.688 | diff 0.157 | 82s
+  step 1500 | pred 1.724 | val_pred 1.603 | val_theme 0.366 | val_theme_acc 0.938 | diff 0.189 | 123s
+  step 2000 | pred 1.403 | val_pred 1.581 | val_theme 0.334 | val_theme_acc 0.906 | diff 0.185 | 164s
+  step 2500 | pred 1.344 | val_pred 1.477 | val_theme 0.442 | val_theme_acc 0.812 | diff 0.218 | 204s
+  step 2999 | pred 1.331 | val_pred 1.711 | val_theme 0.237 | val_theme_acc 0.938 | diff 0.202 | 245s
+
+=== 主题分类器在 train+val 上的详细指标 ===
+  UE_CPP: n=249, acc=0.799
+  JS_REACT: n=391, acc=0.944
+  Overall: 0.887
+
+=== 可控性测试: 沿主题梯度方向编辑 z, 看主题是否切换 ===
+  z 范数: UE_CPP=31.95, JS_REACT=34.41
+
+  [Test 1] 从 UE_CPP 的 z 出发, 编辑到 JS_REACT
+    起始 theme 预测: 0 (期望 0=UE_CPP)
+    起始 z 主题预测准确率 (UE_CPP): 1/20 = 0.05
+    编辑后 theme 预测: 0 (期望 1=JS_REACT)
+    编辑后 z 主题预测准确率 (JS_REACT): 19/20 = 0.95
+
+  [样例] 起始 z (UE_CPP) vs 编辑 z (→JS_REACT) 生成对比:
+    UE_CPP z:                                             # 
+                                                 
+    →JS_REACT:                                             # 
+                                                 
+
+  [Test 2] 从 JS_REACT 的 z 出发, 编辑到 UE_CPP
+    起始 theme 预测: 1 (期望 1)
+    编辑后 theme 预测: 1 (期望 0)
+    JS_REACT z:                                             # 
+                                                 
+    →UE_CPP:                                                # 
+                                                 
+
+Model saved: crystalllm/proto_v14_controllable_model.pt
+Log saved: crystalllm/v14_train_log.json
+
+=== v14 训练完成 (265s) ===

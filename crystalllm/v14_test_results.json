@@ -1,0 +1,37 @@
+{
+  "theme_classifier_acc_overall": 0.896875,
+  "per_theme_acc": {
+    "UE_CPP": 0.8408163265306122,
+    "JS_REACT": 0.9316455696202531
+  },
+  "edit_results": {
+    "UE_CPP_to_JS_REACT": {
+      "start_pred": 0,
+      "end_pred": 1,
+      "samples_src": [
+        "def                                             # \n                                 ",
+        "def                           #          I S _Gttaantcley  = >B=u=sf.arpwliusn(.).).",
+        "def                                                                                 "
+      ],
+      "samples_edited": [
+        "def                                             # \n                                 ",
+        "def                           #          I Ss_ntt s{t r e s=t>rpu<ef.)r e ngem;.\n   ",
+        "def                                                     f a(stuabg )=  { s eCnatme r"
+      ]
+    },
+    "JS_REACT_to_UE_CPP": {
+      "start_pred": 1,
+      "end_pred": 0,
+      "samples_src": [
+        "def                                             # \n                                 ",
+        "def                           #          I kse<p=lse=r=a{ds .=.=b=-(8c0 0=)=\n{ . . .",
+        "def                                                     f asstuabtl_ervrosre(n(o)n _"
+      ],
+      "samples_edited": [
+        "def                                             # \n                                 ",
+        "def                           #          I S _Gttaantcley  = >B=u=sf.arpwliusn(.).).",
+        "def                                                                                 "
+      ]
+    }
+  }
+}

@@ -1,0 +1,28 @@
+[load] v14_controllable_model.pt
+  loaded: 51.98M params
+
+[eval] 主题分类器在 train+val 上的 acc, 并重算 z_means
+  UE_CPP: n=490, acc=0.841, |z_mean|=31.67
+  JS_REACT: n=790, acc=0.932, |z_mean|=34.46
+  Overall: 0.897
+
+[test] 沿主题梯度编辑 z, 看生成文本是否切换主题
+
+  [UE_CPP -> JS_REACT] 起始预测=0, 编辑后=1
+    src#0:                                                # 
+                             
+    edit#0:                                              # 
+                             
+    src#1:                              #          I S _Gttaantcley  = >B=u=sf.arpwliusn(.
+    edit#1:                            #          I Ss_ntt s{t r e s=t>rpu<ef.)r e ngem;.
+
+  [JS_REACT -> UE_CPP] 起始预测=1, 编辑后=0
+    src#0:                                                # 
+                             
+    edit#0:                                              # 
+                             
+    src#1:                              #          I kse<p=lse=r=a{ds .=.=b=-(8c0 0=)=
+{ .
+    edit#1:                            #          I S _Gttaantcley  = >B=u=sf.arpwliusn(.
+
+[done] saved to crystalllm/v14_test_results.json

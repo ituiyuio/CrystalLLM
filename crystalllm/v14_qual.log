@@ -1,0 +1,126 @@
+[load] v14
+[collect z]
+
+=== 定性对比: 真实 prefix z (起始) vs prefix z+主题梯度 (编辑) ===
+
+  seed = 'def '
+    trial 0:
+      src:    att iistseeldf (pca reesntta bbuatc h'a
+n t rreeand efxfeocnt;  {  sterpta b=a=c
+      edited: t`e m(a2q)),
+ -  `?H?D?: /T-1b.V3)D`_ C+o3n FH+D+ DM3ODDE A?B L?L?  ?P?r ewmriid
+    trial 1:
+      src:    l ebrfoirnmcattiioonn ?a
+c tbaaisleyd:  t ecxeapr_ipdp(o"u)n c&obuei nraem_eevde
+      edited: Jusst
+ 
+     rSeploarndT rPeecrtaonnT(o)u
+t accteirvaet e=xst;a t=esmti-claes /+
+
+  seed = 'void '
+    trial 0:
+      src:    emmaapppeerr(a)l;t
+       Tc1k:o uTneCmlmeasrh( &=&  f=owne)x;p
+r e xct e{x tEor
+      edited: ist ei.t
+o
+r-erxriodn  e vse nborwmeidf
+y3t rce acltoirn  s ttihtg etvweintg  f 
+    trial 1:
+      src:    ?/ b5/83.41)) 
+?
+ 
+ #  2- 1i2ne x(ecvoe  ! &s=t'a)r g=l{o
+n`-.
+    `-sst osfeicf
+      edited: emlei/nDoawdneorp.ecxoinsgiinngg`( `?g?r?e nse,r ePnreosmCeoru(t)a`r e?m o`rCcoo
+
+  seed = 'class '
+    trial 0:
+      src:    asseet.`q s?e2n3e2514e,1 9T11  fraonnciets. 
+H oar:  f own  t=i tca.tceps  5 .0 
+      edited: 
+|* *R*e*a*d i|m a?p?e rRestuarle  |-  LTeMbroowmsCeoflB
+a
+d
+i*t*o Bmaisne laagb
+    trial 1:
+      src:    chherr emdiitnso)r
+(- t?e?m?i schoets( )- -c-lloasdterd  C arsg bterr iCsleaep 
+
+      edited: ooll__uussee::  BBaEsdh]]
+
+[[ttoooll__ruenst]]
+
+
+
+[[ttoooll__uussee::  BRaesChoa
+
+  seed = 'const '
+    trial 0:
+      src:    teurpirnet),  b u-sceendse,r b?u tcr.a xcerni.c o+n efxfeocnt.  T hTaitl iwm at 
+      edited: erd ei.tgoer)) 
+m eHaesreaac tboakg eavraiyl ocramgeefs 
+i m piaxr a(cnoem p=a0r
+    trial 1:
+      src:    s//b`u)n.d a-rgebs .t oawsiidteinneed.  TThYe_ hnoookks  aanrdo wthheirn  efmfee
+      edited: oll__rreessuulltt]]
+
+[[ttoooll__uussee::  ERd_iDdaet:a gka3pdx9 dterreed  i-mcph
+
+  seed = 'function '
+    trial 0:
+      src:    ::GPeErvriidnee(d)e`p e(xnoaunnccee)). 
+T
+h ins trhaep  w ihtliepsu ecvteixn mta
+      edited:       . .P.reev(eem)p;o
+r e xbturbnei(n)o;n
+F o=u neevde dse lioqruoccteedd 
+t o
+    trial 1:
+      src:    ##  `4l orn irgss /c ofn  riegsr:o upndeaxdt r=e3m4o51`1  (`r.e.d7e`f r-esvienst
+      edited: nuoer/ eevleatse  mcahteerdiensc:e*v*e niotnietsi oont ekviarniobn*i*n*e veerrii
+
+=== 主题特征变化汇总 (UE_CPP→JS_REACT 编辑) ===
+
+  seed='def ':
+    brace_open_frac     : src=0.0022 -> edit=0.0022 (delta=+0.0000)
+    brace_close_frac    : src=0.0043 -> edit=0.0000 (delta=-0.0043)
+    arrow_frac          : src=0.0000 -> edit=0.0000 (delta=+0.0000)
+    semi_frac           : src=0.0022 -> edit=0.0043 (delta=+0.0022)
+    const_frac          : src=0.0000 -> edit=0.0000 (delta=+0.0000)
+    function_frac       : src=0.0000 -> edit=0.0000 (delta=+0.0000)
+
+  seed='void ':
+    brace_open_frac     : src=0.0087 -> edit=0.0022 (delta=-0.0065)
+    brace_close_frac    : src=0.0000 -> edit=0.0000 (delta=+0.0000)
+    arrow_frac          : src=0.0000 -> edit=0.0000 (delta=+0.0000)
+    semi_frac           : src=0.0043 -> edit=0.0000 (delta=-0.0043)
+    const_frac          : src=0.0000 -> edit=0.0000 (delta=+0.0000)
+    function_frac       : src=0.0000 -> edit=0.0000 (delta=+0.0000)
+
+  seed='class ':
+    brace_open_frac     : src=0.0022 -> edit=0.0044 (delta=+0.0022)
+    brace_close_frac    : src=0.0022 -> edit=0.0022 (delta=+0.0000)
+    arrow_frac          : src=0.0000 -> edit=0.0000 (delta=+0.0000)
+    semi_frac           : src=0.0000 -> edit=0.0000 (delta=+0.0000)
+    const_frac          : src=0.0000 -> edit=0.0000 (delta=+0.0000)
+    function_frac       : src=0.0000 -> edit=0.0000 (delta=+0.0000)
+
+  seed='const ':
+    brace_open_frac     : src=0.0022 -> edit=0.0066 (delta=+0.0044)
+    brace_close_frac    : src=0.0000 -> edit=0.0000 (delta=+0.0000)
+    arrow_frac          : src=0.0000 -> edit=0.0000 (delta=+0.0000)
+    semi_frac           : src=0.0000 -> edit=0.0110 (delta=+0.0110)
+    const_frac          : src=0.0000 -> edit=0.0000 (delta=+0.0000)
+    function_frac       : src=0.0000 -> edit=0.0000 (delta=+0.0000)
+
+  seed='function ':
+    brace_open_frac     : src=0.0000 -> edit=0.0045 (delta=+0.0045)
+    brace_close_frac    : src=0.0023 -> edit=0.0023 (delta=+0.0000)
+    arrow_frac          : src=0.0000 -> edit=0.0000 (delta=+0.0000)
+    semi_frac           : src=0.0023 -> edit=0.0068 (delta=+0.0045)
+    const_frac          : src=0.0000 -> edit=0.0000 (delta=+0.0000)
+    function_frac       : src=0.0000 -> edit=0.0000 (delta=+0.0000)
+
+[done] saved to crystalllm/v14_qualitative.json
