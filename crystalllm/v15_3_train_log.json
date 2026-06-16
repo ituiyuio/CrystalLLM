@@ -1,0 +1,176 @@
+{
+  "log": [
+    [
+      0,
+      7.627063274383545,
+      6.015100002288818,
+      7.482274532318115,
+      1.0245060920715332,
+      0.7032949328422546,
+      0.4166666865348816
+    ],
+    [
+      250,
+      3.8744847774505615,
+      3.6969242095947266,
+      3.7080910205841064,
+      0.05962318181991577,
+      0.6620873808860779,
+      0.7083333730697632
+    ],
+    [
+      500,
+      3.638000726699829,
+      3.7247233390808105,
+      3.5353291034698486,
+      0.05999252200126648,
+      0.5646783709526062,
+      0.75
+    ],
+    [
+      750,
+      3.9684500694274902,
+      3.8168201446533203,
+      3.7944068908691406,
+      0.029912661761045456,
+      0.6836361885070801,
+      0.7083333730697632
+    ],
+    [
+      1000,
+      3.476288318634033,
+      3.733590602874756,
+      3.74981951713562,
+      0.01971244625747204,
+      0.6664912700653076,
+      0.7916666865348816
+    ],
+    [
+      1250,
+      3.6460349559783936,
+      3.5044496059417725,
+      3.780033826828003,
+      0.007791256066411734,
+      0.6615824103355408,
+      0.625
+    ],
+    [
+      1500,
+      3.251986026763916,
+      3.108098030090332,
+      3.6810836791992188,
+      0.003934936132282019,
+      0.6615927219390869,
+      0.5416666865348816
+    ],
+    [
+      1750,
+      3.21820068359375,
+      3.373833179473877,
+      3.8352115154266357,
+      0.004082458093762398,
+      0.6615633368492126,
+      0.5
+    ],
+    [
+      1999,
+      3.282254695892334,
+      3.2870285511016846,
+      3.803741455078125,
+      0.004571230616420507,
+      0.6195808053016663,
+      0.7083333730697632
+    ]
+  ],
+  "val_theme_acc": 0.6263888888888889,
+  "per_theme_acc": {
+    "UE_CPP": 0.0,
+    "JS_REACT": 1.0
+  },
+  "demo_samples": [
+    {
+      "theme_src": "UE_CPP",
+      "theme_tgt": "JS_REACT",
+      "prefix": "Coords.Y +\n\t\t\t      ",
+      "pred_src": 1,
+      "pred_edit": 1,
+      "src_text": "     iwnq obnatmees eesreasc yt\nr l`e' \nT\nt rHe rraelfeed:e ",
+      "edit_text": "o n ti.nq obnatmees eesreasc yt\nr l`e' \nT\nt rHe rraelfees:e "
+    },
+    {
+      "theme_src": "UE_CPP",
+      "theme_tgt": "JS_REACT",
+      "prefix": "d 2 new methods at t",
+      "pred_src": 1,
+      "pred_edit": 1,
+      "src_text": "loaoto.nq obnatmees eesreasc yt\nr ltea rTet rHe rraelfees:e ",
+      "edit_text": "ionoto.nq obnatmees eesreasccyo\nr ltea rTet rHe rraelfeedleh"
+    },
+    {
+      "theme_src": "UE_CPP",
+      "theme_tgt": "JS_REACT",
+      "prefix": "r getting and settin",
+      "pred_src": 1,
+      "pred_edit": 1,
+      "src_text": "  a ti.nq obnatmees eesreasc yt\nr l`e' \nT3t rHe rraelfeed:e ",
+      "edit_text": "lgautt.hqoobnatmees eesreasc yt\nr ltea rtet rHe rraelfeesleh"
+    },
+    {
+      "theme_src": "UE_CPP",
+      "theme_tgt": "JS_REACT",
+      "prefix": "itePress 那套 `npm run",
+      "pred_src": 1,
+      "pred_edit": 1,
+      "src_text": "     i.nq obnatmees eTseensccyo=r)l`e' \nT3t rHe r`aMlheed:e ",
+      "edit_text": "oTnoto.nq obnatmees eesreasccya\nr ltea rTet rHe rraelfeed:s "
+    },
+    {
+      "theme_src": "JS_REACT",
+      "theme_tgt": "UE_CPP",
+      "prefix": " subs) {\n  if (lane ",
+      "pred_src": 1,
+      "pred_edit": 0,
+      "src_text": "i n ti.nq obnatmees eesreasccyo\nr ltea rTet rHe rraelfeed:e ",
+      "edit_text": "oTooloonq obnatl]e[ teoro]l\n]\n\n\n\n\n\n\n\n\n \nT\nt rHeerroelf_osleh"
+    },
+    {
+      "theme_src": "JS_REACT",
+      "theme_tgt": "UE_CPP",
+      "prefix": "onents/file_watch.rs",
+      "pred_src": 1,
+      "pred_edit": 0,
+      "src_text": "o n ti.nq obnatmees eesreasc yt\nr ltea rtet rHe rraelfeesleh",
+      "edit_text": "o n ti.nq obnatmees eesreasccyo\nr ltea rTet rHe rraelfeed:e "
+    },
+    {
+      "theme_src": "JS_REACT",
+      "theme_tgt": "UE_CPP",
+      "prefix": "t `..`, `/`, `\\`, an",
+      "pred_src": 1,
+      "pred_edit": 0,
+      "src_text": " Taoto.nq obnatmees eesreasc yt\nr ltea rTet rHe rraelfeedleh",
+      "edit_text": " o o ownq obnatmees eesreasc yt\nr ltea rTet rHe rraelfeed:e "
+    },
+    {
+      "theme_src": "JS_REACT",
+      "theme_tgt": "UE_CPP",
+      "prefix": "anup in `useSupervis",
+      "pred_src": 1,
+      "pred_edit": 0,
+      "src_text": "oonoto.nq obnatmees eesreasccyo\nr ltea rtet rHe rraelfeedleh",
+      "edit_text": "o]o\no\no[qtoenst(]c[etsoeorl]]\n\n\n\n\n\n\n\n\n \nT\nt ]H\nu\nr\ne\nf\no\nl[o"
+    }
+  ],
+  "config": {
+    "STEPS": 2000,
+    "W_THEME": 0.1,
+    "N_LAYER": 16,
+    "N_EMBD": 1024,
+    "N_HEAD": 16,
+    "B": 24,
+    "T": 256,
+    "D_Z": 64,
+    "LR": 0.0003,
+    "arch": "v15.3-prefix-inject+xattn-decoder"
+  }
+}

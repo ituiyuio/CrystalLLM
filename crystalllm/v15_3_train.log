@@ -1,0 +1,127 @@
+主题分布: {1: 800, 0: 481}
+train sessions: 1153  |  val sessions: 128
+
+Model v15.3: 442.33M params
+  Encoder: 16 × BlockPure | Decoder: 16 × BlockXattn (cross-attn)
+  z 注入: prefix pos 0 (v14 style) + cross-attn in decoder
+  W_PRED=1.0 W_RECON=0.4 W_DIFF=0.05 W_THEME=0.1
+
+=== train 2000 steps ===
+  step    0/2000 | pred 7.627 | val_pred 6.015 | val_theme 0.707 | val_theme_acc 0.417 | diff 1.025 | 1s ETA 1791s
+  step  250/2000 | pred 3.874 | val_pred 3.697 | val_theme 0.609 | val_theme_acc 0.708 | diff 0.060 | 72s ETA 507s
+  step  500/2000 | pred 3.638 | val_pred 3.725 | val_theme 0.597 | val_theme_acc 0.750 | diff 0.060 | 143s ETA 428s
+  step  750/2000 | pred 3.968 | val_pred 3.817 | val_theme 0.622 | val_theme_acc 0.708 | diff 0.030 | 213s ETA 355s
+  step 1000/2000 | pred 3.476 | val_pred 3.734 | val_theme 0.610 | val_theme_acc 0.792 | diff 0.020 | 285s ETA 285s
+  step 1250/2000 | pred 3.646 | val_pred 3.504 | val_theme 0.662 | val_theme_acc 0.625 | diff 0.008 | 356s ETA 214s
+  step 1500/2000 | pred 3.252 | val_pred 3.108 | val_theme 0.703 | val_theme_acc 0.542 | diff 0.004 | 425s ETA 142s
+  step 1750/2000 | pred 3.218 | val_pred 3.374 | val_theme 0.725 | val_theme_acc 0.500 | diff 0.004 | 493s ETA 70s
+  step 1999/2000 | pred 3.282 | val_pred 3.287 | val_theme 0.620 | val_theme_acc 0.708 | diff 0.005 | 561s ETA 0s
+
+=== 主题分类器全集 acc ===
+  UE_CPP: n=269, acc=0.000
+  JS_REACT: n=451, acc=1.000
+  Overall: 0.626
+  z 范数: mean=33.29, std=0.00, min=33.29, max=33.29
+
+=== 可控性测试 ===
+  [UE_CPP→JS_REACT] 起始=1 (期望 0) → 编辑后=1 (期望 1)
+  [JS_REACT→UE_CPP] 起始=1 (期望 1) → 编辑后=0 (期望 0)
+
+=== 真实 prefix encode + 编辑测试 ===
+
+  [UE_CPP→JS_REACT] z_norm=33.29 | theme 1→1
+    prefix: Coords.Y +
+			      
+    src:         iwnq obnatmees eesreasc yt
+r l`e' 
+T
+t rHe rraelfeed:e 
+    edit:   o n ti.nq obnatmees eesreasc yt
+r l`e' 
+T
+t rHe rraelfees:e 
+
+  [UE_CPP→JS_REACT] z_norm=33.29 | theme 1→1
+    prefix: d 2 new methods at t
+    src:    loaoto.nq obnatmees eesreasc yt
+r ltea rTet rHe rraelfees:e 
+    edit:   ionoto.nq obnatmees eesreasccyo
+r ltea rTet rHe rraelfeedleh
+
+  [UE_CPP→JS_REACT] z_norm=33.29 | theme 1→1
+    prefix: r getting and settin
+    src:      a ti.nq obnatmees eesreasc yt
+r l`e' 
+T3t rHe rraelfeed:e 
+    edit:   lgautt.hqoobnatmees eesreasc yt
+r ltea rtet rHe rraelfeesleh
+
+  [UE_CPP→JS_REACT] z_norm=33.29 | theme 1→1
+    prefix: itePress ?? `npm run
+    src:         i.nq obnatmees eTseensccyo=r)l`e' 
+T3t rHe r`aMlheed:e 
+    edit:   oTnoto.nq obnatmees eesreasccya
+r ltea rTet rHe rraelfeed:s 
+
+  [JS_REACT→UE_CPP] z_norm=33.29 | theme 1→0
+    prefix:  subs) {
+  if (lane 
+    src:    i n ti.nq obnatmees eesreasccyo
+r ltea rTet rHe rraelfeed:e 
+    edit:   oTooloonq obnatl]e[ teoro]l
+]
+
+
+
+
+
+
+
+
+ 
+T
+t rHeerroelf_osleh
+
+  [JS_REACT→UE_CPP] z_norm=33.29 | theme 1→0
+    prefix: onents/file_watch.rs
+    src:    o n ti.nq obnatmees eesreasc yt
+r ltea rtet rHe rraelfeesleh
+    edit:   o n ti.nq obnatmees eesreasccyo
+r ltea rTet rHe rraelfeed:e 
+
+  [JS_REACT→UE_CPP] z_norm=33.29 | theme 1→0
+    prefix: t `..`, `/`, `\`, an
+    src:     Taoto.nq obnatmees eesreasc yt
+r ltea rTet rHe rraelfeedleh
+    edit:    o o ownq obnatmees eesreasc yt
+r ltea rTet rHe rraelfeed:e 
+
+  [JS_REACT→UE_CPP] z_norm=33.29 | theme 1→0
+    prefix: anup in `useSupervis
+    src:    oonoto.nq obnatmees eesreasccyo
+r ltea rtet rHe rraelfeedleh
+    edit:   o]o
+o
+o[qtoenst(]c[etsoeorl]]
+
+
+
+
+
+
+
+
+ 
+T
+t ]H
+u
+r
+e
+f
+o
+l[o
+
+Model saved: crystalllm/proto_v15_3_xattn_model.pt
+Log saved: crystalllm/v15_3_train_log.json
+
+=== v15.3 训练完成 (581s) ===

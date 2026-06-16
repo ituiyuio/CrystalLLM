@@ -1,0 +1,85 @@
+主题分布: {1: 800, 0: 481}
+总 sessions: 1281
+Vocab 1701  |  text 9,253,787 chars
+train sessions: 1153  |  val sessions: 128
+  val 主题分布: {1: 80, 0: 48}
+
+Model v15.1: 442.26M params
+  Config: 16L × 1024 embd × 16 head × D_Z=64
+  Encoder: 16 × BlockPure (self-attn)
+  Decoder: 16 × BlockXattn (self-attn + cross-attn to z)
+  W_PRED=1.0 W_RECON=0.4 W_DIFF=0.05 W_THEME=0.05
+  Steps=2000, LR=0.0003, B=24, T=256
+  Device: cuda
+  GPU: NVIDIA GeForce RTX 5090 (34.2GB)
+
+=== train 2000 steps ===
+  step    0/2000 | pred 7.448 | val_pred 5.874 | val_theme 0.656 | val_theme_acc 0.417 | diff 1.021 | 1s ETA 1538s
+  step  250/2000 | pred 2.434 | val_pred 2.168 | val_theme 0.713 | val_theme_acc 0.292 | diff 0.049 | 71s ETA 497s
+  step  500/2000 | pred 1.279 | val_pred 1.235 | val_theme 0.729 | val_theme_acc 0.250 | diff 0.042 | 144s ETA 431s
+  step  750/2000 | pred 1.074 | val_pred 1.010 | val_theme 0.703 | val_theme_acc 0.292 | diff 0.038 | 215s ETA 358s
+  step 1000/2000 | pred 0.493 | val_pred 0.682 | val_theme 0.748 | val_theme_acc 0.208 | diff 0.036 | 286s ETA 286s
+  step 1250/2000 | pred 0.610 | val_pred 0.476 | val_theme 0.663 | val_theme_acc 0.375 | diff 0.030 | 360s ETA 216s
+  step 1500/2000 | pred 0.299 | val_pred 0.282 | val_theme 0.626 | val_theme_acc 0.458 | diff 0.032 | 432s ETA 144s
+  step 1750/2000 | pred 0.305 | val_pred 0.364 | val_theme 0.612 | val_theme_acc 0.500 | diff 0.035 | 505s ETA 72s
+  step 1999/2000 | pred 0.299 | val_pred 0.363 | val_theme 0.705 | val_theme_acc 0.292 | diff 0.028 | 577s ETA 0s
+
+=== 主题分类器全集 acc ===
+  UE_CPP: n=269, acc=1.000
+  JS_REACT: n=451, acc=0.000
+  Overall: 0.374
+
+=== 可控性测试: 沿主题梯度编辑 z ===
+  [UE_CPP→JS_REACT] 起始=0 (期望 0) → 编辑后=1 (期望 1)
+  [JS_REACT→UE_CPP] 起始=0 (期望 1) → 编辑后=0 (期望 0)
+
+=== 生成样例 v15.2: 真实 prefix encode + 沿主题梯度编辑 ===
+  Demo samples: 8 (4 UE_CPP + 4 JS_REACT)
+  真实 UE_CPP z 范数: 33.04 ± 0.00
+  真实 JS_REACT z 范数: 33.04 ± 0.00
+
+  [UE_CPP→JS_REACT] theme 预测 0→1
+    prefix:  atus: DONE | DONE_WI
+    src:     eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+    edited:  ````````````````````````````````````{G???P?5??+?6?????????9?
+
+  [UE_CPP→JS_REACT] theme 预测 0→1
+    prefix:                 [--no
+    src:     pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
+    edited:  LLLLLL__q??;++????????????A??????????G????????+?????????????
+
+  [UE_CPP→JS_REACT] theme 预测 0→1
+    prefix:  ?sync vs async+ui??C
+    src:     nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
+    edited:  eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+
+  [UE_CPP→JS_REACT] theme 预测 0→1
+    prefix:  h` + ??? `/docs` ???
+    src:     vvvvvvvvvvvvvvv33vvvvv33333.....3........3..........3vv33333
+    edited:                                                              
+
+  [JS_REACT→UE_CPP] theme 预测 0→0
+    prefix:  fully, the pending t
+    src:     nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
+    edited:  mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+
+  [JS_REACT→UE_CPP] theme 预测 0→0
+    prefix:  ???? `MaxTriggersPay
+    src:     E8111EIII111111188E1?1111EE111?88811EI7TT3........333vv33333
+    edited:  CCCCCCCCCCNC(22(22222(22222\\2\2M""""""""""""""""""M""""""""
+
+  [JS_REACT→UE_CPP] theme 预测 0→0
+    prefix:  g-harness/src/comman
+    src:     llllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
+    edited:  oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+  [JS_REACT→UE_CPP] theme 预测 0→0
+    prefix:  op event listeners
+-
+    src:     rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
+    edited:  dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+
+Model saved: crystalllm/proto_v15_xattn_model.pt
+Log saved: crystalllm/v15_train_log.json
+
+=== v15 训练完成 (593s) ===

@@ -1,0 +1,176 @@
+{
+  "log": [
+    [
+      0,
+      7.447525978088379,
+      5.874314308166504,
+      7.47003173828125,
+      1.0206050872802734,
+      0.7124410271644592,
+      0.4166666865348816
+    ],
+    [
+      250,
+      2.434419870376587,
+      2.168365955352783,
+      3.6999990940093994,
+      0.049128055572509766,
+      0.6622891426086426,
+      0.2916666865348816
+    ],
+    [
+      500,
+      1.2791863679885864,
+      1.2348873615264893,
+      3.5365333557128906,
+      0.04153919965028763,
+      0.7571164965629578,
+      0.25
+    ],
+    [
+      750,
+      1.073784589767456,
+      1.0100558996200562,
+      3.7864601612091064,
+      0.03836414963006973,
+      0.6447649598121643,
+      0.2916666865348816
+    ],
+    [
+      1000,
+      0.4928325116634369,
+      0.6817879676818848,
+      3.747403383255005,
+      0.03570569306612015,
+      0.6630321145057678,
+      0.2083333432674408
+    ],
+    [
+      1250,
+      0.6098170280456543,
+      0.4759010970592499,
+      3.7779533863067627,
+      0.029716312885284424,
+      0.6631168127059937,
+      0.375
+    ],
+    [
+      1500,
+      0.29867514967918396,
+      0.28197333216667175,
+      3.6833150386810303,
+      0.03213278949260712,
+      0.6621602773666382,
+      0.4583333432674408
+    ],
+    [
+      1750,
+      0.3046257495880127,
+      0.3641902804374695,
+      3.8369762897491455,
+      0.03540695086121559,
+      0.6623520851135254,
+      0.5
+    ],
+    [
+      1999,
+      0.29942700266838074,
+      0.36345505714416504,
+      3.806654691696167,
+      0.02767518162727356,
+      0.7045294642448425,
+      0.2916666865348816
+    ]
+  ],
+  "val_theme_acc": 0.3736111111111111,
+  "per_theme_acc": {
+    "UE_CPP": 1.0,
+    "JS_REACT": 0.0
+  },
+  "demo_samples": [
+    {
+      "theme_src": "UE_CPP",
+      "theme_tgt": "JS_REACT",
+      "prefix": "atus: DONE | DONE_WI",
+      "pred_src": 0,
+      "pred_edit": 1,
+      "src_text": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "edit_text": "````````````````````````````````````{G件作验P态5看后+唯6、输控证变求与基不9更"
+    },
+    {
+      "theme_src": "UE_CPP",
+      "theme_tgt": "JS_REACT",
+      "prefix": "               [--no",
+      "pred_src": 0,
+      "pred_edit": 1,
+      "src_text": "pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp",
+      "edit_text": "LLLLLL__q件✅;++后功处个解所实类中│息现A📤前类试事着模修件已G件作验正态用—后+唯修、输控证变求不件不行件"
+    },
+    {
+      "theme_src": "UE_CPP",
+      "theme_tgt": "JS_REACT",
+      "prefix": "（sync vs async+ui）、C",
+      "pred_src": 0,
+      "pred_edit": 1,
+      "src_text": "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
+      "edit_text": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+    },
+    {
+      "theme_src": "UE_CPP",
+      "theme_tgt": "JS_REACT",
+      "prefix": "h` + 选了带 `/docs` 的分支",
+      "pred_src": 0,
+      "pred_edit": 1,
+      "src_text": "vvvvvvvvvvvvvvv33vvvvv33333.....3........3..........3vv33333",
+      "edit_text": "                                                            "
+    },
+    {
+      "theme_src": "JS_REACT",
+      "theme_tgt": "UE_CPP",
+      "prefix": "fully, the pending t",
+      "pred_src": 0,
+      "pred_edit": 0,
+      "src_text": "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
+      "edit_text": "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm"
+    },
+    {
+      "theme_src": "JS_REACT",
+      "theme_tgt": "UE_CPP",
+      "prefix": "让我检查 `MaxTriggersPay",
+      "pred_src": 0,
+      "pred_edit": 0,
+      "src_text": "E8111EIII111111188E1→1111EE111→88811EI7TT3........333vv33333",
+      "edit_text": "CCCCCCCCCCNC(22(22222(22222\\\\2\\2M\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"M\"\"\"\"\"\"\"\""
+    },
+    {
+      "theme_src": "JS_REACT",
+      "theme_tgt": "UE_CPP",
+      "prefix": "g-harness/src/comman",
+      "pred_src": 0,
+      "pred_edit": 0,
+      "src_text": "llllllllllllllllllllllllllllllllllllllllllllllllllllllllllll",
+      "edit_text": "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+    },
+    {
+      "theme_src": "JS_REACT",
+      "theme_tgt": "UE_CPP",
+      "prefix": "op event listeners\n-",
+      "pred_src": 0,
+      "pred_edit": 0,
+      "src_text": "rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr",
+      "edit_text": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+    }
+  ],
+  "config": {
+    "STEPS": 2000,
+    "W_THEME": 0.05,
+    "N_LAYER": 16,
+    "N_EMBD": 1024,
+    "N_HEAD": 16,
+    "B": 24,
+    "T": 256,
+    "D_Z": 64,
+    "LR": 0.0003,
+    "arch": "xattn-z-injection-v15.2"
+  }
+}
