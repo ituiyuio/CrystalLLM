@@ -1,0 +1,41 @@
+Vocab 1701  |  text 9,573,162 chars
+Model: 205.04M params (Hybrid 200M, prefix-LM)  |  device: cuda
+  Config: 16L ¡Á 1024 embd ¡Á 16 head  |  lr=0.0002  |  W_PRED=1.0 W_RECON=0.4 W_DIFF=0.05
+
+=== train 3000 steps ===
+  step    0 | pred 7.592 | val_pred 5.496 | val_recon 7.419 | diff 1.030 | val_suffix_ppl 243.73 | 1s
+  step  500 | pred 3.754 | val_pred 3.722 | val_recon 3.897 | diff 0.036 | val_suffix_ppl 41.33 | 127s
+  step 1000 | pred 3.125 | val_pred 3.146 | val_recon 3.732 | diff 0.065 | val_suffix_ppl 23.24 | 254s
+  step 1500 | pred 2.719 | val_pred 2.647 | val_recon 3.481 | diff 0.131 | val_suffix_ppl 14.11 | 380s
+  step 2000 | pred 2.373 | val_pred 2.258 | val_recon 3.725 | diff 0.153 | val_suffix_ppl 9.56 | 506s
+  step 2500 | pred 1.936 | val_pred 2.013 | val_recon 3.690 | diff 0.167 | val_suffix_ppl 7.48 | 632s
+  step 2999 | pred 1.937 | val_pred 2.096 | val_recon 3.637 | diff 0.192 | val_suffix_ppl 8.13 | 757s
+
+=== gen ===
+  seed='def ': def n  Dteeamk  shtoarrde ,1?
+ |  A cNoOmsp i=n1 -6 .f4o8bd`0 `keisgtSriyc o'n "ainni"n`e xleec )r;e
+c-o nfoowd nmoets  9b.d))  ?t eEsbsPherm (|an
+d irn 
+  seed='class ': class (s0e-t_oCmoet (s u8n7d9"3
+.-`
+s
+t`epxs"erriittyor
+"
+`
+`
+````
+
+
+:*#*#* *`JDaEmqeuriinnts``  `L.oSneTcrliadteeNsetlOlbllaictkieosn/`L.u)i`a `|f
+y `FDi3
+  seed='import ': import teerr  |} 
+[|t oIldK]e
+l oGoeast=:t eudr.etm(oovpeonnetn;'  -|  e[rte  '|a utfoiunl)y,  c{l,a tMoOinltyo,)  ''l i6n,k  2o7n  {p)r)o s{y t}y)p]e 0"3)  
+  seed='## ': ## irnaicn taosuel: *E`r0e evreynso nmoats  froomn .t{r`r e"doirp  =c cmre xmeel lcaotnh  cEhraayg  uwppreodss
+     d erfoard( 'T>asrkiRneofrtFeancti.o
+u
+  seed='the ': the  ecvoevdeyr u(nnaimde riesn ccaanrsa lsltmesneeerx. 
+T
+o*o raem aTloxeels  (=  S omupn  (Vc 'w iitt  1w8a 1f)':  '  =                       o r e tgau
+
+Model saved: crystalllm/proto_v12_hybrid_model.pt

@@ -1,0 +1,39 @@
+Vocab 1701  |  text 9,573,162 chars
+Model: 203.55M params (Pure AR 200M)  |  device: cuda
+  Config: 16L ¡Á 1024 embd ¡Á 16 head  |  lr=0.0002  |  steps=3000
+
+=== train 3000 steps ===
+  step    0 | train 7.599 | val 5.517 | val_ppl 248.77 | 1s
+  step  500 | train 3.627 | val 3.578 | val_ppl 35.82 | 319s
+  step 1000 | train 2.924 | val 2.716 | val_ppl 15.12 | 631s
+  step 1500 | train 2.494 | val 2.136 | val_ppl 8.46 | 975s
+  step 2000 | train 1.904 | val 1.948 | val_ppl 7.01 | 1258s
+  step 2500 | train 1.710 | val 1.816 | val_ppl 6.15 | 1551s
+  step 2999 | train 1.576 | val 1.668 | val_ppl 5.30 | 1875s
+
+=== gen ===
+  seed='def ': def call derection fath lose that's the explace mising ? commit and doc. Uptions.
+
+**Read struct:** Dec<Build and is for insteadd (dead) is capturede it c
+  seed='class ': class Task 4 + OSonString + ?-2 (HITH_WDE_TOUNAOT Now Buant) bartions into depencated or dirt parsted on a vissing'), be consismer and remove `Ipply` failed
+  seed='import ': import that auto-propticaleCinvagis to import blog.
+
+## 2. - Findings Report
+
+```bash
+cd "D:/UnrealEngine/CODEO\Plugins/LLMVFX\Source\LLMVFXEditor\Public\Sur
+  seed='the ': the after for fer with tre draph from for subcommand section sections.
+
+Avportant the state implementation only component:
+
+---
+
+## Dhat to Job
+
+- **Updat
+  seed='## ': ## ? |
+| `python ability` | livecoding calls Status | SetProcess ??? |
+| `python Ability` | Live Bython | dapped | Appiced |
+| `python params. | Pluep
+
+Model saved: crystalllm/proto_v12_pure_model.pt
