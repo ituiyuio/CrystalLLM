@@ -1,0 +1,186 @@
+{
+  "log": [
+    {
+      "step": 0,
+      "loss_recon": 7.851451873779297,
+      "val_recon": 7.098137378692627,
+      "loss_kl": 256.0,
+      "loss_theme": 0.6782886981964111,
+      "val_theme_acc": 0.5625,
+      "beta": 0.0,
+      "val_ppl": 1209.7117398650055
+    },
+    {
+      "step": 250,
+      "loss_recon": 3.7869820594787598,
+      "val_recon": 4.173679351806641,
+      "loss_kl": 256.0,
+      "loss_theme": 0.4199618995189667,
+      "val_theme_acc": 0.8125,
+      "beta": 0.25,
+      "val_ppl": 64.95400160768322
+    },
+    {
+      "step": 500,
+      "loss_recon": 3.963094472885132,
+      "val_recon": 3.539152145385742,
+      "loss_kl": 256.0,
+      "loss_theme": 0.5644974708557129,
+      "val_theme_acc": 0.8125,
+      "beta": 0.5,
+      "val_ppl": 34.43770863928249
+    },
+    {
+      "step": 750,
+      "loss_recon": 3.5418686866760254,
+      "val_recon": 3.522703170776367,
+      "loss_kl": 256.0,
+      "loss_theme": 0.7489535212516785,
+      "val_theme_acc": 0.8125,
+      "beta": 0.75,
+      "val_ppl": 33.87587708850857
+    },
+    {
+      "step": 1000,
+      "loss_recon": 3.414386510848999,
+      "val_recon": 3.171300172805786,
+      "loss_kl": 256.0,
+      "loss_theme": 0.66081702709198,
+      "val_theme_acc": 0.75,
+      "beta": 1.0,
+      "val_ppl": 23.838458331559828
+    },
+    {
+      "step": 1250,
+      "loss_recon": 3.300045967102051,
+      "val_recon": 3.22469425201416,
+      "loss_kl": 256.0,
+      "loss_theme": 0.5326053500175476,
+      "val_theme_acc": 0.875,
+      "beta": 1.0,
+      "val_ppl": 25.145884676764815
+    },
+    {
+      "step": 1500,
+      "loss_recon": 2.88392972946167,
+      "val_recon": 2.9952144622802734,
+      "loss_kl": 256.0,
+      "loss_theme": 0.3907259702682495,
+      "val_theme_acc": 0.6875,
+      "beta": 1.0,
+      "val_ppl": 19.989646455348062
+    },
+    {
+      "step": 1750,
+      "loss_recon": 3.04379940032959,
+      "val_recon": 2.8862507343292236,
+      "loss_kl": 256.0,
+      "loss_theme": 0.5788212418556213,
+      "val_theme_acc": 0.75,
+      "beta": 1.0,
+      "val_ppl": 17.925974211568356
+    },
+    {
+      "step": 2000,
+      "loss_recon": 2.7008650302886963,
+      "val_recon": 2.874480724334717,
+      "loss_kl": 256.0,
+      "loss_theme": 0.5872611403465271,
+      "val_theme_acc": 0.8125,
+      "beta": 1.0,
+      "val_ppl": 17.71622212945058
+    },
+    {
+      "step": 2250,
+      "loss_recon": 2.4073381423950195,
+      "val_recon": 2.478048801422119,
+      "loss_kl": 256.0,
+      "loss_theme": 0.31778961420059204,
+      "val_theme_acc": 0.75,
+      "beta": 1.0,
+      "val_ppl": 11.917987356168709
+    },
+    {
+      "step": 2500,
+      "loss_recon": 2.7612476348876953,
+      "val_recon": 2.841421604156494,
+      "loss_kl": 256.0,
+      "loss_theme": 0.17360393702983856,
+      "val_theme_acc": 0.9375,
+      "beta": 1.0,
+      "val_ppl": 17.14011468389846
+    },
+    {
+      "step": 2750,
+      "loss_recon": 2.481203556060791,
+      "val_recon": 2.462672710418701,
+      "loss_kl": 256.0,
+      "loss_theme": 0.49177467823028564,
+      "val_theme_acc": 0.875,
+      "beta": 1.0,
+      "val_ppl": 11.736136954966751
+    },
+    {
+      "step": 3000,
+      "loss_recon": 2.7292723655700684,
+      "val_recon": 2.634835720062256,
+      "loss_kl": 256.0,
+      "loss_theme": 0.5905240774154663,
+      "val_theme_acc": 0.875,
+      "beta": 1.0,
+      "val_ppl": 13.941022044799512
+    },
+    {
+      "step": 3250,
+      "loss_recon": 2.523670196533203,
+      "val_recon": 2.573132038116455,
+      "loss_kl": 256.0,
+      "loss_theme": 0.25235798954963684,
+      "val_theme_acc": 0.875,
+      "beta": 1.0,
+      "val_ppl": 13.10681125373089
+    },
+    {
+      "step": 3500,
+      "loss_recon": 2.8006656169891357,
+      "val_recon": 2.350687026977539,
+      "loss_kl": 256.0,
+      "loss_theme": 0.47069305181503296,
+      "val_theme_acc": 0.8125,
+      "beta": 1.0,
+      "val_ppl": 10.492776069196406
+    },
+    {
+      "step": 3750,
+      "loss_recon": 2.4911980628967285,
+      "val_recon": 2.8107991218566895,
+      "loss_kl": 256.0,
+      "loss_theme": 0.3409954905509949,
+      "val_theme_acc": 0.875,
+      "beta": 1.0,
+      "val_ppl": 16.62319687239768
+    },
+    {
+      "step": 3999,
+      "loss_recon": 2.29424786567688,
+      "val_recon": 2.553678512573242,
+      "loss_kl": 256.0,
+      "loss_theme": 0.3517773151397705,
+      "val_theme_acc": 0.625,
+      "beta": 1.0,
+      "val_ppl": 12.854301630671758
+    }
+  ],
+  "config": {
+    "STEPS": 4000,
+    "D_Z": 256,
+    "W_RECON": 1.0,
+    "W_KL": 0.1,
+    "W_THEME": 0.5,
+    "FREE_BITS_NAT": 1.0,
+    "encoder_params_M": 87.284994,
+    "mini_decoder_params_M": 13.965824,
+    "n_themes": 2,
+    "arch": "v22-256D-encoder-theme-aligned"
+  }
+}

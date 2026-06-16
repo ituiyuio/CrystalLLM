@@ -1,0 +1,29 @@
+=== v22a-4 500M Decoder Warm-Start (z 64→256) ===
+Vocab 2261 | BOS=1 PAD=0 EOS=2
+train: 1893 | val: 210
+
+=== Warm-start: 加载 v21 decoder 权重 ===
+v21 decoder: D_Z=64, layers=24
+v22 decoder: D_Z=256, layers=24
+  z_to_emb.weight: 扩展 64→256, 旧列复制, 新列零
+
+v22 decoder: 475.65M (warm-started from v21 475M)
+Loaded cached v22 z: train torch.Size([1893, 256]) | val torch.Size([210, 256])
+
+=== train 2000 steps (warm-start, 短训) ===
+  step    0/2000 | recon 1.576 | val_recon 3.442 | KL 335.79 β=0.000 | val_ppl 31.26 | 1s ETA 1050s
+  step  200/2000 | recon 1.892 | val_recon 1.612 | KL 351.36 β=0.400 | val_ppl 5.01 | 34s ETA 305s
+  step  400/2000 | recon 1.694 | val_recon 1.786 | KL 311.86 β=0.800 | val_ppl 5.96 | 67s ETA 269s
+  step  600/2000 | recon 1.918 | val_recon 1.484 | KL 315.90 β=1.000 | val_ppl 4.41 | 101s ETA 236s
+  step  800/2000 | recon 2.057 | val_recon 1.415 | KL 306.54 β=1.000 | val_ppl 4.11 | 135s ETA 203s
+  step 1000/2000 | recon 1.605 | val_recon 1.688 | KL 320.02 β=1.000 | val_ppl 5.41 | 169s ETA 169s
+  step 1200/2000 | recon 1.467 | val_recon 1.834 | KL 320.58 β=1.000 | val_ppl 6.26 | 202s ETA 135s
+  step 1400/2000 | recon 1.623 | val_recon 1.511 | KL 313.78 β=1.000 | val_ppl 4.53 | 236s ETA 101s
+  step 1600/2000 | recon 1.326 | val_recon 1.800 | KL 310.99 β=1.000 | val_ppl 6.05 | 269s ETA 67s
+  step 1800/2000 | recon 1.248 | val_recon 1.310 | KL 319.72 β=1.000 | val_ppl 3.71 | 303s ETA 34s
+  step 1999/2000 | recon 1.227 | val_recon 1.328 | KL 314.43 β=1.000 | val_ppl 3.77 | 336s ETA 0s
+
+Model saved: crystalllm/v22_decoder.pt
+Log saved: crystalllm/v22_decoder_train_log.json
+
+=== 训练完成 (337s) ===

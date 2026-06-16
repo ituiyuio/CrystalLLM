@@ -1,0 +1,61 @@
+v22 decoder: 24L × 1280 × 20, D_Z=256
+v22 decoder params: 475.65M
+val: 210 samples
+Loaded cached v22 val_z: torch.Size([210, 256])
+
+--- 模式 1: diffusion_z (5 步 Euler, v22 prior) ---
+
+--- 模式 0: theme-conditional z (encoder_mu per theme) ---
+  z_theme0: shape torch.Size([1, 256]), norm 5.08
+  z_theme1: shape torch.Size([1, 256]), norm 8.01
+  主题中心距离: 9.56
+  [diffusion_z] avg_loss 1.4804 | PPL 4.3947
+  [encoder_mu] avg_loss 1.4779 | PPL 4.3836
+  [random_z] avg_loss 1.4818 | PPL 4.4008
+
+--- 主题条件生成 (用主题中心 z 评估 PPL) ---
+  [theme_0_center] avg_loss 1.4799 | PPL 4.3923
+  [theme_1_center] avg_loss 1.4803 | PPL 4.3944
+
+--- 主题 token 比例 (生成 50 步, batch=8) ---
+  theme 0 中心生成: 匹配 0/120 = 0.000
+  theme 1 中心生成: 匹配 0/120 = 0.000
+  (v19.5 对照: 主题 token 比例 0.06/0.00, 现在应该高得多)
+
+  theme 0 中心生成 sample 0:
+    '<bos> (`staticMesh3.cpp` (line 11) — `status` (line 12)'
+  theme 1 中心生成 sample 0:
+    '<bos> (`status` and `state` and `state` and `state` and'
+
+--- 主题切换: 插值生成 ---
+  alpha=0.00 (0→1): 主题0比例=0.000, 主题1比例=0.000
+  alpha=0.25 (0→1): 主题0比例=0.000, 主题1比例=0.000
+  alpha=0.50 (0→1): 主题0比例=0.000, 主题1比例=0.000
+  alpha=0.75 (0→1): 主题0比例=0.000, 主题1比例=0.000
+  alpha=1.00 (0→1): 主题0比例=0.000, 主题1比例=0.000
+
+--- 速度基准 (RTX 5090, batch=1) ---
+  [v22 端到端 (5步扩散+100 AR)] mean 846.80 ms | p50 841.53
+
+=== v22 端到端 PPL 汇总 ===
+  decoder: 475.65M
+  diffusion_z PPL:  4.3947
+  encoder_mu PPL:   4.3836
+  random_z PPL:     4.4008
+  theme_0_center:   4.3923
+  theme_1_center:   4.3944
+  PPL 比率 (diff/enc): 1.0025
+  PPL 范围 (enc/rand): 0.4%
+
+=== 对照 (跨版本) ===
+  v18 (87M, 64z):  e2e 17.71 | theme 0.06/0.00
+  v20a (229M, 64z): e2e 13.05 | theme (未测)
+  v21 (500M, 64z):  e2e 5.83  | theme <6%
+  v22 (500M, 256z): e2e 4.39 | theme 0.00/0.00
+
+=== 速度 KR1.3 ===
+  v22 端到端: 847 ms (含 5步扩散+100 AR)
+  v21 端到端: 786 ms (含 5步扩散+100 AR)
+  v22 vs v21: 1.08x
+
+Saved: crystalllm/v22_e2e.json

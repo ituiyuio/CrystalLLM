@@ -1,0 +1,32 @@
+=== v22a-1 256D Encoder + 主题对齐 STARTUP ===
+Vocab 2261 | BOS=1 PAD=0 EOS=2
+theme 分布: {0: 688, 1: 1415} | n_themes=2
+train: 1893 | val: 210
+
+Encoder: 87.28M (12L×768×12, output D_Z=256)
+Mini decoder: 13.97M (4L×512×8, 临时)
+
+=== train 4000 steps (encoder+mini_dec) ===
+  L = 1.0*L_recon + 0.1*β*L_KL + 0.5*L_theme
+  step    0/4000 | recon 7.851 | val_recon 7.098 | KL 256.00 β=0.000 | theme_loss 0.678 | val_theme_acc 0.562 | val_ppl 1209.71 | 0s ETA 1787s
+  step  250/4000 | recon 3.787 | val_recon 4.174 | KL 256.00 β=0.250 | theme_loss 0.420 | val_theme_acc 0.812 | val_ppl 64.95 | 11s ETA 167s
+  step  500/4000 | recon 3.963 | val_recon 3.539 | KL 256.00 β=0.500 | theme_loss 0.564 | val_theme_acc 0.812 | val_ppl 34.44 | 22s ETA 151s
+  step  750/4000 | recon 3.542 | val_recon 3.523 | KL 256.00 β=0.750 | theme_loss 0.749 | val_theme_acc 0.812 | val_ppl 33.88 | 32s ETA 138s
+  step 1000/4000 | recon 3.414 | val_recon 3.171 | KL 256.00 β=1.000 | theme_loss 0.661 | val_theme_acc 0.750 | val_ppl 23.84 | 42s ETA 127s
+  step 1250/4000 | recon 3.300 | val_recon 3.225 | KL 256.00 β=1.000 | theme_loss 0.533 | val_theme_acc 0.875 | val_ppl 25.15 | 53s ETA 116s
+  step 1500/4000 | recon 2.884 | val_recon 2.995 | KL 256.00 β=1.000 | theme_loss 0.391 | val_theme_acc 0.688 | val_ppl 19.99 | 63s ETA 105s
+  step 1750/4000 | recon 3.044 | val_recon 2.886 | KL 256.00 β=1.000 | theme_loss 0.579 | val_theme_acc 0.750 | val_ppl 17.93 | 73s ETA 94s
+  step 2000/4000 | recon 2.701 | val_recon 2.874 | KL 256.00 β=1.000 | theme_loss 0.587 | val_theme_acc 0.812 | val_ppl 17.72 | 84s ETA 84s
+  step 2250/4000 | recon 2.407 | val_recon 2.478 | KL 256.00 β=1.000 | theme_loss 0.318 | val_theme_acc 0.750 | val_ppl 11.92 | 94s ETA 73s
+  step 2500/4000 | recon 2.761 | val_recon 2.841 | KL 256.00 β=1.000 | theme_loss 0.174 | val_theme_acc 0.938 | val_ppl 17.14 | 105s ETA 63s
+  step 2750/4000 | recon 2.481 | val_recon 2.463 | KL 256.00 β=1.000 | theme_loss 0.492 | val_theme_acc 0.875 | val_ppl 11.74 | 115s ETA 52s
+  step 3000/4000 | recon 2.729 | val_recon 2.635 | KL 256.00 β=1.000 | theme_loss 0.591 | val_theme_acc 0.875 | val_ppl 13.94 | 126s ETA 42s
+  step 3250/4000 | recon 2.524 | val_recon 2.573 | KL 256.00 β=1.000 | theme_loss 0.252 | val_theme_acc 0.875 | val_ppl 13.11 | 136s ETA 31s
+  step 3500/4000 | recon 2.801 | val_recon 2.351 | KL 256.00 β=1.000 | theme_loss 0.471 | val_theme_acc 0.812 | val_ppl 10.49 | 147s ETA 21s
+  step 3750/4000 | recon 2.491 | val_recon 2.811 | KL 256.00 β=1.000 | theme_loss 0.341 | val_theme_acc 0.875 | val_ppl 16.62 | 157s ETA 10s
+  step 3999/4000 | recon 2.294 | val_recon 2.554 | KL 256.00 β=1.000 | theme_loss 0.352 | val_theme_acc 0.625 | val_ppl 12.85 | 168s ETA 0s
+
+Encoder saved: crystalllm/v22_encoder.pt
+Log saved: crystalllm/v22_encoder_train_log.json
+
+=== 训练完成 (168s) ===

@@ -1,0 +1,29 @@
+=== v22a-3 256D Diffusion Prior STARTUP ===
+Loaded cached z: train torch.Size([1893, 256]) | val torch.Size([210, 256])
+mu_norm: train 9.76 | val 10.23
+DiffusionPrior: 6.58M (D_Z=256, D_HID=512, L=6)
+对比 v19 prior: 826K (D_Z=64)
+
+=== train 4000 steps ===
+  step    0/4000 | loss 1.7088 | val_loss 1.7662 | sample-val cos_sim 0.322 | 0s ETA 1072s
+  step  250/4000 | loss 0.5193 | val_loss 0.4693 | sample-val cos_sim 0.721 | 2s ETA 29s
+  step  500/4000 | loss 0.3524 | val_loss 0.3311 | sample-val cos_sim 0.888 | 4s ETA 25s
+  step  750/4000 | loss 0.1734 | val_loss 0.3771 | sample-val cos_sim 0.938 | 5s ETA 23s
+  step 1000/4000 | loss 0.1790 | val_loss 0.1823 | sample-val cos_sim 0.965 | 7s ETA 22s
+  step 1250/4000 | loss 0.2937 | val_loss 0.2170 | sample-val cos_sim 0.891 | 9s ETA 20s
+  step 1500/4000 | loss 0.1421 | val_loss 0.1614 | sample-val cos_sim 0.961 | 11s ETA 19s
+  step 1750/4000 | loss 0.1954 | val_loss 0.2399 | sample-val cos_sim 0.952 | 13s ETA 17s
+  step 2000/4000 | loss 0.1220 | val_loss 0.2530 | sample-val cos_sim 0.961 | 15s ETA 15s
+  step 2250/4000 | loss 0.1984 | val_loss 0.1971 | sample-val cos_sim 0.892 | 17s ETA 13s
+  step 2500/4000 | loss 0.2406 | val_loss 0.1931 | sample-val cos_sim 0.950 | 18s ETA 11s
+  step 2750/4000 | loss 0.1576 | val_loss 0.1504 | sample-val cos_sim 0.937 | 20s ETA 9s
+  step 3000/4000 | loss 0.0919 | val_loss 0.1184 | sample-val cos_sim 0.951 | 22s ETA 7s
+  step 3250/4000 | loss 0.1152 | val_loss 0.0747 | sample-val cos_sim 0.927 | 24s ETA 5s
+  step 3500/4000 | loss 0.1046 | val_loss 0.1455 | sample-val cos_sim 0.980 | 25s ETA 4s
+  step 3750/4000 | loss 0.0529 | val_loss 0.0675 | sample-val cos_sim 0.945 | 27s ETA 2s
+  step 3999/4000 | loss 0.0966 | val_loss 0.0456 | sample-val cos_sim 0.955 | 29s ETA 0s
+
+Model saved: crystalllm/v22_diffusion_prior.pt | best cos_sim: 0.980
+Log saved: crystalllm/v22_diffusion_log.json
+
+=== 训练完成 (29s) ===

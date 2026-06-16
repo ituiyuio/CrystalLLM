@@ -1,0 +1,39 @@
+{
+  "config": {
+    "decoder_params_M": 475.65056,
+    "D_Z": 256,
+    "DEC_LAYER": 24
+  },
+  "ppl": {
+    "diffusion_z": 4.394665966103664,
+    "encoder_mu": 4.38357149626652,
+    "random_z": 4.400776973887779,
+    "theme_0_center": 4.392328484188174,
+    "theme_1_center": 4.394397455798865
+  },
+  "ppl_ratio_diff_over_enc": 1.0025309202431378,
+  "ppl_range_pct": 0.3909645438373355,
+  "theme_center_distance": 9.56320858001709,
+  "theme_token_ratio": {
+    "theme_0": 0.0,
+    "theme_1": 0.0,
+    "matches": {
+      "theme_0": 0,
+      "theme_1": 0
+    }
+  },
+  "speed_ms": {
+    "v22_e2e": 846.7957735061646
+  },
+  "samples": {
+    "theme_0_first": "<bos> (`staticMesh3.cpp` (line 11) — `status` (line 12)",
+    "theme_1_first": "<bos> (`status` and `state` and `state` and `state` and"
+  },
+  "comparison": {
+    "v18_e2e_ppl": 17.71,
+    "v20a_e2e_ppl": 13.05,
+    "v21_e2e_ppl": 5.83,
+    "v18_theme_ratio": 0.06,
+    "v21_theme_ratio": 0.06
+  }
+}

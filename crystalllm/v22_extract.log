@@ -1,0 +1,19 @@
+v22 encoder: 12L × 768 × 12 | D_Z=256
+train: 1893 | val: 210
+
+=== 提取 z ===
+  [train] z shape: (1893, 256) | mu_norm mean: 9.76
+  [val] z shape: (210, 256) | mu_norm mean: 10.23
+
+Saved: crystalllm/cached_v22_z.npz
+  train_z: (1893, 256)
+  val_z: (210, 256)
+  train_themes: (1893,), dist {0: 612, 1: 1281}
+  val_themes: (210,), dist {0: 76, 1: 134}
+
+=== 主题可分离性 (256 维 z) ===
+  theme 0 (n=612): center norm 5.37, within-dist 7.93
+  theme 1 (n=1281): center norm 7.36, within-dist 6.64
+  center distance: 9.47
+  separability (center_dist / mean_within): 1.30
+  ⚠️ 主题分离不够强
