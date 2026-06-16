@@ -1,0 +1,78 @@
+=== v18 BAD-DP Phase 1 STARTUP ===
+Vocab 2261 | BOS=1 PAD=0 EOS=2
+Loaded 2103 sessions, theme dist: {1: 1415, 0: 688}
+train: 1893 | val: 210
+
+Encoder: 86.99M (双向 12L × 768 × 12)
+Decoder: 86.94M (因果 12L × 768 × 12)
+Total: 173.93M | D_Z=64 | T=128
+W_RECON=1.0 | W_KL=0.1 | β anneal 0→1 over 1000 steps | free_bits=1.0 nat/dim
+
+=== train 4000 steps ===
+  step    0/4000 | recon 7.791 | val_recon 6.042 | KL 64.00 β=0.000 | mu_std_dim 0.043 | mu_norm 11.43±0.105 | logvar -0.04 | 1s ETA 2238s
+  step  250/4000 | recon 3.814 | val_recon 4.203 | KL 64.23 β=0.250 | mu_std_dim 0.001 | mu_norm 5.76±0.001 | logvar -0.31 | 20s ETA 301s
+  step  500/4000 | recon 3.997 | val_recon 3.572 | KL 64.00 β=0.500 | mu_std_dim 0.002 | mu_norm 6.07±0.001 | logvar -0.29 | 39s ETA 276s
+  step  750/4000 | recon 3.948 | val_recon 3.875 | KL 64.00 β=0.750 | mu_std_dim 0.001 | mu_norm 5.40±0.000 | logvar -0.31 | 59s ETA 256s
+  step 1000/4000 | recon 3.823 | val_recon 3.699 | KL 64.05 β=1.000 | mu_std_dim 0.000 | mu_norm 5.73±0.001 | logvar -0.36 | 79s ETA 236s
+  step 1250/4000 | recon 3.982 | val_recon 3.852 | KL 64.00 β=1.000 | mu_std_dim 0.001 | mu_norm 6.51±0.002 | logvar -0.57 | 98s ETA 216s
+  step 1500/4000 | recon 3.507 | val_recon 3.541 | KL 64.00 β=1.000 | mu_std_dim 0.003 | mu_norm 6.63±0.007 | logvar -0.61 | 118s ETA 196s
+  step 1750/4000 | recon 3.759 | val_recon 3.489 | KL 64.00 β=1.000 | mu_std_dim 0.370 | mu_norm 5.18±1.452 | logvar -0.61 | 137s ETA 176s
+  step 2000/4000 | recon 3.218 | val_recon 3.447 | KL 64.00 β=1.000 | mu_std_dim 0.398 | mu_norm 5.09±1.657 | logvar -0.88 | 157s ETA 157s
+  step 2250/4000 | recon 3.020 | val_recon 2.985 | KL 64.00 β=1.000 | mu_std_dim 0.217 | mu_norm 3.73±0.881 | logvar -1.17 | 176s ETA 137s
+  step 2500/4000 | recon 3.208 | val_recon 3.225 | KL 64.00 β=1.000 | mu_std_dim 0.354 | mu_norm 4.26±1.400 | logvar -1.30 | 196s ETA 118s
+  step 2750/4000 | recon 2.823 | val_recon 2.788 | KL 64.00 β=1.000 | mu_std_dim 0.321 | mu_norm 4.59±1.103 | logvar -1.56 | 216s ETA 98s
+  step 3000/4000 | recon 3.009 | val_recon 2.911 | KL 64.00 β=1.000 | mu_std_dim 0.305 | mu_norm 4.32±1.037 | logvar -1.62 | 235s ETA 78s
+  step 3250/4000 | recon 2.740 | val_recon 2.820 | KL 64.00 β=1.000 | mu_std_dim 0.223 | mu_norm 3.97±0.697 | logvar -1.73 | 255s ETA 59s
+  step 3500/4000 | recon 3.027 | val_recon 2.598 | KL 64.00 β=1.000 | mu_std_dim 0.263 | mu_norm 4.24±0.826 | logvar -1.80 | 274s ETA 39s
+  step 3750/4000 | recon 2.730 | val_recon 3.031 | KL 64.00 β=1.000 | mu_std_dim 0.212 | mu_norm 4.20±0.461 | logvar -1.84 | 294s ETA 20s
+  step 3999/4000 | recon 2.515 | val_recon 2.773 | KL 64.00 β=1.000 | mu_std_dim 0.245 | mu_norm 4.23±0.894 | logvar -1.87 | 313s ETA 0s
+
+=== 全集 mu 评估 (val) ===
+  mu 范数: mean=4.43, std=0.91, min=3.71, max=9.51
+  mu per-dim std: 0.287 (avg across 64 dims)
+
+=== N(0,I) 采样生成测试 ===
+  trial 0 z=[-0.30194637179374695, 0.7679607272148132, 0.8962914347648621]:
+    <bos>rerss, `cetIs0 `53`om `6P lant rat blon ige.tillus che che txreste/pompermers sig dedits: venttrid misig
+**. `*`5Lo
+  trial 1 z=[1.317041039466858, -0.1090497225522995, -0.002530303318053484]:
+    <bos>imsins`) tolrelantit chipir, ing e deantgind thopecte find.
+Tif. | Tatask spror char/stc
+- Cherint che uile thest n
+  trial 2 z=[0.11099635809659958, 0.9957357048988342, -0.04762815311551094]:
+    <bos>d s
+        { cDontris` `3 tippatiynenstacivengthevat(s
+Crelemd issxest asex tod chere opaint.
+
+-  IT Ous sutce stI
+  trial 3 z=[0.18444699048995972, 1.5847526788711548, 0.03527125343680382]:
+    <bos>ndoredudses | `.-`pomlot/Genstearowte.cimen, `pone (pud orow Tran #- 3fild-r-'Mon talellin dend al: che chilentens
+  trial 4 z=[-0.580534040927887, -0.24762044847011566, -1.1977537870407104]:
+    <bos>es tons`: fe the munes fi, fit spat in mevos
+- de refunt rent feae, thangcaty stalver paes f-thrisuresrsint wred-pa
+  trial 5 z=[-0.5024299025535583, -2.2196013927459717, 0.9376364946365356]:
+    <bos>e ha>
+  }cinldee(repot** cos ufne mene ipt: ut allpite loe moungtatcas ale theples sprete easte thom ach vatl Thest
+
+=== 真实文本 z + 重建测试 ===
+  src (1): late_file` ????????string??`vars` ??????object??
+
+Cannot connect data to vars
+?
+
+  recon:        bos> un seltat afe esin thepond as ( co st Fat cong tatects lane tanvple is. `1
+  src (0):  Mesh.PrimaryColors.GetTriangle(TriID);  // 3 ? ElementId
+        
+        for (
+  recon:        bos>                                      -                                    
+  src (0): rent, int32 Delta, bool bIsCounting);` ? signature matches exactly
+- Indentation
+  recon:        bos>                                        indescalpuontaterinsjcerst_s:      
+  src (1): ely and preserves its casing
+2. `renderProperty`: Uses IIFE with case-insensitiv
+  recon:        bos>                                                                           
+
+Model saved: crystalllm/proto_v18_vae_model.pt
+Log saved: crystalllm/v18_train_log.json
+
+=== v18 训练完成 (320s) ===
