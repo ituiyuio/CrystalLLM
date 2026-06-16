@@ -1,0 +1,33 @@
+=== v19.5 纯 AR Baseline STARTUP ===
+Vocab 2261 | BOS=1 PAD=0 EOS=2
+Loaded 2103 sessions, theme dist: {1: 1415, 0: 688}
+train: 1893 | val: 210
+
+PureAR: 86.89M (12L × 768 × 12, target ~87M)
+
+=== train 4000 steps ===
+  step    0/4000 | loss 7.938 | val_loss 6.280 | val_ppl 533.77 | 0s ETA 1129s
+  step  250/4000 | loss 3.822 | val_loss 4.207 | val_ppl 67.13 | 9s ETA 132s
+  step  500/4000 | loss 4.005 | val_loss 3.568 | val_ppl 35.43 | 17s ETA 122s
+  step  750/4000 | loss 3.898 | val_loss 3.827 | val_ppl 45.93 | 26s ETA 113s
+  step 1000/4000 | loss 3.740 | val_loss 3.560 | val_ppl 35.15 | 35s ETA 104s
+  step 1250/4000 | loss 3.593 | val_loss 3.554 | val_ppl 34.95 | 43s ETA 95s
+  step 1500/4000 | loss 3.225 | val_loss 3.245 | val_ppl 25.67 | 52s ETA 87s
+  step 1750/4000 | loss 3.303 | val_loss 3.136 | val_ppl 23.02 | 61s ETA 78s
+  step 2000/4000 | loss 2.889 | val_loss 3.098 | val_ppl 22.16 | 69s ETA 69s
+  step 2250/4000 | loss 2.588 | val_loss 2.600 | val_ppl 13.47 | 78s ETA 61s
+  step 2500/4000 | loss 2.902 | val_loss 2.974 | val_ppl 19.57 | 87s ETA 52s
+  step 2750/4000 | loss 2.517 | val_loss 2.550 | val_ppl 12.81 | 95s ETA 43s
+  step 3000/4000 | loss 2.741 | val_loss 2.671 | val_ppl 14.45 | 104s ETA 35s
+  step 3250/4000 | loss 2.535 | val_loss 2.560 | val_ppl 12.94 | 112s ETA 26s
+  step 3500/4000 | loss 2.762 | val_loss 2.387 | val_ppl 10.88 | 121s ETA 17s
+  step 3750/4000 | loss 2.434 | val_loss 2.805 | val_ppl 16.52 | 130s ETA 9s
+  step 3999/4000 | loss 2.272 | val_loss 2.504 | val_ppl 12.23 | 139s ETA 0s
+
+=== 全 val 集 PPL ===
+  val_ppl (full): 11.4625
+
+Model saved: crystalllm/proto_v195_pure_ar.pt
+Log saved: crystalllm/v195_train_log.json
+
+=== 训练完成 (139s) ===
