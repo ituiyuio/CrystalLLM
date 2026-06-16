@@ -1,0 +1,34 @@
+Vocab 1701  |  text 9,573,162 chars  |  train 8,615,845  val 957,317
+
+========== training v3 (no z) (use_z=False) ==========
+Model: 11.40M params  |  device: cuda
+  step    0 | ar 7.611 | val 6.710 | ppl 820.5 | 0s
+  step  500 | ar 3.539 | val 3.158 | ppl 23.5 | 10s
+  step 1000 | ar 2.934 | val 2.818 | ppl 16.7 | 20s
+  step 1500 | ar 2.398 | val 2.490 | ppl 12.1 | 29s
+  step 2000 | ar 2.067 | val 2.408 | ppl 11.1 | 39s
+  step 2500 | ar 2.159 | val 1.825 | ppl 6.2 | 48s
+  step 2999 | ar 1.969 | val 2.213 | ppl 9.1 | 58s
+
+========== training v4 (with z) (use_z=True) ==========
+Model: 11.78M params  |  device: cuda
+  step    0 | ar 7.603 | val 6.726 | ppl 834.1 | recon 7.36 | 0s
+  step  500 | ar 3.811 | val 3.822 | ppl 45.7 | recon 3.82 | 21s
+  step 1000 | ar 3.718 | val 3.703 | ppl 40.6 | recon 3.70 | 41s
+  step 1500 | ar 3.819 | val 3.813 | ppl 45.3 | recon 3.81 | 62s
+  step 2000 | ar 3.799 | val 3.791 | ppl 44.3 | recon 3.81 | 83s
+  step 2500 | ar 3.697 | val 3.648 | ppl 38.4 | recon 3.66 | 104s
+  step 2999 | ar 3.783 | val 3.555 | ppl 35.0 | recon 3.58 | 124s
+
+========== comparison ==========
+  v3 (no z)  val PPL: 9.14
+  v4 (with z) val PPL: 34.98
+  gap: +25.84  (+1.342 log-ppl)
+Plot saved: crystalllm/v5_comparison.png
+
+========== v4 z space ==========
+  z norm: 17.67 ¨C 35.40  (mean 30.29)
+  mean pairwise dist: 6.17
+  effective rank: approx 29 / 64
+  PCA explained var (top-3): [0.938 0.062 0.   ]
+Plot saved: crystalllm/v5_z_space.png
