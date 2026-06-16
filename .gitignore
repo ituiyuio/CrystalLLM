@@ -21,3 +21,7 @@ dev/
 
 # Results file
 results.tsv
+
+# CrystaLLM bulk data (re-generable from ~/.claude/, too large for git)
+crystalllm/data/raw/
+crystalllm/data/processed/
