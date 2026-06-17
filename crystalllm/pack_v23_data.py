@@ -21,6 +21,24 @@ DEFAULT_RATIOS = {
     "wiki": 0.10,
 }
 
+
+# Map ModelScope source name → domain. Used when docs don't carry a `domain` field.
+_SOURCE_TO_DOMAIN = {
+    "swift/github-code": "code",
+    "swift/wikipedia": "wiki",
+    "armand0e/claude-fable-5-claude-code": "agentic",
+    "Glint-Research/Fable-5-traces": "agentic",
+    "lazarus19/Vibe-Coding-Claude-Fable-5": "agentic",
+    "ZhipuAI/humaneval-x": "eval",
+}
+
+
+def _infer_domain(doc: dict) -> str:
+    if "domain" in doc and doc["domain"]:
+        return doc["domain"]
+    src = doc.get("source", "")
+    return _SOURCE_TO_DOMAIN.get(src, "agentic")
+
 OUT_PATH = Path("data/processed/extended_v23.parquet")
 
 
@@ -97,7 +115,7 @@ def build_packs(
         first = docs[texts.index(b[0])]
         out.append({
             "text": packed_text,
-            "domain": first.get("domain", "agentic"),
+            "domain": _infer_domain(first),
             "source": first.get("source", ""),
             "n_docs": len(b),
             "n_chars": sum(len(d) for d in b),
@@ -129,8 +147,9 @@ if __name__ == "__main__":
 
     random.seed(args.seed)
     all_docs = []
+    n_skip_decode_err = 0
     for path in args.in_paths:
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, "r", encoding="utf-8", errors="replace") as f:
             for line in f:
                 line = line.strip()
                 if not line:
@@ -138,7 +157,10 @@ if __name__ == "__main__":
                 try:
                     all_docs.append(json.loads(line))
                 except json.JSONDecodeError:
+                    n_skip_decode_err += 1
                     continue
+    if n_skip_decode_err:
+        print(f"[warn] skipped {n_skip_decode_err} lines with JSON decode errors", file=sys.stderr)
     print(f"loaded {len(all_docs)} docs from {len(args.in_paths)} files", file=sys.stderr)
 
     sampled = quota_sample(all_docs)
