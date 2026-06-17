@@ -27,3 +27,7 @@ crystalllm/data/raw/
 crystalllm/data/processed/*.parquet
 crystalllm/data/processed/*.bin
 crystalllm/data/processed/*.pt
+
+# Local env files (use .env.v23.example as template)
+.env
+crystalllm/.env
