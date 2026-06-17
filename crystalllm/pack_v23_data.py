@@ -148,6 +148,7 @@ if __name__ == "__main__":
     random.seed(args.seed)
     all_docs = []
     n_skip_decode_err = 0
+    n_skip_non_dict = 0
     for path in args.in_paths:
         with open(path, "r", encoding="utf-8", errors="replace") as f:
             for line in f:
@@ -155,12 +156,18 @@ if __name__ == "__main__":
                 if not line:
                     continue
                 try:
-                    all_docs.append(json.loads(line))
+                    obj = json.loads(line)
                 except json.JSONDecodeError:
                     n_skip_decode_err += 1
                     continue
+                if not isinstance(obj, dict):
+                    n_skip_non_dict += 1
+                    continue
+                all_docs.append(obj)
     if n_skip_decode_err:
         print(f"[warn] skipped {n_skip_decode_err} lines with JSON decode errors", file=sys.stderr)
+    if n_skip_non_dict:
+        print(f"[warn] skipped {n_skip_non_dict} non-dict JSON lines", file=sys.stderr)
     print(f"loaded {len(all_docs)} docs from {len(args.in_paths)} files", file=sys.stderr)
 
     sampled = quota_sample(all_docs)
