@@ -257,14 +257,14 @@ if __name__ == "__main__":
                         # Flush bin
                         packed = SEP_TOKEN.join(cur_bin)[:PACK_LEN]
                         if len(packed) >= MIN_PACK_CHARS:
-                            row = {
-                                "text": packed,
-                                "domain": domain,
-                                "source": first_doc.get("source", ""),
-                                "n_docs": len(cur_bin),
-                                "n_chars": cur_len,
-                            }
-                            writer.write_batch(pa.record_batch([row], schema=schema))
+                            cols = [
+                                pa.array([packed]),
+                                pa.array([domain]),
+                                pa.array([first_doc.get("source", "")]),
+                                pa.array([len(cur_bin)], type=pa.int64()),
+                                pa.array([cur_len], type=pa.int64()),
+                            ]
+                            writer.write_batch(pa.record_batch(cols, schema=schema))
                             n_packs_written += 1
                             domain_acc[domain] += cur_len
                     cur_bin = [text]
@@ -279,14 +279,14 @@ if __name__ == "__main__":
         if cur_bin and (not args.max_packs or n_packs_written < args.max_packs):
             packed = SEP_TOKEN.join(cur_bin)[:PACK_LEN]
             if len(packed) >= MIN_PACK_CHARS:
-                row = {
-                    "text": packed,
-                    "domain": domain,
-                    "source": first_doc.get("source", "") if first_doc else "",
-                    "n_docs": len(cur_bin),
-                    "n_chars": cur_len,
-                }
-                writer.write_batch(pa.record_batch([row], schema=schema))
+                cols = [
+                    pa.array([packed]),
+                    pa.array([domain]),
+                    pa.array([first_doc.get("source", "") if first_doc else ""]),
+                    pa.array([len(cur_bin)], type=pa.int64()),
+                    pa.array([cur_len], type=pa.int64()),
+                ]
+                writer.write_batch(pa.record_batch(cols, schema=schema))
                 n_packs_written += 1
                 domain_acc[domain] += cur_len
         if args.max_packs and n_packs_written >= args.max_packs:
