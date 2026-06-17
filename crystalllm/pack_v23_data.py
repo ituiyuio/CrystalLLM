@@ -14,6 +14,7 @@ import pandas as pd
 PACK_LEN = 512
 SEP_TOKEN = "<eos>"  # 复用 vocab 已有
 MIN_PACK_CHARS = 50  # 跳过退化 pack
+ROW_GROUP_SIZE = 100_000  # ~50MB per row group (avoids thrift 2GB limit on huge files)
 
 DEFAULT_RATIOS = {
     "agentic": 0.70,
@@ -211,7 +212,8 @@ if __name__ == "__main__":
         ("n_docs", pa.int64()),
         ("n_chars", pa.int64()),
     ])
-    writer = pq.ParquetWriter(str(out_path), schema, compression="snappy")
+    writer = pq.ParquetWriter(str(out_path), schema, compression="snappy",
+                                row_group_size=ROW_GROUP_SIZE)
     n_packs_written = 0
     domain_acc: dict[str, int] = {d: 0 for d in domain_list}
     n_skip_decode_err = 0
