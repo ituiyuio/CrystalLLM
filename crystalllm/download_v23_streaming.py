@@ -96,12 +96,27 @@ class StreamQuota:
 
 
 class RotatingJsonlWriter:
-    def __init__(self, out_dir, base_name: str, rotate_bytes: int = ROTATE_BYTES):
+    def __init__(self, out_dir, base_name: str, rotate_bytes: int = ROTATE_BYTES,
+                 start_idx: Optional[int] = None):
         self.out_dir = Path(out_dir)
         self.out_dir.mkdir(parents=True, exist_ok=True)
         self.base_name = base_name
         self.rotate_bytes = rotate_bytes
-        self.idx = 0
+        # If start_idx is None, find the highest existing index and continue
+        # from there + 1 (so we append to existing files in the same out_dir).
+        if start_idx is None:
+            existing = sorted(self.out_dir.glob(f"{self.base_name}_*.jsonl"))
+            if existing:
+                # parse last index from filename
+                last = existing[-1].stem.rsplit("_", 1)[-1]
+                try:
+                    self.idx = int(last) + 1
+                except ValueError:
+                    self.idx = len(existing)
+            else:
+                self.idx = 0
+        else:
+            self.idx = start_idx
         self.fp = None
         self.bytes_written = 0
         self._open()
@@ -110,8 +125,10 @@ class RotatingJsonlWriter:
         if self.fp is not None:
             self.fp.close()
         path = self.out_dir / f"{self.base_name}_{self.idx:04d}.jsonl"
-        self.fp = open(path, "w", encoding="utf-8")
-        self.bytes_written = 0
+        # Append mode so we never truncate prior data
+        self.fp = open(path, "a", encoding="utf-8")
+        # Account for any pre-existing size in this file
+        self.bytes_written = self.fp.tell()
         self.idx += 1
 
     def write(self, doc: dict) -> None:
@@ -226,6 +243,17 @@ def stream_code_parquets(
     import pyarrow.parquet as pq
 
     writer = RotatingJsonlWriter(out_dir, "swift_github-code", rotate_bytes)
+    # Pre-load existing doc count so doc_ids continue from previous runs
+    pre_n_docs = 0
+    for f in sorted(Path(out_dir).glob("swift_github-code_*.jsonl")):
+        try:
+            # Count lines cheaply
+            with open(f, "rb") as fp:
+                pre_n_docs += sum(1 for _ in fp)
+        except OSError:
+            continue
+    quota.n_docs = pre_n_docs
+    print(f"  [github-code] pre-existing jsonl: {pre_n_docs} docs in {out_dir}", file=sys.stderr)
     clean_text = _load_clean_text()
     try:
         parquets = _list_github_code_files()
