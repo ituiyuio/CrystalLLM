@@ -32,9 +32,9 @@ probe fable5_3 --source lazarus19/Vibe-Coding-Claude-Fable-5 --subset-name defau
 probe humaneval --source ZhipuAI/humaneval-x --split test --sample-mb 1 --trust-remote-code &
 # github-code (用 Python-all, 不用 default)
 probe ghcode_py --source swift/github-code --subset-name "Python-all" --sample-mb 5 --trust-remote-code &
-# wikipedia (中英)
-probe wiki_en --source swift/wikipedia --subset-name en --sample-mb 5 --trust-remote-code &
-probe wiki_zh --source swift/wikipedia --subset-name zh --sample-mb 5 --trust-remote-code &
+# wikipedia (中英) — subset format is 20220301.<lang>
+probe wiki_en --source swift/wikipedia --subset-name 20220301.en --sample-mb 5 --trust-remote-code &
+probe wiki_zh --source swift/wikipedia --subset-name 20220301.zh --sample-mb 5 --trust-remote-code &
 
 wait
 echo ""
