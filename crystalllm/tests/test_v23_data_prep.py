@@ -44,3 +44,37 @@ def test_clean_text_returns_clean_string():
     from clean_v23_data import clean_text
     out = clean_text("hello world")
     assert out == "hello world"
+
+
+def test_discover_schema_writes_report(tmp_data_dir, monkeypatch):
+    """Smoke: discover_v23_schema writes a JSON report for a fake source."""
+    import discover_v23_schema as dvs
+    # Mock MsDataset to return 3 fake docs
+    class FakeDS:
+        def __iter__(self):
+            for i in range(3):
+                yield {"code": f"def f{i}(): pass", "language": "Python", "size": 13}
+    class FakeMsDataset:
+        load = staticmethod(lambda *a, **kw: FakeDS())
+    monkeypatch.setattr(dvs, "MsDataset", FakeMsDataset)
+    report_path = dvs.discover_schema(
+        source="fake/source", subset_name=None, split="train",
+        sample_mb=1, out_dir=tmp_data_dir,
+    )
+    report = json.loads(report_path.read_text(encoding="utf-8"))
+    assert report["source"] == "fake/source"
+    assert report["sample_n"] == 3
+    assert "fields" in report
+    assert report["empty_text_n"] == 0
+
+
+def test_discover_schema_raises_on_empty(monkeypatch):
+    import discover_v23_schema as dvs
+    class EmptyDS:
+        def __iter__(self):
+            return iter([])
+    class FakeMsDataset:
+        load = staticmethod(lambda *a, **kw: EmptyDS())
+    monkeypatch.setattr(dvs, "MsDataset", FakeMsDataset)
+    with pytest.raises(dvs.EmptyDatasetError):
+        dvs.discover_schema("fake/empty", None, "train", 1, out_dir=Path("/tmp"))
