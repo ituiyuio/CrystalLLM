@@ -46,6 +46,67 @@ DEFAULT_RATIOS = {
 OUT_PATH = Path("data/processed/extended_v23.parquet")
 
 
+def quota_sample(
+    docs: list[dict],
+    target_chars: dict[str, int] | None = None,
+    ratios: dict[str, float] | None = None,
+) -> list[dict]:
+    """Legacy helper: sample docs by character quota per domain.
+
+    Kept for unit tests; the production main() does per-file sampling
+    instead (memory-efficient for huge files).
+    """
+    if target_chars is None:
+        ratios = ratios or DEFAULT_RATIOS
+        total_chars = sum(len(d.get("text", "")) for d in docs)
+        target_chars = {dom: int(total_chars * r) for dom, r in ratios.items()}
+
+    by_domain: dict[str, list[dict]] = {}
+    for d in docs:
+        by_domain.setdefault(d.get("domain", "agentic"), []).append(d)
+
+    sampled = []
+    for domain, ds in by_domain.items():
+        random.shuffle(ds)
+        budget = target_chars.get(domain, 0)
+        acc = 0
+        for d in ds:
+            if acc >= budget:
+                break
+            sampled.append(d)
+            acc += len(d.get("text", ""))
+    return sampled
+
+
+def build_packs(docs: list[dict], pack_len: int = PACK_LEN) -> list[dict]:
+    """Legacy helper: build pack records from doc list (in-memory)."""
+    texts = [d["text"] for d in docs]
+    bins = pack_documents(texts, pack_len)
+    out = []
+    for b in bins:
+        packed_text = _join_pack(b)
+        if len(packed_text) < MIN_PACK_CHARS:
+            continue
+        first = docs[texts.index(b[0])]
+        out.append({
+            "text": packed_text,
+            "domain": _infer_domain(first),
+            "source": first.get("source", ""),
+            "n_docs": len(b),
+            "n_chars": sum(len(d) for d in b),
+        })
+    return out
+
+
+def write_parquet(packs: list[dict], out_path: Path = OUT_PATH) -> Path:
+    """Legacy helper: write all packs to a single parquet via pandas."""
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    df = pd.DataFrame(packs)
+    df.to_parquet(out_path, engine="pyarrow", compression="snappy", index=False,
+                  row_group_size=ROW_GROUP_SIZE)
+    return out_path
+
+
 def pack_documents(docs: list[str], pack_len: int = PACK_LEN) -> list[list[str]]:
     """Greedy bin-pack: pack_len chars per bin, <sep> between docs."""
     bins = []
