@@ -109,10 +109,27 @@ def minhash_dedup(
 
 if __name__ == "__main__":
     # CLI for one domain
-    if len(sys.argv) != 3:
-        print("Usage: python dedup_v23_data.py <src.jsonl> <dst.jsonl>", file=sys.stderr)
-        sys.exit(2)
-    src, dst = Path(sys.argv[1]), Path(sys.argv[2])
-    n1 = exact_hash_dedup(src, dst.with_suffix(".exact.jsonl"))
-    n2 = minhash_dedup(dst.with_suffix(".exact.jsonl"), dst)
-    print(f"exact kept {n1}, after minhash kept {n2}", file=sys.stderr)
+    import argparse
+    p = argparse.ArgumentParser()
+    p.add_argument("src", help="Source jsonl")
+    p.add_argument("dst", help="Destination jsonl")
+    p.add_argument("--no-minhash", action="store_true",
+                   help="Skip MinHash near-dedup (fast; SHA-1 only). "
+                        "Recommended for files with >100K docs where MinHash "
+                        "is O(N) in-memory and very slow.")
+    p.add_argument("--exact-prefix-len", type=int, default=EXACT_PREFIX_LEN)
+    args = p.parse_args()
+    src, dst = Path(args.src), Path(args.dst)
+    intermediate = dst.with_suffix(".exact.jsonl")
+    n1 = exact_hash_dedup(src, intermediate, prefix_len=args.exact_prefix_len)
+    if args.no_minhash:
+        # Move intermediate to dst
+        if intermediate != dst:
+            intermediate.replace(dst)
+        print(f"exact kept {n1} (--no-minhash)", file=sys.stderr)
+    else:
+        n2 = minhash_dedup(intermediate, dst)
+        # Clean up intermediate
+        if intermediate.exists() and intermediate != dst:
+            intermediate.unlink()
+        print(f"exact kept {n1}, after minhash kept {n2}", file=sys.stderr)
