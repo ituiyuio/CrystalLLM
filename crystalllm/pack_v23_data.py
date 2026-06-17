@@ -209,20 +209,37 @@ def main():
     domain_acc: dict[str, int] = {d: 0 for d in domain_list}
     n_skip_decode_err = 0
     n_skip_non_dict = 0
+    # Buffer columns and flush as a single record batch every ROW_GROUP_SIZE
+    # packs. Each write_batch() call creates one row group, so we want
+    # bigger batches to limit row group count (pyarrow writes 1 row group
+    # per write_batch). row_group_size=50K -> ~23 row groups for 1.1M packs.
+    _buf = {"text": [], "domain": [], "source": [], "n_docs": [], "n_chars": []}
 
     def _flush_bin(packed, ndocs, nchars, src):
         nonlocal n_packs_written
-        cols = [
-            pa.array([packed]),
-            pa.array([domain]),
-            pa.array([src]),
-            pa.array([ndocs], type=pa.int64()),
-            pa.array([nchars], type=pa.int64()),
-        ]
-        # Use row_group_size to keep each row group < 2GB
-        writer.write_batch(pa.record_batch(cols, schema=schema))
+        _buf["text"].append(packed)
+        _buf["domain"].append(domain)
+        _buf["source"].append(src)
+        _buf["n_docs"].append(ndocs)
+        _buf["n_chars"].append(nchars)
         n_packs_written += 1
         domain_acc[domain] += nchars
+        if len(_buf["text"]) >= ROW_GROUP_SIZE:
+            _flush_buf()
+
+    def _flush_buf():
+        if not _buf["text"]:
+            return
+        batch = pa.record_batch([
+            pa.array(_buf["text"]),
+            pa.array(_buf["domain"]),
+            pa.array(_buf["source"]),
+            pa.array(_buf["n_docs"], type=pa.int64()),
+            pa.array(_buf["n_chars"], type=pa.int64()),
+        ], schema=schema)
+        writer.write_batch(batch)
+        for v in _buf.values():
+            v.clear()
 
     for path, domain, file_chars in file_stats:
         rate = char_budget.get(domain, 0) / max(1, total_chars_per_domain[domain])
@@ -273,6 +290,7 @@ def main():
         if args.max_packs and n_packs_written >= args.max_packs:
             break
 
+    _flush_buf()  # flush any remaining packs
     writer.close()
     if n_skip_decode_err:
         print(f"[warn] skipped {n_skip_decode_err} lines with JSON decode errors", file=sys.stderr)
