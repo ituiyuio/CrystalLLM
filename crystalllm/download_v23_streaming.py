@@ -10,6 +10,8 @@ import sys
 from pathlib import Path
 from typing import Optional
 
+import v23_modelscope_compat  # noqa: F401  (apply side-effect: patches as_dataset)
+
 # Force SDK cache to a separate dir (must happen before any modelscope import)
 os.environ.setdefault("MODELSCOPE_CACHE", "D:/tmp_v23_dl/")
 

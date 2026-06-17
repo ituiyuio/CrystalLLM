@@ -9,6 +9,8 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Iterator
 
+import v23_modelscope_compat  # noqa: F401  (apply side-effect: patches as_dataset)
+
 # MsDataset is a lazy attribute — set to a real class on first call, or
 # replaced by a fake in tests via `monkeypatch.setattr("download_v23_agentic.MsDataset", ...)`.
 # We expose it as a module-level symbol so tests can patch it before any

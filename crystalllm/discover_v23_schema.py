@@ -8,6 +8,9 @@ import sys
 from pathlib import Path
 from typing import Optional
 
+# Compatibility shim: modelscope 1.37.1 vs datasets 5.0.0 verification_mode kwarg
+import v23_modelscope_compat  # noqa: F401  (apply side-effect)
+
 # MsDataset is a lazy attribute — set to a real class on first call, or
 # replaced by a fake in tests via `monkeypatch.setattr("discover_v23_schema.MsDataset", ...)`.
 # We expose it as a module-level symbol so tests can patch it before any
