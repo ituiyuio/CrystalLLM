@@ -148,3 +148,73 @@ def test_stream_rotate_file_index(tmp_path):
     w.close()
     files = sorted(tmp_path.glob("streaming_*.jsonl"))
     assert len(files) >= 2
+
+
+def test_exact_hash_dedup_basic(tmp_path):
+    from dedup_v23_data import exact_hash_dedup
+    # 2 exact dup + 1 unique
+    docs = [
+        {"text": "a" * 250, "doc_id": "1"},
+        {"text": "a" * 250, "doc_id": "2"},  # dup of 1
+        {"text": "b" * 250, "doc_id": "3"},  # unique
+    ]
+    inp = tmp_path / "in.jsonl"
+    out = tmp_path / "out.jsonl"
+    inp.write_text("\n".join(json.dumps(d) for d in docs), encoding="utf-8")
+    n_kept = exact_hash_dedup(inp, out, prefix_len=200)
+    assert n_kept == 2
+    kept = [json.loads(l) for l in out.read_text(encoding="utf-8").splitlines() if l]
+    assert len(kept) == 2
+
+
+def test_minhash_dedup_filters_near_dup(tmp_path):
+    """Two docs that share 90% content -> one removed."""
+    from dedup_v23_data import minhash_dedup
+    base = "the quick brown fox jumps over the lazy dog " * 5
+    docs = [
+        {"text": base, "doc_id": "1"},
+        {"text": base + "extra", "doc_id": "2"},  # ~95% similar to 1
+        {"text": "completely unrelated content " * 5, "doc_id": "3"},
+    ]
+    inp = tmp_path / "in.jsonl"
+    out = tmp_path / "out.jsonl"
+    inp.write_text("\n".join(json.dumps(d) for d in docs), encoding="utf-8")
+    n_kept = minhash_dedup(
+        inp, out,
+        num_perm=64, ngram=3, threshold=0.80,
+    )
+    # Should keep 2: either {1,3} or {2,3}, but not both 1 & 2
+    kept_ids = sorted(json.loads(l)["doc_id"] for l in out.read_text(encoding="utf-8").splitlines() if l)
+    assert "3" in kept_ids
+    assert len(kept_ids) == 2
+
+
+def test_pack_documents_respects_pack_len():
+    from pack_v23_data import pack_documents
+    docs = ["a" * 100, "b" * 200, "c" * 300, "d" * 50]
+    bins = pack_documents(docs, pack_len=512)
+    for b in bins:
+        # total len (incl. <sep> between docs) <= 512
+        assert sum(len(d) + 1 for d in b) <= 512
+    # All docs must be packed
+    flat = [d for b in bins for d in b]
+    assert sorted(flat) == sorted(docs)
+
+
+def test_quota_sampling_respects_ratios():
+    from pack_v23_data import quota_sample
+    # 100GB char budget: 70% agentic, 20% code, 10% wiki
+    docs = [
+        {"text": "a" * 100, "domain": "agentic"},
+        {"text": "b" * 200, "domain": "code"},
+        {"text": "c" * 300, "domain": "wiki"},
+    ] * 1000  # simulate 1000x
+    target_chars = {"agentic": 70_000, "code": 20_000, "wiki": 10_000}
+    sampled = quota_sample(docs, target_chars)
+    chars_by_domain = {}
+    for d in sampled:
+        chars_by_domain[d["domain"]] = chars_by_domain.get(d["domain"], 0) + len(d["text"])
+    total = sum(chars_by_domain.values())
+    assert abs(chars_by_domain.get("agentic", 0) / total - 0.70) < 0.05
+    assert abs(chars_by_domain.get("code", 0) / total - 0.20) < 0.05
+    assert abs(chars_by_domain.get("wiki", 0) / total - 0.10) < 0.05
