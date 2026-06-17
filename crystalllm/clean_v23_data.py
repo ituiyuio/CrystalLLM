@@ -9,13 +9,12 @@ from pathlib import Path
 from typing import Optional
 
 CONTROL_CHARS_RE = re.compile(r"[\x00-\x08\x0b-\x0c\x0e-\x1f\x7f]")
-UNPRINTABLE_RE = re.compile(r"[^\S\n\t\ ]")  # any whitespace except space \n \t will be normalized below
 
 LEN_MIN = 10
 LEN_MAX = 50_000
 
 
-def clean_text(text: object, min_len: int = 1, max_len: int = LEN_MAX) -> Optional[str]:
+def clean_text(text: str, min_len: int = 1, max_len: int = LEN_MAX) -> Optional[str]:
     """Clean a single text. Return None if filtered out.
 
     Length filter is applied on the **raw input** so that callers can pre-screen
@@ -23,8 +22,6 @@ def clean_text(text: object, min_len: int = 1, max_len: int = LEN_MAX) -> Option
     tests of cleaning behavior on short strings; production callers in
     ``clean_jsonl_file`` pass ``min_len=LEN_MIN``.
     """
-    if not isinstance(text, str):
-        return None
     # 0) Length filter on original input
     if len(text) < min_len or len(text) > max_len:
         return None
