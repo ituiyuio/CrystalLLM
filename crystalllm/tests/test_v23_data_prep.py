@@ -118,3 +118,33 @@ def test_safe_name_and_source_lists():
     assert len(AGENTIC_SOURCES) == 3
     assert all(isinstance(s, tuple) and len(s) == 3 for s in AGENTIC_SOURCES)
     assert isinstance(HUMANEVAL_SOURCE, tuple) and len(HUMANEVAL_SOURCE) == 3
+
+
+def test_stream_filter_python_only():
+    from download_v23_streaming import filter_lang
+    assert filter_lang({"language": "Python", "code": "x"}, allow={"Python"})
+    assert not filter_lang({"language": "Java", "code": "x"}, allow={"Python"})
+
+
+def test_stream_count_chars_respects_quota():
+    """Smoke: streaming stop logic hits target."""
+    from download_v23_streaming import StreamQuota
+    sq = StreamQuota(target_chars=100)
+    for doc in [{"text": "a" * 50}, {"text": "b" * 50}, {"text": "c" * 50}]:
+        sq.add(doc["text"])
+        if sq.reached():
+            break
+    assert sq.reached()
+    assert sq.char_count >= 100
+    assert sq.n_docs == 2
+
+
+def test_stream_rotate_file_index(tmp_path):
+    """100MB chunk rotation increments file index."""
+    from download_v23_streaming import RotatingJsonlWriter
+    w = RotatingJsonlWriter(out_dir=tmp_path, base_name="streaming", rotate_bytes=100)
+    for i in range(20):
+        w.write({"text": "x" * 50, "doc_id": str(i)})
+    w.close()
+    files = sorted(tmp_path.glob("streaming_*.jsonl"))
+    assert len(files) >= 2
