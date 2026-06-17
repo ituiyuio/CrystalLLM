@@ -78,3 +78,43 @@ def test_discover_schema_raises_on_empty(monkeypatch):
     monkeypatch.setattr(dvs, "MsDataset", FakeMsDataset)
     with pytest.raises(dvs.EmptyDatasetError):
         dvs.discover_schema("fake/empty", None, "train", 1, out_dir=Path("/tmp"))
+
+
+def test_write_jsonl_doc_basic(tmp_path):
+    from download_v23_agentic import write_jsonl_doc, iter_jsonl_docs
+    p = tmp_path / "out.jsonl"
+    write_jsonl_doc(p, {"text": "hello", "source": "x", "doc_id": "1"})
+    docs = list(iter_jsonl_docs(p))
+    assert docs == [{"text": "hello", "source": "x", "doc_id": "1"}]
+
+
+def test_iter_jsonl_docs_handles_corrupt_line(tmp_path):
+    from download_v23_agentic import iter_jsonl_docs
+    p = tmp_path / "bad.jsonl"
+    p.write_text('{"a": 1}\nnot json\n{"b": 2}\n', encoding="utf-8")
+    docs = list(iter_jsonl_docs(p))
+    assert docs == [{"a": 1}, {"b": 2}]
+
+
+def test_write_jsonl_doc_appends_and_creates_dirs(tmp_path):
+    """write_jsonl_doc should append (not overwrite) and mkdir parents."""
+    from download_v23_agentic import write_jsonl_doc, iter_jsonl_docs
+    p = tmp_path / "deep" / "nested" / "out.jsonl"
+    write_jsonl_doc(p, {"text": "first", "source": "x", "doc_id": "0"})
+    write_jsonl_doc(p, {"text": "second", "source": "x", "doc_id": "1"})
+    assert p.exists()
+    docs = list(iter_jsonl_docs(p))
+    assert docs == [
+        {"text": "first", "source": "x", "doc_id": "0"},
+        {"text": "second", "source": "x", "doc_id": "1"},
+    ]
+
+
+def test_safe_name_and_source_lists():
+    """_safe_name converts 'org/name' to 'org__name'; AGENTIC_SOURCES has 3 entries."""
+    from download_v23_agentic import _safe_name, AGENTIC_SOURCES, HUMANEVAL_SOURCE
+    assert _safe_name("armand0e/claude-fable-5-claude-code") == "armand0e__claude-fable-5-claude-code"
+    assert _safe_name("simple") == "simple"
+    assert len(AGENTIC_SOURCES) == 3
+    assert all(isinstance(s, tuple) and len(s) == 3 for s in AGENTIC_SOURCES)
+    assert isinstance(HUMANEVAL_SOURCE, tuple) and len(HUMANEVAL_SOURCE) == 3
