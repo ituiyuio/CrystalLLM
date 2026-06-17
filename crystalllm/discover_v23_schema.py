@@ -66,17 +66,30 @@ def discover_schema(
     samples, total_bytes = [], 0
     text_lens = []
     empty_n = 0
-    text_field = None  # we'll auto-pick the first string field
+    field_counter: dict[str, int] = {}  # str-typed field frequency across early docs
+    BUFFER = 10
+    text_field: str | None = None
+    buffer_full = False
 
     for doc in ds:
+        # Always count str fields for the field_frequency map (until text_field is set)
         if text_field is None:
-            # Heuristic: pick the first str-typed field
             for k, v in doc.items():
                 if isinstance(v, str):
-                    text_field = k
-                    break
-        if text_field is None:
-            text_field = "text"
+                    field_counter[k] = field_counter.get(k, 0) + 1
+            samples.append(doc)
+            if len(samples) >= BUFFER:
+                text_field = max(field_counter, key=field_counter.get) if field_counter else "text"
+                buffer_full = True
+                # Now retroactively compute text_lens for the buffered docs
+                for d in samples:
+                    t = d.get(text_field, "")
+                    if not t:
+                        empty_n += 1
+                    text_lens.append(len(t))
+                    total_bytes += len(json.dumps(d, ensure_ascii=False).encode("utf-8"))
+            continue
+
         text = doc.get(text_field, "")
         if not text:
             empty_n += 1
@@ -84,14 +97,28 @@ def discover_schema(
         samples.append(doc)
         total_bytes += len(json.dumps(doc, ensure_ascii=False).encode("utf-8"))
         if total_bytes >= sample_mb * 1024 * 1024:
-            break
+            break  # include the doc that pushed us over budget
 
     if not samples:
         raise EmptyDatasetError(f"Source {source} is empty")
 
-    text_lens_sorted = sorted(text_lens)
+    # Handle the case where the dataset has fewer than BUFFER docs
+    # (e.g., small test fixtures). Pick text_field from whatever we saw.
+    if not buffer_full:
+        text_field = max(field_counter, key=field_counter.get) if field_counter else "text"
+        for d in samples:
+            t = d.get(text_field, "")
+            if not t:
+                empty_n += 1
+            text_lens.append(len(t))
+            total_bytes += len(json.dumps(d, ensure_ascii=False).encode("utf-8"))
+
+    if not text_lens:
+        raise EmptyDatasetError(f"Source {source} has no text content")
+
+    import statistics
     avg = sum(text_lens) / len(text_lens)
-    median = text_lens_sorted[len(text_lens_sorted) // 2]
+    median = int(statistics.median(text_lens))
     report = {
         "source": source,
         "subset_name": subset_name,
