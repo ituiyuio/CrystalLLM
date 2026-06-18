@@ -117,14 +117,28 @@ forward 次数从 K+1 降到 2, 这是真正的 sequential bottleneck 突破.
 **复用 v26.5 的 KV cache 代码**, 支持:
 - KV cache 作为输入 (跳过 attention 重算)
 - Batched 输入 (B=N=10, KV 各异)
-- 仅最后一层前向 + head (因为 KV 已有)
+- 完整 24 层前向 (因为各候选 KV 不同, 必须重新走 blocks)
 
-**关键简化**: 既然有 KV cache, 只需:
-1. 用 cached K, V 计算 attention
-2. 最后一层 hidden state
-3. head 投影到 logits
+**关键路径** (per sample n):
+1. tok_embed(BOS) → x_n (1, embd)
+2. x_n + z_to_emb(z_n) → inp_n
+3. inp_n + pos(0) → inp_n
+4. for layer in 24:
+     q_n = layer.ln1(inp_n) @ W_q
+     k_new_n = layer.ln1(inp_n) @ W_k
+     v_new_n = layer.ln1(inp_n) @ W_v
+     k_n = cat([KV_cache_n[layer]['k'][:, :, 0], k_new_n], dim=1)  # 100 + 1
+     v_n = cat([KV_cache_n[layer]['v'][:, :, 0], v_new_n], dim=1)
+     attn = softmax(q_n @ k_n^T / sqrt(d)) @ v_n
+     inp_n = layer.mlp(layer.ln2(inp_n + attn))
+5. logits_n = head(ln_f(inp_n))  # (1, V)
 
-实际上, 由于各候选 K, V 不同, 需要 N 倍 attention 计算, 但避免了 AR sequential.
+**批量化**: batch=N=10, 每样本独立的 KV cache.
+
+**简化路径** (备选): 只跑最后一层
+- 用 KV 计算 attention 的 output, 直接接 head
+- 假设: KV cache 包含了所有历史信息, 不需要走完 24 层
+- **风险**: 质量下降 (KV 没有经过中间层抽象)
 
 ## 3. 实验设计
 
