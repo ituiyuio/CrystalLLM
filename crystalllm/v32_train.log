@@ -1,0 +1,30 @@
+=== v32 重训 32L decoder (~1.2B) ===
+Vocab 2261
+
+=== 加载 v28.5 (28L) warm-start ===
+v28.5: 28L × 1280 × 20
+v28.5 维度: 1280 embd, 20 head
+v32 维度: 1280 embd, 20 head
+
+=== 初始化 v32 (32L × 1280 × 20) ===
+v32 decoder: 633.56M params (vs v28.5 555M, 1.14x)
+Loaded 343 tensors from v28.5 (warm-start)
+Skipped 0 tensors (新层或维度不匹配)
+Loaded v24 cached z: train torch.Size([19307, 256]) | val torch.Size([1016, 256])
+v24 train: 19307 | val: 1016
+
+=== train 4000 steps, B=4, T=512, LR=2e-05 ===
+⚠️ 1.2B 模型, 可能很慢 (估 0.5-1s/step)
+  step    0/4000 | recon 0.931 | val_recon 0.804 | KL 303.28 β=0.000 | val_ppl 2.234 | LR 5.00e-08 | 1s ETA 2563s
+  step  500/4000 | recon 1.057 | val_recon 0.969 | KL 310.21 β=0.500 | val_ppl 2.635 | LR 2.00e-05 | 117s ETA 822s
+  step 1000/4000 | recon 0.958 | val_recon 1.120 | KL 299.27 β=1.000 | val_ppl 3.066 | LR 1.87e-05 | 235s ETA 704s
+  step 1500/4000 | recon 0.885 | val_recon 1.061 | KL 324.25 β=1.000 | val_ppl 2.890 | LR 1.57e-05 | 352s ETA 586s
+  step 2000/4000 | recon 0.469 | val_recon 1.112 | KL 305.58 β=1.000 | val_ppl 3.040 | LR 1.17e-05 | 468s ETA 468s
+  step 2500/4000 | recon 0.787 | val_recon 0.823 | KL 295.57 β=1.000 | val_ppl 2.277 | LR 7.40e-06 | 586s ETA 351s
+  step 3000/4000 | recon 0.717 | val_recon 0.612 | KL 349.62 β=1.000 | val_ppl 1.843 | LR 3.57e-06 | 703s ETA 234s
+  step 3500/4000 | recon 0.717 | val_recon 0.976 | KL 309.74 β=1.000 | val_ppl 2.654 | LR 9.33e-07 | 821s ETA 117s
+  step 3999/4000 | recon 0.924 | val_recon 0.767 | KL 309.06 β=1.000 | val_ppl 2.154 | LR 0.00e+00 | 939s ETA 0s
+
+Model saved: v32_decoder.pt (2534 MB)
+
+=== 训练完成 (941s) ===

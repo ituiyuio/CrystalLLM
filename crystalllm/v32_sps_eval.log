@@ -1,0 +1,27 @@
+=== v32 SpS 评估 ===
+v32 verifier: 633.56M
+v32 drafter: 118.71M + tok_emb: 1.16M
+
+=== 速度对比 ===
+  [v32 AR baseline] mean 903.65 ms
+  [v32 SpS K=8] mean 385.42 ms
+
+v32 SpS 速度: 385 ms
+  vs v32 AR: 904 ms, 加速 2.34x
+  vs v28.5 AR (544ms): 1.41x
+  vs v31 SpS (206ms): 0.53x
+
+=== 接受率 ===
+  接受: 959/1037 = 92.5%
+
+=== 生成质量 ===
+v32 AR:  '<bos>0,                                                         '
+v32 SpS: '<bos>                                                           '
+v32 SpS rounds: 14
+
+=== 速度分解 ===
+  prior 采样: 9.17 ms
+  扩散 drafter (K=8, 100M): 18.51 ms
+  verifier 1 forward (32L, K=8): 10.43 ms
+
+Saved: v32_sps_results.json

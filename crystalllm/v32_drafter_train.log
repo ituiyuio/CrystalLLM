@@ -1,0 +1,26 @@
+=== v32 100M 扩散 drafter 训练 ===
+Vocab 2261
+Loading cached_v29_outputs.npz ...
+  z: torch.Size([2000, 256]), tokens: torch.Size([2000, 100])
+
+v32 Drafter: 118.71M params (vs v31 28M, 4.2x)
+  tok_emb (tied): 1.16M params
+
+=== 训练 6000 steps, B=16, LR=0.0002 ===
+  step    0/6000 | loss 2.4350 | pred_match 0.0% | target_match 100.0% | LR 3.33e-07 | 0s ETA 2352s
+  step  500/6000 | loss 0.6336 | pred_match 58.6% | target_match 100.0% | LR 1.67e-04 | 13s ETA 139s
+  step 1000/6000 | loss 0.2628 | pred_match 57.0% | target_match 100.0% | LR 1.97e-04 | 25s ETA 124s
+  step 1500/6000 | loss 0.1522 | pred_match 57.0% | target_match 100.0% | LR 1.87e-04 | 37s ETA 111s
+  step 2000/6000 | loss 0.1578 | pred_match 57.0% | target_match 100.0% | LR 1.69e-04 | 49s ETA 98s
+  step 2500/6000 | loss 0.0719 | pred_match 57.0% | target_match 100.0% | LR 1.45e-04 | 61s ETA 86s
+  step 3000/6000 | loss 0.0237 | pred_match 56.2% | target_match 100.0% | LR 1.17e-04 | 73s ETA 73s
+  step 3500/6000 | loss 0.1150 | pred_match 59.4% | target_match 100.0% | LR 8.83e-05 | 85s ETA 61s
+  step 4000/6000 | loss 0.0072 | pred_match 57.8% | target_match 100.0% | LR 6.03e-05 | 97s ETA 49s
+  step 4500/6000 | loss 0.0412 | pred_match 55.5% | target_match 100.0% | LR 3.57e-05 | 109s ETA 36s
+  step 5000/6000 | loss 0.0104 | pred_match 55.5% | target_match 100.0% | LR 1.64e-05 | 121s ETA 24s
+  step 5500/6000 | loss 0.0027 | pred_match 57.8% | target_match 100.0% | LR 4.18e-06 | 133s ETA 12s
+  step 5999/6000 | loss 0.0019 | pred_match 56.2% | target_match 100.0% | LR 0.00e+00 | 145s ETA 0s
+
+Model saved: v32_diff_drafter.pt (479.5 MB)
+
+=== 训练完成 (146s) ===
