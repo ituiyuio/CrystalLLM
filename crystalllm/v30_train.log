@@ -1,0 +1,44 @@
+=== v30 KV 扩散模型训练 (CFM, 100M) ===
+Loading cached_v30_kv.npz ...
+  kv: (500, 28, 2, 20, 103, 64), dtype=float32
+  z: torch.Size([500, 256])
+  KV 范围: [-10.703, 11.539]
+  N=500, L=28 层, S=2 (K/V), H=20 头, T_kv=103 tokens, D=64 dim/head
+  KV 扁平化: torch.Size([500, 7383040])
+
+Fitting PCA (128 维) ...
+  U: torch.Size([500, 128]), S[:5]: [19296.998046875, 14392.869140625, 9892.4638671875, 8085.28662109375, 6439.8818359375]
+  S 总和: 87985.93
+  S 累计解释方差: 100.00%
+  KV_LATENT: torch.Size([500, 128])
+  标准化: mean 0.000, std 0.999
+
+DiffKVGenerator: 116.55M params (vs v27 13M)
+
+=== 训练 4000 steps, B=8, LR=0.0001 ===
+  step    0/4000 | loss 2.24165 | cos_sim_norm -0.0054 | cos_sim_real -0.1211 | LR 5.00e-07 | 0s ETA 1657s
+  step  200/4000 | loss 2.16624 | cos_sim_norm -0.0347 | cos_sim_real 0.0655 | LR 1.00e-04 | 5s ETA 91s
+  step  400/4000 | loss 1.76996 | cos_sim_norm -0.0239 | cos_sim_real 0.1340 | LR 9.93e-05 | 9s ETA 81s
+  step  600/4000 | loss 3.12036 | cos_sim_norm 0.0651 | cos_sim_real 0.3590 | LR 9.73e-05 | 13s ETA 75s
+  step  800/4000 | loss 1.73094 | cos_sim_norm 0.0132 | cos_sim_real 0.3617 | LR 9.40e-05 | 17s ETA 68s
+  step 1000/4000 | loss 1.67093 | cos_sim_norm 0.0410 | cos_sim_real 0.2510 | LR 8.94e-05 | 21s ETA 63s
+  step 1200/4000 | loss 2.44727 | cos_sim_norm 0.0358 | cos_sim_real 0.2333 | LR 8.38e-05 | 25s ETA 59s
+  step 1400/4000 | loss 2.41780 | cos_sim_norm 0.0564 | cos_sim_real 0.3063 | LR 7.73e-05 | 29s ETA 55s
+  step 1600/4000 | loss 1.75991 | cos_sim_norm 0.0280 | cos_sim_real 0.3239 | LR 7.00e-05 | 33s ETA 50s
+  step 1800/4000 | loss 2.11640 | cos_sim_norm 0.0480 | cos_sim_real 0.3834 | LR 6.22e-05 | 37s ETA 46s
+  step 2000/4000 | loss 1.90141 | cos_sim_norm 0.0347 | cos_sim_real 0.4578 | LR 5.41e-05 | 41s ETA 41s
+  step 2200/4000 | loss 1.49581 | cos_sim_norm 0.0227 | cos_sim_real 0.1136 | LR 4.58e-05 | 45s ETA 37s
+  step 2400/4000 | loss 2.31142 | cos_sim_norm 0.0311 | cos_sim_real 0.3065 | LR 3.77e-05 | 49s ETA 33s
+  step 2600/4000 | loss 1.80143 | cos_sim_norm -0.0163 | cos_sim_real 0.2873 | LR 2.99e-05 | 53s ETA 29s
+  step 2800/4000 | loss 1.50846 | cos_sim_norm 0.0330 | cos_sim_real 0.4846 | LR 2.26e-05 | 57s ETA 24s
+  step 3000/4000 | loss 1.70422 | cos_sim_norm 0.0052 | cos_sim_real 0.4730 | LR 1.61e-05 | 61s ETA 20s
+  step 3200/4000 | loss 1.85607 | cos_sim_norm 0.0206 | cos_sim_real 0.3630 | LR 1.05e-05 | 65s ETA 16s
+  step 3400/4000 | loss 1.96707 | cos_sim_norm 0.0349 | cos_sim_real 0.1177 | LR 6.01e-06 | 69s ETA 12s
+  step 3600/4000 | loss 2.34963 | cos_sim_norm 0.0658 | cos_sim_real 0.3249 | LR 2.70e-06 | 73s ETA 8s
+  step 3800/4000 | loss 1.61249 | cos_sim_norm 0.0134 | cos_sim_real 0.1510 | LR 6.75e-07 | 77s ETA 4s
+  step 3999/4000 | loss 2.49734 | cos_sim_norm 0.0193 | cos_sim_real 0.5331 | LR 0.00e+00 | 81s ETA 0s
+
+Model saved: v30_diff_kv.pt (466.2 MB)
+PCA basis saved: v30_pca_basis.npz
+
+=== 训练完成 (84s) ===
