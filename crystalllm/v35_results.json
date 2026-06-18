@@ -1,0 +1,13 @@
+{
+  "v35_ms": 1611.6405725479126,
+  "v31_ms": 206,
+  "speedup_vs_v31": 0.12782006330004814,
+  "accept_rate": 0.13286713286713286,
+  "v31_accept_rate": 0.955,
+  "n_rounds_avg": 86.8,
+  "v31_rounds": 13,
+  "drafter_M": 28.23936,
+  "verifier_M": 554.85184,
+  "n_train_samples": 100000,
+  "v31_n_train_samples": 2000
+}
