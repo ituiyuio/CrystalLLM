@@ -1,0 +1,77 @@
+=== v34a Shared-Backbone 训练 ===
+Vocab 2261
+Loading cached_v29_outputs.npz ...
+  samples: 2000, z: torch.Size([2000, 256]), tokens: torch.Size([2000, 100])
+Backbone: 239.8M
+D head: 16.4M
+Total: 256.2M
+
+=== Training 30000 steps, B=8, LR=0.0002 ===
+Phase 1 (AR-only):        0 - 5000
+Phase 2 (+0.1 diff):      5000 - 15000
+Phase 3 (+0.3 diff):      15000 - 30000
+  step     0/30000 | loss 15.7380 (AR 15.7380, diff 0.0000 w=0.0) | LR 5.00e-07 | 0s ETA 13892s
+  step   500/30000 | loss 0.0000 (AR 0.0000, diff 0.0000 w=0.0) | LR 2.00e-04 | 31s ETA 1824s
+  step  1000/30000 | loss 0.0241 (AR 0.0241, diff 0.0000 w=0.0) | LR 2.00e-04 | 56s ETA 1636s
+  step  1500/30000 | loss 0.0115 (AR 0.0115, diff 0.0000 w=0.0) | LR 1.99e-04 | 82s ETA 1559s
+  step  2000/30000 | loss 0.0008 (AR 0.0008, diff 0.0000 w=0.0) | LR 1.99e-04 | 108s ETA 1510s
+  step  2500/30000 | loss 0.0093 (AR 0.0093, diff 0.0000 w=0.0) | LR 1.98e-04 | 134s ETA 1470s
+  step  3000/30000 | loss 0.0215 (AR 0.0215, diff 0.0000 w=0.0) | LR 1.96e-04 | 169s ETA 1524s
+  step  3500/30000 | loss 0.0001 (AR 0.0001, diff 0.0000 w=0.0) | LR 1.95e-04 | 199s ETA 1507s
+  step  4000/30000 | loss 0.0132 (AR 0.0132, diff 0.0000 w=0.0) | LR 1.93e-04 | 225s ETA 1462s
+  step  4500/30000 | loss 0.0000 (AR 0.0000, diff 0.0000 w=0.0) | LR 1.91e-04 | 251s ETA 1424s
+  step  5000/30000 | loss 0.1928 (AR 0.0003, diff 1.9249 w=0.1) | LR 1.88e-04 | 277s ETA 1387s
+  step  5500/30000 | loss 0.1032 (AR 0.0000, diff 1.0316 w=0.1) | LR 1.86e-04 | 310s ETA 1381s
+  step  6000/30000 | loss 0.1131 (AR 0.0008, diff 1.1224 w=0.1) | LR 1.83e-04 | 343s ETA 1370s
+  step  6500/30000 | loss 0.1199 (AR 0.0003, diff 1.1962 w=0.1) | LR 1.80e-04 | 376s ETA 1360s
+  step  7000/30000 | loss 0.1013 (AR 0.0001, diff 1.0125 w=0.1) | LR 1.76e-04 | 411s ETA 1352s
+  step  7500/30000 | loss 0.0999 (AR 0.0000, diff 0.9991 w=0.1) | LR 1.73e-04 | 441s ETA 1324s
+  step  8000/30000 | loss 0.1034 (AR 0.0027, diff 1.0075 w=0.1) | LR 1.69e-04 | 472s ETA 1299s
+  step  8500/30000 | loss 0.0996 (AR 0.0001, diff 0.9949 w=0.1) | LR 1.65e-04 | 503s ETA 1272s
+  step  9000/30000 | loss 0.1002 (AR 0.0000, diff 1.0021 w=0.1) | LR 1.61e-04 | 533s ETA 1243s
+  step  9500/30000 | loss 0.1011 (AR 0.0005, diff 1.0057 w=0.1) | LR 1.57e-04 | 563s ETA 1215s
+  step 10000/30000 | loss 0.1007 (AR 0.0000, diff 1.0071 w=0.1) | LR 1.52e-04 | 593s ETA 1186s
+  step 10500/30000 | loss 0.1001 (AR 0.0000, diff 1.0014 w=0.1) | LR 1.48e-04 | 623s ETA 1157s
+  step 11000/30000 | loss 0.1032 (AR 0.0021, diff 1.0106 w=0.1) | LR 1.43e-04 | 653s ETA 1128s
+  step 11500/30000 | loss 0.1126 (AR 0.0000, diff 1.1259 w=0.1) | LR 1.38e-04 | 684s ETA 1100s
+  step 12000/30000 | loss 0.1052 (AR 0.0023, diff 1.0287 w=0.1) | LR 1.33e-04 | 714s ETA 1070s
+  step 12500/30000 | loss 0.1000 (AR 0.0003, diff 0.9966 w=0.1) | LR 1.28e-04 | 744s ETA 1041s
+  step 13000/30000 | loss 0.1397 (AR 0.0395, diff 1.0025 w=0.1) | LR 1.23e-04 | 773s ETA 1011s
+  step 13500/30000 | loss 0.1004 (AR 0.0000, diff 1.0038 w=0.1) | LR 1.18e-04 | 804s ETA 983s
+  step 14000/30000 | loss 0.0998 (AR 0.0000, diff 0.9979 w=0.1) | LR 1.13e-04 | 834s ETA 953s
+  step 14500/30000 | loss 0.0994 (AR 0.0000, diff 0.9943 w=0.1) | LR 1.07e-04 | 863s ETA 923s
+  step 15000/30000 | loss 0.3031 (AR 0.0007, diff 1.0081 w=0.3) | LR 1.02e-04 | 893s ETA 893s
+  step 15500/30000 | loss 0.2997 (AR 0.0001, diff 0.9988 w=0.3) | LR 9.68e-05 | 922s ETA 863s
+  step 16000/30000 | loss 0.3010 (AR 0.0000, diff 1.0032 w=0.3) | LR 9.15e-05 | 952s ETA 833s
+  step 16500/30000 | loss 0.2983 (AR 0.0000, diff 0.9943 w=0.3) | LR 8.62e-05 | 981s ETA 803s
+  step 17000/30000 | loss 0.3208 (AR 0.0138, diff 1.0232 w=0.3) | LR 8.10e-05 | 1011s ETA 773s
+  step 17500/30000 | loss 0.3001 (AR 0.0000, diff 1.0003 w=0.3) | LR 7.58e-05 | 1041s ETA 743s
+  step 18000/30000 | loss 0.3020 (AR 0.0000, diff 1.0065 w=0.3) | LR 7.07e-05 | 1070s ETA 713s
+  step 18500/30000 | loss 0.2976 (AR 0.0000, diff 0.9919 w=0.3) | LR 6.57e-05 | 1100s ETA 684s
+  step 19000/30000 | loss 0.3027 (AR 0.0000, diff 1.0090 w=0.3) | LR 6.07e-05 | 1129s ETA 654s
+  step 19500/30000 | loss 0.2983 (AR 0.0000, diff 0.9943 w=0.3) | LR 5.59e-05 | 1159s ETA 624s
+  step 20000/30000 | loss 0.3009 (AR 0.0000, diff 1.0030 w=0.3) | LR 5.12e-05 | 1188s ETA 594s
+  step 20500/30000 | loss 0.2990 (AR 0.0000, diff 0.9965 w=0.3) | LR 4.67e-05 | 1218s ETA 564s
+  step 21000/30000 | loss 0.2990 (AR 0.0000, diff 0.9967 w=0.3) | LR 4.22e-05 | 1247s ETA 535s
+  step 21500/30000 | loss 0.3006 (AR 0.0010, diff 0.9987 w=0.3) | LR 3.80e-05 | 1277s ETA 505s
+  step 22000/30000 | loss 0.2992 (AR 0.0001, diff 0.9970 w=0.3) | LR 3.39e-05 | 1306s ETA 475s
+  step 22500/30000 | loss 0.3002 (AR 0.0000, diff 1.0007 w=0.3) | LR 3.00e-05 | 1336s ETA 445s
+  step 23000/30000 | loss 0.3315 (AR 0.0000, diff 1.1051 w=0.3) | LR 2.63e-05 | 1365s ETA 416s
+  step 23500/30000 | loss 0.3005 (AR 0.0003, diff 1.0006 w=0.3) | LR 2.29e-05 | 1395s ETA 386s
+  step 24000/30000 | loss 0.3003 (AR 0.0000, diff 1.0010 w=0.3) | LR 1.96e-05 | 1424s ETA 356s
+  step 24500/30000 | loss 0.2988 (AR 0.0000, diff 0.9959 w=0.3) | LR 1.66e-05 | 1454s ETA 326s
+  step 25000/30000 | loss 0.3015 (AR 0.0019, diff 0.9990 w=0.3) | LR 1.37e-05 | 1484s ETA 297s
+  step 25500/30000 | loss 0.3000 (AR 0.0000, diff 1.0001 w=0.3) | LR 1.12e-05 | 1513s ETA 267s
+  step 26000/30000 | loss 0.3021 (AR 0.0000, diff 1.0069 w=0.3) | LR 8.87e-06 | 1543s ETA 237s
+  step 26500/30000 | loss 0.3011 (AR 0.0000, diff 1.0036 w=0.3) | LR 6.82e-06 | 1572s ETA 208s
+  step 27000/30000 | loss 0.3005 (AR 0.0000, diff 1.0018 w=0.3) | LR 5.02e-06 | 1602s ETA 178s
+  step 27500/30000 | loss 0.3003 (AR 0.0006, diff 0.9988 w=0.3) | LR 3.50e-06 | 1631s ETA 148s
+  step 28000/30000 | loss 0.2990 (AR 0.0000, diff 0.9967 w=0.3) | LR 2.24e-06 | 1662s ETA 119s
+  step 28500/30000 | loss 0.2989 (AR 0.0000, diff 0.9962 w=0.3) | LR 1.26e-06 | 1691s ETA 89s
+  step 29000/30000 | loss 0.2996 (AR 0.0001, diff 0.9981 w=0.3) | LR 5.62e-07 | 1721s ETA 59s
+  step 29500/30000 | loss 0.3010 (AR 0.0000, diff 1.0033 w=0.3) | LR 1.40e-07 | 1750s ETA 30s
+  step 29999/30000 | loss 0.2999 (AR 0.0000, diff 0.9997 w=0.3) | LR 0.00e+00 | 1780s ETA 0s
+
+Saved: v34a_shared_backbone.pt (1024.9 MB)
+
+=== 训练完成 (1781s) ===
