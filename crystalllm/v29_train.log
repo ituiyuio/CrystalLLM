@@ -1,0 +1,23 @@
+=== v29 TokenDiffusionDrafter 训练 ===
+Vocab 2261
+Loading cached_v29_outputs.npz ...
+  z: torch.Size([2000, 256]), range [-2.19, 2.16]
+  tokens: torch.Size([2000, 100])
+
+TokenDiffusionDrafter: 29.45M params
+  tok_emb + tied head: 1.16M params (TIED)
+
+=== 训练 4000 steps, B=16, LR=0.0002 ===
+  step    0/4000 | loss 2.4764 | pred_match 0.0% | target_match 100.0% | LR 5.00e-07 | 0s ETA 1245s
+  step  500/4000 | loss 0.4938 | pred_match 74.8% | target_match 100.0% | LR 2.00e-04 | 6s ETA 39s
+  step 1000/4000 | loss 0.1853 | pred_match 77.0% | target_match 100.0% | LR 1.87e-04 | 11s ETA 32s
+  step 1500/4000 | loss 0.1103 | pred_match 74.8% | target_match 100.0% | LR 1.57e-04 | 16s ETA 27s
+  step 2000/4000 | loss 0.1273 | pred_match 74.0% | target_match 100.0% | LR 1.17e-04 | 21s ETA 21s
+  step 2500/4000 | loss 0.0536 | pred_match 73.2% | target_match 100.0% | LR 7.40e-05 | 27s ETA 16s
+  step 3000/4000 | loss 0.0173 | pred_match 69.7% | target_match 100.0% | LR 3.57e-05 | 32s ETA 11s
+  step 3500/4000 | loss 0.0324 | pred_match 71.7% | target_match 100.0% | LR 9.33e-06 | 37s ETA 5s
+  step 3999/4000 | loss 0.0521 | pred_match 73.5% | target_match 100.0% | LR 0.00e+00 | 42s ETA 0s
+
+Model saved: v29_token_diff.pt (117.8 MB)
+
+=== 训练完成 (43s) ===

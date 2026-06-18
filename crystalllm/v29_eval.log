@@ -1,0 +1,26 @@
+=== v29 端到端评估 ===
+v25: 24L × 1280 × 20, T=512, D_Z=256
+v25 verifier: 476.14M
+v29 drafter: 29.45M + tok_emb: 1.16M
+
+=== 速度对比 ===
+  [v25 AR baseline] mean 473.74 ms
+  [v29 (扩散 tokens)] mean 490.15 ms
+
+v29 速度: 490 ms
+  vs v25: 474 ms, 加速比 0.97x
+  vs v26 SpS K=5 (663ms): 1.35x
+
+=== 接受率测试 (训练数据 z) ===
+  接受率 (训练 z): 0/10 = 0.0%
+
+=== 接受率测试 (sample_prior z) ===
+  接受率 (sample_prior): 0/10 = 0.0%
+
+=== 生成质量 (定性) ===
+v25 AR:  <bos>0,                                                                             
+v29:     <bos>                                                                               
+v29 接受 tokens: 0/100
+  v25 vs v29 前缀匹配: 1/80
+
+Saved: v29_results.json
