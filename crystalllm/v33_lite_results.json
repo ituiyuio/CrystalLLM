@@ -1,0 +1,12 @@
+{
+  "v33_lite_ode_only_ms": 324.397611618042,
+  "v33_lite_hybrid_ms": 320.4298496246338,
+  "speedup_vs_v31": 0.6428864234755839,
+  "speedup_vs_v33_c": 1.7476524133316844,
+  "accept_rate": 0.9594202898550724,
+  "n_rounds_avg": 15.1,
+  "drafter_M": 34.540544,
+  "verifier_M": 554.85184,
+  "v31_baseline_ms": 206,
+  "v33_c_baseline_ms": 560
+}

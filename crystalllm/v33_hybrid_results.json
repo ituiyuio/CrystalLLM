@@ -1,0 +1,10 @@
+{
+  "v33_ode_only_ms": 473.2372283935547,
+  "v33_hybrid_ms": 560.2557182312012,
+  "speedup_vs_v31": 0.3676892413528028,
+  "accept_rate_hybrid": 0.9951923076923077,
+  "n_rounds_avg": 13.3,
+  "drafter_M": 42.945536,
+  "verifier_M": 554.85184,
+  "v31_baseline_ms": 206
+}

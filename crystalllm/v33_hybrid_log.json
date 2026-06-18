@@ -1,0 +1,107 @@
+{
+  "log": [
+    {
+      "step": 0,
+      "loss": 3.321043014526367,
+      "loss_cfm": 2.264155626296997,
+      "loss_refine": 1.0568873882293701,
+      "match_no_refine": 0.0,
+      "match_refined": 0.0,
+      "target_match": 1.0,
+      "lr": 5.000000000000001e-07
+    },
+    {
+      "step": 500,
+      "loss": 0.4568907618522644,
+      "loss_cfm": 0.4101422131061554,
+      "loss_refine": 0.04674854129552841,
+      "match_no_refine": 0.5703125,
+      "match_refined": 0.5703125,
+      "target_match": 1.0,
+      "lr": 0.00019961182610449515
+    },
+    {
+      "step": 1000,
+      "loss": 0.22675636410713196,
+      "loss_cfm": 0.21533741056919098,
+      "loss_refine": 0.011418950743973255,
+      "match_no_refine": 0.5859375,
+      "match_refined": 0.5859375,
+      "target_match": 1.0,
+      "lr": 0.00018655887417688122
+    },
+    {
+      "step": 1500,
+      "loss": 0.07770517468452454,
+      "loss_cfm": 0.07379063963890076,
+      "loss_refine": 0.003914531785994768,
+      "match_no_refine": 0.609375,
+      "match_refined": 0.5703125,
+      "target_match": 1.0,
+      "lr": 0.0001572861373027709
+    },
+    {
+      "step": 2000,
+      "loss": 0.10065515339374542,
+      "loss_cfm": 0.0982840284705162,
+      "loss_refine": 0.002371121197938919,
+      "match_no_refine": 0.5703125,
+      "match_refined": 0.5703125,
+      "target_match": 1.0,
+      "lr": 0.00011727887047662276
+    },
+    {
+      "step": 2500,
+      "loss": 0.08842501789331436,
+      "loss_cfm": 0.08643276244401932,
+      "loss_refine": 0.0019922584760934114,
+      "match_no_refine": 0.609375,
+      "match_refined": 0.609375,
+      "target_match": 1.0,
+      "lr": 7.403381242555088e-05
+    },
+    {
+      "step": 3000,
+      "loss": 0.07230589538812637,
+      "loss_cfm": 0.07106087356805801,
+      "loss_refine": 0.0012450210051611066,
+      "match_no_refine": 0.5703125,
+      "match_refined": 0.5859375,
+      "target_match": 1.0,
+      "lr": 3.565441352662211e-05
+    },
+    {
+      "step": 3500,
+      "loss": 0.023718545213341713,
+      "loss_cfm": 0.02316497638821602,
+      "loss_refine": 0.0005535692907869816,
+      "match_no_refine": 0.59375,
+      "match_refined": 0.5859375,
+      "target_match": 1.0,
+      "lr": 9.332375409924121e-06
+    },
+    {
+      "step": 3999,
+      "loss": 0.021419446915388107,
+      "loss_cfm": 0.020962262526154518,
+      "loss_refine": 0.000457183487014845,
+      "match_no_refine": 0.5703125,
+      "match_refined": 0.5625,
+      "target_match": 1.0,
+      "lr": 0.0
+    }
+  ],
+  "config": {
+    "STEPS": 4000,
+    "B": 32,
+    "LR": 0.0002,
+    "D_HID": 1024,
+    "N_LAYER": 6,
+    "N_REFINE": 3,
+    "N": 8,
+    "D_EMB": 512,
+    "model_params_M": 42.945536,
+    "n_train_samples": 2000,
+    "arch": "v33-HybridDrafter-CFM-K=8-Refine-TIED-WEIGHTS"
+  }
+}
