@@ -1,0 +1,27 @@
+=== v31 SpS 评估 ===
+v28.5 verifier: 554.85M
+v31 drafter: 28.24M + tok_emb: 1.16M
+
+=== 速度对比 ===
+  [v28.5 AR] mean 564.04 ms
+  [v31 SpS K=8] mean 206.29 ms
+
+v31 速度: 206 ms
+  vs v28.5: 564 ms, 加速 2.73x
+  vs v26 SpS (663ms): 3.21x
+
+=== 接受率测试 ===
+  接受 tokens: 987/1033 = 95.5%
+
+=== 生成质量 ===
+v28.5: '<bos>0,                                                                             '
+v31:   '<bos>                                                                               '
+v31 rounds: 20 (生成 100 tokens)
+  v28.5 vs v31 前缀匹配: 1/80
+
+=== 速度分解 ===
+  prior 采样: 7.05 ms
+  扩散 drafter (K=8): 7.98 ms
+  verifier 1 forward (K=8): 6.97 ms
+
+Saved: v31_results.json

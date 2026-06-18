@@ -1,0 +1,23 @@
+=== v31 K=8 扩散 drafter 训练 ===
+Vocab 2261
+Loading cached_v29_outputs.npz ...
+  z: torch.Size([2000, 256])
+  tokens: torch.Size([2000, 100])
+
+Drafter: 28.24M params (N=8, K=8)
+  tok_emb + tied head: 1.16M params
+
+=== 训练 4000 steps, B=32, LR=0.0002 ===
+  step    0/4000 | loss 2.3063 | pred_match 0.0% | target_match 100.0% | LR 5.00e-07 | 0s ETA 1586s
+  step  500/4000 | loss 0.5014 | pred_match 57.0% | target_match 100.0% | LR 2.00e-04 | 7s ETA 46s
+  step 1000/4000 | loss 0.2467 | pred_match 60.2% | target_match 100.0% | LR 1.87e-04 | 13s ETA 38s
+  step 1500/4000 | loss 0.0964 | pred_match 57.8% | target_match 100.0% | LR 1.57e-04 | 19s ETA 31s
+  step 2000/4000 | loss 0.0874 | pred_match 57.0% | target_match 100.0% | LR 1.17e-04 | 24s ETA 24s
+  step 2500/4000 | loss 0.0556 | pred_match 57.8% | target_match 100.0% | LR 7.40e-05 | 30s ETA 18s
+  step 3000/4000 | loss 0.0268 | pred_match 56.2% | target_match 100.0% | LR 3.57e-05 | 36s ETA 12s
+  step 3500/4000 | loss 0.0293 | pred_match 61.7% | target_match 100.0% | LR 9.33e-06 | 42s ETA 6s
+  step 3999/4000 | loss 0.0152 | pred_match 56.2% | target_match 100.0% | LR 0.00e+00 | 48s ETA 0s
+
+Model saved: v31_diff_drafter.pt (117.6 MB)
+
+=== 训练完成 (48s) ===
