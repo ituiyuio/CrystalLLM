@@ -1,0 +1,11 @@
+{
+  "checkpoint": "v25",
+  "z_mode": "encoded",
+  "PPL": 2.460454774476842,
+  "avg_loss": 0.9003462005318619,
+  "decoder_params_M": 476.14208,
+  "D_Z": 256,
+  "T": 512,
+  "n_val_samples": 1016,
+  "n_batches": 254
+}
