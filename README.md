@@ -14,7 +14,7 @@ It records the full journey — from a 50-line character-level toy to a 570M-par
 
 - **Premise.** Text generation is reframed as a two-stage physical process: high-entropy noise → low-entropy latent semantic intent → concrete tokens.
 - **Architecture.** Phase I: 5–10 diffusion steps in a low-dim latent space produce a `z` that carries global intent. Phase II: a causal Transformer decoder generates tokens conditioned on `z`.
-- **Status (v38, 2026-06-19).** z 健康度诊断完成 (Scenario C, 2/4 健康) — see [`crystalllm/versions/v38/v38_decision.md`](./crystalllm/versions/v38/v38_decision.md). v25 仍是 PPL SOTA (2.47). 下一步: 重测 MI with token embeddings + 维度子集分析.
+- **Status (v39, 2026-06-19).** z 细化诊断完成 — v38 MI=0.06 是测量假象, 真实 MI=2.0. z 信息量充足, decoder 设计才是瓶颈. 见 [`crystalllm/versions/v39/v39_decision.md`](./crystalllm/versions/v39/v39_decision.md). 下一步: decoder 失败原因诊断 (v40 选项 C, 半天) → block-diffusion PoC (v40 选项 A, 2-3 天).
 - **Trajectory.** 50 versions in [`crystalllm/versions/`](./crystalllm/versions/), from M1 toy world to real-corpus diffusion + AR hybrid. Full timeline in [`crystalllm/TIMELINE.md`](./crystalllm/TIMELINE.md).
 
 ---

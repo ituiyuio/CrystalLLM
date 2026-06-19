@@ -28,3 +28,19 @@
 ## 下一步
 
 基于 v39_refine_report.json 的 4 种决策组合, 决定 v40 方向.
+
+## 决策 (v39_decision.md 摘要)
+
+**核心发现**: v38 MI=0.06 是测量假象. v39 用 64 维 text features 重测, **MI = 1.21 (random embed) / 2.03 (char trigrams)**, 比 v38 高 20-34 倍.
+
+**结论**: z 信息量充足, **decoder 设计才是问题** (不是 z).
+
+**推荐 v40 路径**: 
+1. 半天 decoder 失败原因诊断 (选项 C)
+2. 2-3 天 block-diffusion PoC (选项 A)
+
+不推荐:
+- ❌ 修 z (KL annealing) - 不解决 decoder 问题
+- ❌ 战略重定位 - v39 证明 z 可用
+
+详见 `v39_decision.md`.
