@@ -79,6 +79,26 @@ def forward_z_at_end(decoder, z, x, **kwargs):
     return logits[:, :T_]
 
 
+def forward_broadcast_random(decoder, z, x, **kwargs):
+    """V7 (control): random noise broadcast (same shape as V2)"""
+    B_, T_ = x.shape
+    # 用 random noise 替代 z, 同样的形状和 magnitude
+    z_random = torch.randn_like(z)
+    z_emb = decoder.z_to_emb(z_random).unsqueeze(1)  # (B, 1, D)
+    bos_emb = decoder.tok(torch.tensor([decoder.BOS_ID], device=x.device)).expand(B_, 1, -1)
+    x_emb = decoder.tok(x)
+    inp = torch.cat([z_emb, bos_emb, x_emb], dim=1)
+    inp = inp + decoder.pos(torch.arange(T_ + 2, device=x.device))
+    # 同 V2: 把 z_emb 作为 residual 加到 [1, T+1] 位置 (跳过 pos 0)
+    z_residual = z_emb.expand(B_, T_ + 2, -1).clone()
+    z_residual[:, 0, :] = 0
+    inp = inp + z_residual
+    for b in decoder.blocks:
+        inp = b(inp)
+    logits = decoder.head(decoder.ln_f(inp))
+    return logits[:, 1:T_ + 1]
+
+
 # ============================================================
 # PPL 评估
 # ============================================================
@@ -124,7 +144,7 @@ def main():
     parser.add_argument("--max_batches", type=int, default=None,
                         help="限制 batch 数 (smoke test)")
     parser.add_argument("--variants", nargs="+",
-                        default=["V1", "V2", "V3", "V4", "V5", "V6"])
+                        default=["V1", "V2", "V3", "V4", "V5", "V6", "V7"])
     parser.add_argument("--output", default=str(V40_DIR / "decoder_injection_ppl.json"))
     args = parser.parse_args()
 
@@ -155,6 +175,7 @@ def main():
         "V4": ("z scale x0.5", forward_z_scaled, {"scale": 0.5}),
         "V5": ("z linear projection", forward_z_projection, {}),
         "V6": ("z at end of sequence", forward_z_at_end, {}),
+        "V7": ("broadcast random noise (control)", forward_broadcast_random, {}),
     }
 
     results = {}

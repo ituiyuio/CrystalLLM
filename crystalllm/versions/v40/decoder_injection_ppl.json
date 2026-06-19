@@ -39,9 +39,16 @@
       "ppl": 2.4891731312991054,
       "avg_loss": 0.911950579543752,
       "delta_vs_V1_pct": 1.167197101941026
+    },
+    "V7": {
+      "name": "broadcast random noise (control)",
+      "ppl": 149.02679341452276,
+      "avg_loss": 5.004126111353476,
+      "delta_vs_V1_pct": 5956.8800109812955
     }
   },
-  "decision": "all_neutral",
-  "action": "decoder_truly_ignores_z -> block-diffusion PoC (v41)",
-  "note": "V1 baseline = v25 BAD-DP (PPL 2.47 per v37)"
+  "decision": "format_brittle",
+  "action": "decoder_is_format_brittle_not_z_specific -> block-diffusion PoC (v41) needs NEW decoder architecture",
+  "v7_interpretation": "V7 (random noise) is even MORE catastrophic than V2 (149 vs 78.7), proving decoder is format-brittle, NOT z-specific. v25 decoder hardcoded assumption: input format is [z(pos 0), BOS, x...]. Any deviation triggers PPL explosion.",
+  "note": "V1 baseline = v25 BAD-DP (PPL 2.4605 vs v37 reported 2.47). V7 random control confirms decoder is format-brittle: even unrelated random noise at pos 0 + broadcast causes larger catastrophic failure than z itself."
 }
