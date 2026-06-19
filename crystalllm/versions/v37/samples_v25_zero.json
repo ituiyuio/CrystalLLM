@@ -1,0 +1,32 @@
+{
+  "checkpoint": "v25",
+  "z_mode": "zero",
+  "n_samples": 10,
+  "n_tokens": 50,
+  "non_space_rates": [
+    0.88,
+    0.76,
+    0.78,
+    0.84,
+    0.9,
+    0.84,
+    0.98,
+    0.88,
+    0.66,
+    0.96
+  ],
+  "avg_rate": 0.8480000000000001,
+  "samples": [
+    "b03,. .q..j\no#k\n \n c lra sfpo\nz\no#c lcorbtaoll.eSn",
+    "a -b- 9-43\n%a% /-6131  w 1-x-8437  -w6-4y%- b  2 -",
+    "a1)e,2if,81ad6d,4yav,2s5c))\n\n         s e=ledn(,u ",
+    " 0_>1 1*xl1i*n1u\";\n # eNl obrjaedn (s|ezse)t yv1m ",
+    " ,+ ja v+e\"g,z 2} \n{\t\ng\tbitdcetxept[\nj\ta1d_(e*na_-",
+    " 7-9b \n2b.y032..x 3% l1icx _cp23 812:.\n.\"c\"a\" \"=d ",
+    "e7.cfag\nepxrpesrs_ d=hmtmxlNianr(onbLeiakneort)a)1",
+    "c2, \n0 xF1o,r eo.flsah2zalra,b .4.cx\n,#\np#r=\n\" \" \n",
+    "U,( 30,  01,0 , 00,,   00,,    018,5 5 0},  ( 600,",
+    "e2d.;f o-nedxswmapx:_\n; \ni\nn/e*d-ienmcoaunst;af/:r"
+  ],
+  "matched_count": 2
+}
