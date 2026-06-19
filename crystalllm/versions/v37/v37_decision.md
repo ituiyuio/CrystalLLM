@@ -21,7 +21,7 @@
 - **cross-attn 贡献 (v36_zero - v25_zero)**: +0.3380 PPL
 - **cross-attn 成本 (encoded 模式)**: +0.3378 PPL
 - **cross-attn 成本 (zero 模式)**: +0.3380 PPL
-- **cross-attn 成本差异 (enc - zero)**: -0.000217 PPL — **若接近 0, 说明 cross-attn 成本与 z 完全无关**
+- **cross-attn 成本差异 (enc - zero)**: -0.000217 PPL — **(spec §5 阈值: `|cost_diff| < 0.05 PPL`)** 若接近 0, 说明 cross-attn 成本与 z 完全无关
 
 ### 1.3 生成质量
 
@@ -36,7 +36,7 @@
 
 **场景**: A (z 死路, 但 cross-attn 有独立贡献)
 
-**核心结论**: z 死路 + cross-attn 自身引入噪声 — 战略重定位路径 (但 cross-attn 也需重新审视)
+**核心结论**: **z 是 dead weight + cross-attn 是 ~0.338 PPL 纯参数开销 (与 z 完全无关)** → 战略重定位. 推荐路径: **v25-only + SpS 优化 (复用 v31 思路)**, v36 cross-attn 架构应退役 (无 z 收益)
 
 ## 3. 推荐下一步
 
@@ -47,6 +47,9 @@
 - 重新定义"信息结晶"含义: z 不是生成路线的输入, 而是 SpS 路由 / 数据压缩探针 / 可控性接口
 - 或: 放弃混合, v25 + SpS 走速度优化路径 (复用 v31 思路)
 - 不再做"让 decoder 用 z"的尝试
+- **首选路径**: v25 (476M BAD-DP, PPL 2.47) + SpS 速度优化 (复用 v31, 接受率不再假象因 v36 已验证 non-space 模式)
+- **弃用路径**: v36 cross-attn (570M, PPL 2.81) — cross-attn 引入 +0.338 PPL 纯开销, 无 z 收益
+- **不再尝试**: prefix-tuning / cross-attn 变体 — z 是 dead weight, 任何注入路径都不会优于 v25
 
 ### 若场景 B (z 微弱信号, 1-5%)
 
