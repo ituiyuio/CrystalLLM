@@ -166,3 +166,59 @@ def classify_text(text: str) -> str:
         if comment_lines > len(lines) * 0.5:
             return "comment"
     return "plain"
+
+
+# ============================================================
+# v24 encoder + 数据加载
+# ============================================================
+def load_v24_encoder(device: str = "cuda"):
+    """
+    加载 v24 encoder.
+    v25 和 v36 都消费这个 encoder 输出的 z (cached_v24_z.npz).
+    """
+    ckpt_path = V38_DIR.parent / "v24" / "v24_encoder.pt"
+    ckpt = torch.load(ckpt_path, map_location=device, weights_only=False)
+    return ckpt
+
+
+def load_val_data():
+    """
+    加载 val 文本 + v24 cached z
+    """
+    import pandas as pd
+    df_val = pd.read_parquet(DATA / "v24_val.parquet")
+    val_texts = df_val["text"].tolist()
+    cache = np.load(DATA / "cached_v24_z.npz")
+    val_z = cache["val_z"]  # (1016, 256)
+    return val_texts, val_z
+
+
+def encode_val_with_encoder(encoder_ckpt, device: str = "cuda"):
+    """
+    复用 cached_v24_z.npz 的 val_z (v24 encoder 已训练完成, 输出已 cache)
+    不重新 inference, 直接用 cache.
+    """
+    _, val_z = load_val_data()
+    return torch.tensor(val_z, dtype=torch.float32, device=device)
+
+
+def encode_text_for_mi(val_texts, device: str = "cuda"):
+    """
+    为 MINE 准备 text features (简化: 长度 + 首字符 one-hot)
+    返回: (N, hidden_dim) tensor
+    """
+    vocab = json.load(open(DATA / "char_vocab.json", encoding="utf-8"))
+    stoi = vocab["stoi"]
+    V = vocab["vocab_size"]
+
+    # 取 vocab 中前 5 个最常见字符作为 one-hot 特征
+    common_chars = list(stoi.keys())[:5]
+
+    features = []
+    for text in val_texts[:1016]:
+        length = min(len(text), 1000) / 1000.0
+        first_char = text[0] if text else " "
+        one_hot = [1.0 if first_char == c else 0.0 for c in common_chars]
+        features.append([length] + one_hot)
+
+    return torch.tensor(features, dtype=torch.float32, device=device)
