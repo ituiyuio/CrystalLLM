@@ -264,13 +264,20 @@ def main():
     print(f"Collapse ratio: {collapse:.4f} (healthy < 0.5, unhealthy > 0.7)")
     collapse_healthy = collapse < 0.5
 
-    # 指标 4: 类别可分性
+    # 指标 4: 类别可分性 (使用真实 domain 标签)
     print("\n--- Metric 4: Class separability (JS divergence) ---")
-    labels = np.array([hash(classify_text(t)) % 4 for t in val_texts])
+    # 旧值: hash bucketing (保留作 reference, 用于对比 bug 影响)
+    labels_hash = np.array([hash(classify_text(t)) % 4 for t in val_texts])
+    class_counts_hash = {int(c): int((labels_hash == c).sum()) for c in np.unique(labels_hash)}
+    js_hash = compute_class_separability(val_z.cpu().numpy(), labels_hash, n_pca=32)
+    print(f"Class distribution (hash bucketing, reference): {class_counts_hash}")
+    print(f"JS (hash bucketing, reference): {js_hash:.4f} nats")
+    # 新值: 真实 domain 标签
+    labels = load_val_labels()[:args.n_samples]
     class_counts = {int(c): int((labels == c).sum()) for c in np.unique(labels)}
-    print(f"Class distribution: {class_counts}")
+    print(f"Class distribution (from val.domain): {class_counts}")
     js = compute_class_separability(val_z.cpu().numpy(), labels, n_pca=32)
-    print(f"JS (class separability): {js:.4f} nats (healthy > 0.05, unhealthy < 0.02)")
+    print(f"JS (class separability, domain-based): {js:.4f} nats (healthy > 0.05, unhealthy < 0.02)")
     js_healthy = js > 0.05
 
     # 指标 2: MINE
@@ -319,7 +326,9 @@ def main():
                                 "threshold_healthy": 0.5, "threshold_unhealthy": 0.7},
             "js_class_separability_nats": {"value": float(js), "healthy": bool(js_healthy),
                                              "threshold_healthy": 0.05, "threshold_unhealthy": 0.02,
-                                             "class_distribution": class_counts}
+                                             "class_distribution": class_counts,
+                                             "value_hash_bucket_reference": float(js_hash),
+                                             "class_distribution_hash_bucket": class_counts_hash}
         },
         "decision": {
             "n_healthy": n_healthy,
@@ -334,6 +343,22 @@ def main():
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(report, f, indent=2, ensure_ascii=False)
     print(f"\nReport written to {out_path}")
+
+
+# ============================================================
+# 真实 domain 标签加载 (修复 JS 分类 bug)
+# ============================================================
+def load_val_labels():
+    """
+    从 val parquet 加载真实 domain 标签.
+    Returns: (N,) numpy array of int labels, 0=code, 1=agentic, 2=unknown
+    """
+    import pandas as pd
+    df = pd.read_parquet(DATA / "v24_val.parquet")
+    domain = df["domain"].tolist()
+    label_map = {"code": 0, "agentic": 1}
+    labels = np.array([label_map.get(d, 2) for d in domain])  # 未知类别 -> 2
+    return labels
 
 
 if __name__ == "__main__":

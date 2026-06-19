@@ -28,20 +28,26 @@
       "threshold_unhealthy": 0.7
     },
     "js_class_separability_nats": {
-      "value": 0.04490726068405948,
-      "healthy": false,
+      "value": 3.1972783152804087,
+      "healthy": true,
       "threshold_healthy": 0.05,
       "threshold_unhealthy": 0.02,
       "class_distribution": {
-        "0": 1000,
-        "3": 16
+        "0": 997,
+        "1": 19
+      },
+      "value_hash_bucket_reference": 0.0,
+      "class_distribution_hash_bucket": {
+        "0": 1,
+        "1": 137,
+        "2": 878
       }
     }
   },
   "decision": {
-    "n_healthy": 1,
-    "scenario": "F",
-    "action": "战略重定位, 放弃 z 路径"
+    "n_healthy": 2,
+    "scenario": "C",
+    "action": "二次 brainstorm"
   },
   "note": "v25 和 v36 都使用 v24 encoder 的 z (cached_v24_z.npz), 所以本测量对两者都适用"
 }
