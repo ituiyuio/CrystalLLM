@@ -1,0 +1,182 @@
+=== v46 Phase 0 完整训练启动 ===
+时间: Sat Jun 20 02:09:55     2026
+
+
+######################################################################
+## Variant A (dense AR baseline)
+## 启动时间: Sat Jun 20 02:09:55     2026
+######################################################################
+=== v46 Phase 0 From-Scratch PoC ===
+Args: {'variant': 'A', 'steps': 5000, 'batch_size': 8, 'T': 512, 'lr': 0.0003, 'warmup_steps': 500, 'alpha': 0.5, 'eval_every': 250, 'eval_batches_train': 32, 'eval_batches_final': 254, 'device': 'cuda'}
+Device: cuda
+CUDA available: True
+GPU: NVIDIA GeForce RTX 5090
+
+======================================================================
+=== v46 Phase 0 | Variant A ===
+  ffn_type=dense  use_per_block_z=False  loss_mode=ar_only
+  Steps=5000  B=8  T=512  LR=0.0003  alpha=0.5
+======================================================================
+
+Vocab: V_BASE=2261, V=2262 (added <mask>=2261)
+Data: train=19307, val=1016
+Z cache: train torch.Size([19307, 256]), val torch.Size([1016, 256])
+Decoder: active=35.17M, total=35.17M, layers=8, embd=512, block_pos=514
+
+=== Training: 5000 steps ===
+  step    0/5000 | L_AR 7.887 | L_diff 0.000 | aux 0.0000 | val_ppl 2608.8324 | lr 6.00e-07 | moe_var nan | pos_norm 0.00 | 1s ETA 3272s
+  step  250/5000 | L_AR 3.619 | L_diff 0.000 | aux 0.0000 | val_ppl 33.5316 | lr 1.51e-04 | moe_var nan | pos_norm 0.00 | 8s ETA 157s
+  step  500/5000 | L_AR 3.221 | L_diff 0.000 | aux 0.0000 | val_ppl 22.3697 | lr 3.00e-04 | moe_var nan | pos_norm 0.00 | 16s ETA 142s
+  step  750/5000 | L_AR 3.225 | L_diff 0.000 | aux 0.0000 | val_ppl 20.0086 | lr 2.98e-04 | moe_var nan | pos_norm 0.00 | 23s ETA 133s
+  step 1000/5000 | L_AR 3.043 | L_diff 0.000 | aux 0.0000 | val_ppl 18.2873 | lr 2.91e-04 | moe_var nan | pos_norm 0.00 | 31s ETA 124s
+  step 1250/5000 | L_AR 2.740 | L_diff 0.000 | aux 0.0000 | val_ppl 17.0653 | lr 2.80e-04 | moe_var nan | pos_norm 0.00 | 39s ETA 116s
+  step 1500/5000 | L_AR 2.924 | L_diff 0.000 | aux 0.0000 | val_ppl 15.4115 | lr 2.65e-04 | moe_var nan | pos_norm 0.00 | 46s ETA 108s
+  step 1750/5000 | L_AR 2.569 | L_diff 0.000 | aux 0.0000 | val_ppl 13.6944 | lr 2.46e-04 | moe_var nan | pos_norm 0.00 | 54s ETA 100s
+  step 2000/5000 | L_AR 2.649 | L_diff 0.000 | aux 0.0000 | val_ppl 13.0314 | lr 2.25e-04 | moe_var nan | pos_norm 0.00 | 62s ETA 93s
+  step 2250/5000 | L_AR 2.477 | L_diff 0.000 | aux 0.0000 | val_ppl 11.8053 | lr 2.01e-04 | moe_var nan | pos_norm 0.00 | 69s ETA 85s
+  step 2500/5000 | L_AR 2.213 | L_diff 0.000 | aux 0.0000 | val_ppl 10.9521 | lr 1.76e-04 | moe_var nan | pos_norm 0.00 | 77s ETA 77s
+  step 2750/5000 | L_AR 2.608 | L_diff 0.000 | aux 0.0000 | val_ppl 10.4585 | lr 1.50e-04 | moe_var nan | pos_norm 0.00 | 85s ETA 69s
+  step 3000/5000 | L_AR 2.250 | L_diff 0.000 | aux 0.0000 | val_ppl 9.7444 | lr 1.24e-04 | moe_var nan | pos_norm 0.00 | 92s ETA 62s
+  step 3250/5000 | L_AR 2.248 | L_diff 0.000 | aux 0.0000 | val_ppl 9.2699 | lr 9.86e-05 | moe_var nan | pos_norm 0.00 | 100s ETA 54s
+  step 3500/5000 | L_AR 2.184 | L_diff 0.000 | aux 0.0000 | val_ppl 8.3028 | lr 7.49e-05 | moe_var nan | pos_norm 0.00 | 108s ETA 46s
+  step 3750/5000 | L_AR 1.986 | L_diff 0.000 | aux 0.0000 | val_ppl 8.0479 | lr 5.35e-05 | moe_var nan | pos_norm 0.00 | 115s ETA 38s
+  step 4000/5000 | L_AR 1.828 | L_diff 0.000 | aux 0.0000 | val_ppl 7.4506 | lr 3.50e-05 | moe_var nan | pos_norm 0.00 | 123s ETA 31s
+  step 4250/5000 | L_AR 2.062 | L_diff 0.000 | aux 0.0000 | val_ppl 7.2443 | lr 2.00e-05 | moe_var nan | pos_norm 0.00 | 131s ETA 23s
+  step 4500/5000 | L_AR 1.742 | L_diff 0.000 | aux 0.0000 | val_ppl 6.9545 | lr 9.01e-06 | moe_var nan | pos_norm 0.00 | 139s ETA 15s
+  step 4750/5000 | L_AR 1.952 | L_diff 0.000 | aux 0.0000 | val_ppl 6.8744 | lr 2.26e-06 | moe_var nan | pos_norm 0.00 | 146s ETA 8s
+  step 4999/5000 | L_AR 1.911 | L_diff 0.000 | aux 0.0000 | val_ppl 6.8421 | lr 0.00e+00 | moe_var nan | pos_norm 0.00 | 154s ETA 0s
+
+=== Final eval on 254 batches ===
+  Final val_ppl: 6.9799  (best during train: 6.8421)
+  Model saved: D:\CrystaLLM\crystalllm\versions\v46\v46_A_decoder.pt
+  Log saved: D:\CrystaLLM\crystalllm\versions\v46\v46_A_train_log.json
+
+=== Variant A 训练完成 (155s) ===
+  best_val_ppl: 6.8421
+  final_val_ppl: 6.9799
+
+=== Final PPL for variant A: 6.9799 ===
+
+######################################################################
+## Variant A 完成: Sat Jun 20 02:12:33     2026
+######################################################################
+
+######################################################################
+## Variant B (MoE AR)
+## 启动时间: Sat Jun 20 02:12:33     2026
+######################################################################
+=== v46 Phase 0 From-Scratch PoC ===
+Args: {'variant': 'B', 'steps': 5000, 'batch_size': 8, 'T': 512, 'lr': 0.0003, 'warmup_steps': 500, 'alpha': 0.5, 'eval_every': 250, 'eval_batches_train': 32, 'eval_batches_final': 254, 'device': 'cuda'}
+Device: cuda
+CUDA available: True
+GPU: NVIDIA GeForce RTX 5090
+
+======================================================================
+=== v46 Phase 0 | Variant B ===
+  ffn_type=moe  use_per_block_z=False  loss_mode=ar_only
+  Steps=5000  B=8  T=512  LR=0.0003  alpha=0.5
+======================================================================
+
+Vocab: V_BASE=2261, V=2262 (added <mask>=2261)
+Data: train=19307, val=1016
+Z cache: train torch.Size([19307, 256]), val torch.Size([1016, 256])
+Decoder: active=60.39M, total=60.39M, layers=8, embd=512, block_pos=514
+
+=== Training: 5000 steps ===
+  step    0/5000 | L_AR 7.858 | L_diff 0.000 | aux 0.1607 | val_ppl 2573.9713 | lr 6.00e-07 | moe_var 0.0002 | pos_norm 0.00 | 1s ETA 6945s
+  step  250/5000 | L_AR 3.625 | L_diff 0.000 | aux 0.1622 | val_ppl 33.9214 | lr 1.51e-04 | moe_var 0.0001 | pos_norm 0.00 | 20s ETA 382s
+  step  500/5000 | L_AR 3.330 | L_diff 0.000 | aux 0.1656 | val_ppl 24.6229 | lr 3.00e-04 | moe_var 0.0003 | pos_norm 0.00 | 39s ETA 348s
+  step  750/5000 | L_AR 3.218 | L_diff 0.000 | aux 0.1666 | val_ppl 20.0145 | lr 2.98e-04 | moe_var 0.0013 | pos_norm 0.00 | 57s ETA 325s
+  step 1000/5000 | L_AR 3.057 | L_diff 0.000 | aux 0.1590 | val_ppl 18.1052 | lr 2.91e-04 | moe_var 0.0027 | pos_norm 0.00 | 76s ETA 305s
+  step 1250/5000 | L_AR 2.804 | L_diff 0.000 | aux 0.1599 | val_ppl 17.3937 | lr 2.80e-04 | moe_var 0.0039 | pos_norm 0.00 | 94s ETA 283s
+  step 1500/5000 | L_AR 3.001 | L_diff 0.000 | aux 0.1612 | val_ppl 15.7091 | lr 2.65e-04 | moe_var 0.0050 | pos_norm 0.00 | 113s ETA 264s
+  step 1750/5000 | L_AR 2.595 | L_diff 0.000 | aux 0.1593 | val_ppl 14.1527 | lr 2.46e-04 | moe_var 0.0059 | pos_norm 0.00 | 131s ETA 244s
+  step 2000/5000 | L_AR 2.663 | L_diff 0.000 | aux 0.1605 | val_ppl 13.5537 | lr 2.25e-04 | moe_var 0.0066 | pos_norm 0.00 | 150s ETA 225s
+  step 2250/5000 | L_AR 2.478 | L_diff 0.000 | aux 0.1600 | val_ppl 12.0466 | lr 2.01e-04 | moe_var 0.0071 | pos_norm 0.00 | 168s ETA 205s
+  step 2500/5000 | L_AR 2.160 | L_diff 0.000 | aux 0.1624 | val_ppl 11.0452 | lr 1.76e-04 | moe_var 0.0075 | pos_norm 0.00 | 186s ETA 186s
+  step 2750/5000 | L_AR 2.556 | L_diff 0.000 | aux 0.1594 | val_ppl 10.5386 | lr 1.50e-04 | moe_var 0.0078 | pos_norm 0.00 | 205s ETA 167s
+  step 3000/5000 | L_AR 2.276 | L_diff 0.000 | aux 0.1581 | val_ppl 9.7978 | lr 1.24e-04 | moe_var 0.0081 | pos_norm 0.00 | 223s ETA 149s
+  step 3250/5000 | L_AR 2.269 | L_diff 0.000 | aux 0.1590 | val_ppl 9.2586 | lr 9.86e-05 | moe_var 0.0083 | pos_norm 0.00 | 241s ETA 130s
+  step 3500/5000 | L_AR 2.214 | L_diff 0.000 | aux 0.1587 | val_ppl 8.3981 | lr 7.49e-05 | moe_var 0.0085 | pos_norm 0.00 | 259s ETA 111s
+  step 3750/5000 | L_AR 2.006 | L_diff 0.000 | aux 0.1588 | val_ppl 8.2294 | lr 5.35e-05 | moe_var 0.0086 | pos_norm 0.00 | 278s ETA 93s
+  step 4000/5000 | L_AR 1.864 | L_diff 0.000 | aux 0.1580 | val_ppl 7.5760 | lr 3.50e-05 | moe_var 0.0088 | pos_norm 0.00 | 296s ETA 74s
+  step 4250/5000 | L_AR 2.062 | L_diff 0.000 | aux 0.1574 | val_ppl 7.3677 | lr 2.00e-05 | moe_var 0.0089 | pos_norm 0.00 | 314s ETA 55s
+  step 4500/5000 | L_AR 1.792 | L_diff 0.000 | aux 0.1582 | val_ppl 7.1068 | lr 9.01e-06 | moe_var 0.0090 | pos_norm 0.00 | 332s ETA 37s
+  step 4750/5000 | L_AR 1.972 | L_diff 0.000 | aux 0.1578 | val_ppl 7.0010 | lr 2.26e-06 | moe_var 0.0091 | pos_norm 0.00 | 351s ETA 18s
+  step 4999/5000 | L_AR 1.911 | L_diff 0.000 | aux 0.1581 | val_ppl 6.9724 | lr 0.00e+00 | moe_var 0.0091 | pos_norm 0.00 | 369s ETA 0s
+
+=== Final eval on 254 batches ===
+  Final val_ppl: 7.0907  (best during train: 6.9724)
+  Model saved: D:\CrystaLLM\crystalllm\versions\v46\v46_B_decoder.pt
+  Log saved: D:\CrystaLLM\crystalllm\versions\v46\v46_B_train_log.json
+
+=== Variant B 训练完成 (372s) ===
+  best_val_ppl: 6.9724
+  final_val_ppl: 7.0907
+
+=== Final PPL for variant B: 7.0907 ===
+
+######################################################################
+## Variant B 完成: Sat Jun 20 02:18:48     2026
+######################################################################
+
+######################################################################
+## Variant C (full framework: MoE + per-block z + 0.5 AR + 0.5 diff)
+## 启动时间: Sat Jun 20 02:18:48     2026
+######################################################################
+=== v46 Phase 0 From-Scratch PoC ===
+Args: {'variant': 'C', 'steps': 5000, 'batch_size': 8, 'T': 512, 'lr': 0.0003, 'warmup_steps': 500, 'alpha': 0.5, 'eval_every': 250, 'eval_batches_train': 32, 'eval_batches_final': 254, 'device': 'cuda'}
+Device: cuda
+CUDA available: True
+GPU: NVIDIA GeForce RTX 5090
+
+======================================================================
+=== v46 Phase 0 | Variant C ===
+  ffn_type=moe  use_per_block_z=True  loss_mode=ar_diff_mix
+  Steps=5000  B=8  T=512  LR=0.0003  alpha=0.5
+======================================================================
+
+Vocab: V_BASE=2261, V=2262 (added <mask>=2261)
+Data: train=19307, val=1016
+Z cache: train torch.Size([19307, 256]), val torch.Size([1016, 256])
+Decoder: active=60.42M, total=60.42M, layers=8, embd=512, block_pos=545
+
+=== Training: 5000 steps ===
+  step    0/5000 | L_AR 7.563 | L_diff 7.874 | aux 0.1609 | val_ppl 1900.7620 | lr 6.00e-07 | moe_var 0.0003 | pos_norm 129.17 | 2s ETA 8353s
+  step  250/5000 | L_AR 3.479 | L_diff 3.633 | aux 0.1621 | val_ppl 29.6374 | lr 1.51e-04 | moe_var 0.0001 | pos_norm 128.85 | 41s ETA 783s
+  step  500/5000 | L_AR 0.602 | L_diff 3.628 | aux 0.1625 | val_ppl 1.7082 | lr 3.00e-04 | moe_var 0.0003 | pos_norm 128.20 | 81s ETA 726s
+  step  750/5000 | L_AR 0.077 | L_diff 3.651 | aux 0.1612 | val_ppl 1.0712 | lr 2.98e-04 | moe_var 0.0013 | pos_norm 127.30 | 120s ETA 680s
+  step 1000/5000 | L_AR 0.055 | L_diff 3.592 | aux 0.1616 | val_ppl 1.0288 | lr 2.91e-04 | moe_var 0.0023 | pos_norm 126.42 | 165s ETA 659s
+  step 1250/5000 | L_AR 0.017 | L_diff 3.210 | aux 0.1616 | val_ppl 1.0223 | lr 2.80e-04 | moe_var 0.0031 | pos_norm 125.57 | 211s ETA 633s
+  step 1500/5000 | L_AR 0.020 | L_diff 3.275 | aux 0.1601 | val_ppl 1.0184 | lr 2.65e-04 | moe_var 0.0037 | pos_norm 124.75 | 257s ETA 600s
+  step 1750/5000 | L_AR 0.011 | L_diff 2.957 | aux 0.1611 | val_ppl 1.0185 | lr 2.46e-04 | moe_var 0.0042 | pos_norm 123.99 | 303s ETA 563s
+  step 2000/5000 | L_AR 0.004 | L_diff 3.106 | aux 0.1607 | val_ppl 1.0112 | lr 2.25e-04 | moe_var 0.0046 | pos_norm 123.28 | 349s ETA 523s
+  step 2250/5000 | L_AR 0.005 | L_diff 2.834 | aux 0.1606 | val_ppl 1.0074 | lr 2.01e-04 | moe_var 0.0049 | pos_norm 122.65 | 395s ETA 483s
+  step 2500/5000 | L_AR 0.002 | L_diff 2.598 | aux 0.1611 | val_ppl 1.0034 | lr 1.76e-04 | moe_var 0.0051 | pos_norm 122.09 | 441s ETA 441s
+  step 2750/5000 | L_AR 0.066 | L_diff 2.913 | aux 0.1600 | val_ppl 1.0068 | lr 1.50e-04 | moe_var 0.0054 | pos_norm 121.61 | 487s ETA 398s
+  step 3000/5000 | L_AR 0.001 | L_diff 2.588 | aux 0.1603 | val_ppl 1.0051 | lr 1.24e-04 | moe_var 0.0056 | pos_norm 121.20 | 532s ETA 355s
+  step 3250/5000 | L_AR 0.027 | L_diff 2.702 | aux 0.1600 | val_ppl 1.0012 | lr 9.86e-05 | moe_var 0.0058 | pos_norm 120.87 | 578s ETA 311s
+  step 3500/5000 | L_AR 0.008 | L_diff 2.709 | aux 0.1601 | val_ppl 1.0030 | lr 7.49e-05 | moe_var 0.0060 | pos_norm 120.61 | 624s ETA 267s
+  step 3750/5000 | L_AR 0.000 | L_diff 2.472 | aux 0.1605 | val_ppl 1.0025 | lr 5.35e-05 | moe_var 0.0062 | pos_norm 120.42 | 670s ETA 223s
+  step 4000/5000 | L_AR 0.000 | L_diff 2.423 | aux 0.1600 | val_ppl 1.0031 | lr 3.50e-05 | moe_var 0.0064 | pos_norm 120.29 | 715s ETA 179s
+  step 4250/5000 | L_AR 0.000 | L_diff 2.563 | aux 0.1599 | val_ppl 1.0042 | lr 2.00e-05 | moe_var 0.0066 | pos_norm 120.21 | 761s ETA 134s
+  step 4500/5000 | L_AR 0.000 | L_diff 2.475 | aux 0.1601 | val_ppl 1.0019 | lr 9.01e-06 | moe_var 0.0067 | pos_norm 120.17 | 806s ETA 90s
+  step 4750/5000 | L_AR 0.000 | L_diff 2.571 | aux 0.1601 | val_ppl 1.0007 | lr 2.26e-06 | moe_var 0.0069 | pos_norm 120.15 | 852s ETA 45s
+  step 4999/5000 | L_AR 0.015 | L_diff 2.516 | aux 0.1607 | val_ppl 1.0011 | lr 0.00e+00 | moe_var 0.0070 | pos_norm 120.15 | 898s ETA 0s
+
+=== Final eval on 254 batches ===
+  Final val_ppl: 1.0026  (best during train: 1.0007)
+  Model saved: D:\CrystaLLM\crystalllm\versions\v46\v46_C_decoder.pt
+  Log saved: D:\CrystaLLM\crystalllm\versions\v46\v46_C_train_log.json
+
+=== Variant C 训练完成 (902s) ===
+  best_val_ppl: 1.0007
+  final_val_ppl: 1.0026
+
+=== Final PPL for variant C: 1.0026 ===
+
+######################################################################
+## Variant C 完成: Sat Jun 20 02:33:54     2026
+######################################################################
+
+=== v46 Phase 0 全部训练完成 ===

@@ -1,0 +1,39 @@
+{
+  "experiment": "v46 Phase 0 no-leak eval (L2 < 0.01 as leak)",
+  "leak_threshold": 0.01,
+  "v25_baseline_ppl": 2.4605,
+  "results": {
+    "A": {
+      "ppl_all": 6.993541132288605,
+      "ppl_noleak": 7.768920300107499,
+      "ppl_leak": 2.5532202446026737,
+      "avg_loss_all": 1.9449870277225503,
+      "avg_loss_noleak": 2.0501311972089438,
+      "n_all": 1016,
+      "n_noleak": 920,
+      "n_leak": 96
+    },
+    "B": {
+      "ppl_all": 6.838457482328515,
+      "ppl_noleak": 7.61120373351317,
+      "ppl_leak": 2.4512024893174935,
+      "avg_loss_all": 1.9225621919228335,
+      "avg_loss_noleak": 2.029621337224608,
+      "n_all": 1016,
+      "n_noleak": 920,
+      "n_leak": 96
+    },
+    "C": {
+      "ppl_all": 1.0016433230696908,
+      "ppl_noleak": 1.001798099092117,
+      "ppl_leak": 1.0001612649710245,
+      "avg_loss_all": 0.0016419742917849105,
+      "avg_loss_noleak": 0.0017964844471822763,
+      "n_all": 1016,
+      "n_noleak": 920,
+      "n_leak": 96
+    }
+  },
+  "decision_true": "phase0_pass_true",
+  "ratio_C_A_true": 0.12894946278162422
+}
