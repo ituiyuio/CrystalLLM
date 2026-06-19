@@ -258,12 +258,14 @@ print(f"  skipped (z_to_emb): {skipped}")
 print(f"  fresh (random init, kept): {fresh}")
 print(f"  mismatched (shape error): {mismatched}")
 
-# 校验计数
-assert loaded == 290, f"expected 290 loaded, got {loaded}"
+# 校验计数 (基于实际验证)
+# loaded: pos(1) + self-attn/mlp 权重 = 293 (v25 295 keys - 2 z_to_emb)
+# skipped: z_to_emb.weight + bias = 2
+# fresh: cross-attn 10 tensors × 24 blocks = 240 (含 ln_cross 和 bias)
+assert loaded == 293, f"expected 293 loaded, got {loaded}"
 assert skipped == 2, f"expected 2 skipped (z_to_emb), got {skipped}"
 assert mismatched == 0, f"unexpected mismatches: {mismatched}"
-# fresh 应该是 cross-attn 4 weights × 24 blocks = 96 (不含 pos, pos 已 loaded)
-assert fresh == 96, f"expected 96 fresh cross-attn weights, got {fresh}"
+assert fresh == 240, f"expected 240 fresh cross-attn tensors, got {fresh}"
 
 new_decoder.load_state_dict(new_state)
 
@@ -369,7 +371,7 @@ for k, v in v25_state.items():
 decoder.load_state_dict(new_state)
 n_dec = sum(p.numel() for p in decoder.parameters())
 P(f"v36 decoder: {n_dec/1e6:.2f}M (loaded {loaded}, skipped {skipped}, fresh {fresh})")
-assert loaded == 290 and skipped == 2 and fresh == 96
+assert loaded == 293 and skipped == 2 and fresh == 240
 
 opt = torch.optim.AdamW(decoder.parameters(), lr=LR, weight_decay=0.1, betas=(0.9, 0.95))
 sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=STEPS)
