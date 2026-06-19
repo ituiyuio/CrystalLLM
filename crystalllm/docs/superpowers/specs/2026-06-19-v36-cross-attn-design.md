@@ -167,7 +167,7 @@ class BlockCrossAttn(nn.Module):
 | 来源权重 | 用途 |
 |---|---|
 | tok / head (V=2261) | 完全复用 |
-| pos (T=512, 514) | 完全复用 |
+| pos (T=512, 514) | **重新对齐**: v25 pos[1:T+2] → v36 pos[0:T+1] (因 z 不再占 pos 0, BOS 从 pos 0 开始) |
 | blocks[i].ln1, qkv, proj | 完全复用 (self-attn) |
 | blocks[i].ln2, mlp | 完全复用 (MLP) |
 | blocks[i].ln_cross, q_cross, k_cross, v_cross, proj_cross | **随机初始化** (He) |
@@ -182,6 +182,10 @@ loaded, skipped, fresh = 0, 0, 0
 for k, v in v25_state.items():
     if k == "z_to_emb.weight" or k == "z_to_emb.bias":
         skipped += 1; continue
+    if k == "pos.weight":
+        # v25 pos[0]=z, pos[1]=BOS, pos[2:T+2]=tokens; v36 pos[0]=BOS, pos[1:T+1]=tokens
+        new_state[k][:T+1] = v[1:T+2]   # 重新对齐
+        loaded += 1; continue
     if k in new_state and v.shape == new_state[k].shape:
         new_state[k] = v; loaded += 1
     else:
@@ -230,12 +234,14 @@ v28.5 本身已坍缩到空格分布，warm-start 会继承这个坏行为。从
 | # | 指标 | 含义 | 通过阈值 |
 |---|---|---|---|
 | 1 | **PPL** | 端到端预测能力 | **< 2.30** (vs v25 2.47, -7%) |
-| 2 | **生成质量 (非空格率)** | 真实生成能力 | **> 90%** 非空格 token |
-| 3 | **KL 收敛** | z 是否被使用 | **KL < 200** |
-| 4 | **速度** | 推理效率 | **< 1500ms** |
-| 5 | **样本检查** | 视觉确认 | 至少 1 个样本含 import/def/class |
+| 2 | **生成质量 (非空格率)** | 真实生成能力 | **> 90%** token 非 `' '` (空格) — `\n`/`\t` 算合法 token |
+| 3 | **KL 收敛** | z 是否被使用 | **`kl_per_dim.sum() < 200`** (与 v25/v28.5 同口径) |
+| 4 | **速度** | 推理效率 | **< 1500ms** (5 步扩散 + 100 token AR, batch=1, 单条样本) |
+| 5 | **样本检查** | 视觉确认 | **≥ 3/10** 样本含 `import` / `def` / `class` |
 
 **指标 2 是关键防线**：v35 揭示 v28.5 verifier 根因就是"从零生成坍缩到空格"。本次实验必须验证 v36 **不重蹈覆辙**。
+
+**指标 2 测量方法**：从 BOS 开始 AR 生成 50 token，统计其中 `token != ' '` (stoi 中空格 token) 的比例。v28.5 实测 ~0% (全空格)，v36 必须 > 90%。
 
 ### 4.2 成功判定（全部满足）
 
@@ -243,7 +249,7 @@ v28.5 本身已坍缩到空格分布，warm-start 会继承这个坏行为。从
 - [ ] 非空格率 > 90%
 - [ ] KL < 200
 - [ ] 速度 < 1500ms
-- [ ] 至少 1 个生成样本含 import/def/class
+- [ ] ≥ 3/10 生成样本含 `import` / `def` / `class`
 
 ### 4.3 失败模式 + 后续决策
 
