@@ -14,7 +14,7 @@ It records the full journey — from a 50-line character-level toy to a 570M-par
 
 - **Premise.** Text generation is reframed as a two-stage physical process: high-entropy noise → low-entropy latent semantic intent → concrete tokens.
 - **Architecture.** Phase I: 5–10 diffusion steps in a low-dim latent space produce a `z` that carries global intent. Phase II: a causal Transformer decoder generates tokens conditioned on `z`.
-- **Status (v36, 2026-06-19).** 570M-param cross-attn decoder, val PPL 2.81, 14 min single-GPU training. **Honest read: this regresses on PPL vs the v25 baseline (2.47)** but resolves the v35 collapse-to-spaces failure mode — see [`crystalllm/versions/v36/v36_results.md`](./crystalllm/versions/v36/v36_results.md) for the full autopsy. v25 remains the current SOTA.
+- **Status (v37, 2026-06-19).** Zero-z ablation complete — see [`crystalllm/versions/v37/v37_decision.md`](./crystalllm/versions/v37/v37_decision.md) for the decision and recommended next step. v25 remains the current PPL SOTA (2.47).
 - **Trajectory.** 50 versions in [`crystalllm/versions/`](./crystalllm/versions/), from M1 toy world to real-corpus diffusion + AR hybrid. Full timeline in [`crystalllm/TIMELINE.md`](./crystalllm/TIMELINE.md).
 
 ---
