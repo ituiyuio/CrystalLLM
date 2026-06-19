@@ -1,0 +1,47 @@
+{
+  "experiment": "v40 decoder injection diagnostic",
+  "n_samples": 1016,
+  "n_batches": 254,
+  "max_batches": null,
+  "results": {
+    "V1": {
+      "name": "baseline (z at pos 0)",
+      "ppl": 2.460454774476842,
+      "avg_loss": 0.9003462005318619,
+      "delta_vs_V1_pct": 0.0
+    },
+    "V2": {
+      "name": "broadcast z to all positions",
+      "ppl": 78.70966052692334,
+      "avg_loss": 4.365765899185121,
+      "delta_vs_V1_pct": 3098.9883066905427
+    },
+    "V3": {
+      "name": "z scale x2.0",
+      "ppl": 2.4625664713304665,
+      "avg_loss": 0.9012040871334827,
+      "delta_vs_V1_pct": 0.08582546915837283
+    },
+    "V4": {
+      "name": "z scale x0.5",
+      "ppl": 2.4621474425873986,
+      "avg_loss": 0.9010339132913454,
+      "delta_vs_V1_pct": 0.06879492881214885
+    },
+    "V5": {
+      "name": "z linear projection",
+      "ppl": 2.4694744223386973,
+      "avg_loss": 0.9040053435197966,
+      "delta_vs_V1_pct": 0.36658458246902664
+    },
+    "V6": {
+      "name": "z at end of sequence",
+      "ppl": 2.4891731312991054,
+      "avg_loss": 0.911950579543752,
+      "delta_vs_V1_pct": 1.167197101941026
+    }
+  },
+  "decision": "all_neutral",
+  "action": "decoder_truly_ignores_z -> block-diffusion PoC (v41)",
+  "note": "V1 baseline = v25 BAD-DP (PPL 2.47 per v37)"
+}
