@@ -1,0 +1,16 @@
+{
+  "v36_decoder_params_M": 570.36928,
+  "PPL": 2.81394427742173,
+  "speed_median_ms": 1336.2534046173096,
+  "speed_p25_ms": 1265.8123970031738,
+  "KL_sum_nats": 303.485595703125,
+  "config": {
+    "V": 2261,
+    "T": 512,
+    "DEC_LAYER": 24,
+    "DEC_HEAD": 20,
+    "DEC_EMBD": 1280,
+    "D_Z": 256,
+    "BOS_ID": 1
+  }
+}

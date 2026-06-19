@@ -1,0 +1,33 @@
+V=2261, BOS_ID=1, SPACE_ID=8
+
+=== 非空格率 (10 样本 × 50 token) ===
+  sample 0: non_space_rate=72.00% text='. A,1]\n#else\n#end(8)\n    {\n#endif\n         this->S'...
+  sample 1: non_space_rate=84.00% text=', option, otal, soundGeometry contents)\n    b.regi'...
+  sample 2: non_space_rate=92.00% text="A')\n#\nif not enp.yer_mode) == 'choifications':\n\tun"...
+  sample 3: non_space_rate=66.00% text='SPOTH_REENTABLED",\n    ,             |TypeStepFile'...
+  sample 4: non_space_rate=98.00% text=', "lta"):\n\tgrpc_stackspacks["winelint"].relative_n'...
+  sample 5: non_space_rate=86.00% text='27896902b62032peta34_line)\n      return any_event('...
+  sample 6: non_space_rate=76.00% text=']\n       port.set_count()\n\n    return bat(full_s)\n'...
+  sample 7: non_space_rate=80.00% text='02, false))\n       sq_26alta_blink(xP, bp, sq_36a,'...
+  sample 8: non_space_rate=98.00% text='U,0830LDBC)\\nTimes-2", len(alpha1815c))>(int());\n\n'...
+  sample 9: non_space_rate=98.00% text='deroQLenGeometry",\n]\n\nvoid QCearLinearDecoder::con'...
+
+平均非空格率: 85.00% (阈值 > 90%, v36 不强求)
+
+=== 样本代码结构检查 ===
+  sample 0: has_keyword=True text='. A,1]\n#else\n#end(8)\n    {\n#endif\n         this->S'
+  sample 1: has_keyword=False text=', option, otal, soundGeometry contents)\n    b.regi'
+  sample 2: has_keyword=True text="A')\n#\nif not enp.yer_mode) == 'choifications':\n\tun"
+  sample 3: has_keyword=False text='SPOTH_REENTABLED",\n    ,             |TypeStepFile'
+  sample 4: has_keyword=False text=', "lta"):\n\tgrpc_stackspacks["winelint"].relative_n'
+  sample 5: has_keyword=True text='27896902b62032peta34_line)\n      return any_event('
+  sample 6: has_keyword=True text=']\n       port.set_count()\n\n    return bat(full_s)\n'
+  sample 7: has_keyword=False text='02, false))\n       sq_26alta_blink(xP, bp, sq_36a,'
+  sample 8: has_keyword=True text='U,0830LDBC)\\nTimes-2", len(alpha1815c))>(int());\n\n'
+  sample 9: has_keyword=True text='deroQLenGeometry",\n]\n\nvoid QCearLinearDecoder::con'
+
+含代码结构样本数: 6/10 (阈值 >= 3)
+
+✓ 生成质量检查完成
+  非空格率: 85.00%
+  代码结构样本: 6/10

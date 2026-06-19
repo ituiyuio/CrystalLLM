@@ -1,0 +1,32 @@
+v36 config: {'V': 2261, 'T': 512, 'DEC_LAYER': 24, 'DEC_HEAD': 20, 'DEC_EMBD': 1280, 'D_Z': 256, 'BOS_ID': 1}
+v36 decoder params: 570.37M
+val: 1016 samples
+
+=== 1. PPL evaluation ===
+PPL: 2.8139
+
+=== 2. Speed evaluation (5-step diff + 100 AR, batch=1) ===
+Speed (100 AR, batch=1): median 1336ms, p25 1266ms
+
+=== 3. KL estimation (z distribution sanity) ===
+KL (sum, free_bits threshold 1.0): 303.49 nats
+  注: KL 反映 z 分布本身, 不直接反映 decoder 是否使用 z
+  真正反映 z 使用率: 看 PPL 改善 (vs v25) + 生成质量
+
+=== 结果保存到 v36_e2e.json ===
+{
+  "v36_decoder_params_M": 570.36928,
+  "PPL": 2.81394427742173,
+  "speed_median_ms": 1336.2534046173096,
+  "speed_p25_ms": 1265.8123970031738,
+  "KL_sum_nats": 303.485595703125,
+  "config": {
+    "V": 2261,
+    "T": 512,
+    "DEC_LAYER": 24,
+    "DEC_HEAD": 20,
+    "DEC_EMBD": 1280,
+    "D_Z": 256,
+    "BOS_ID": 1
+  }
+}
