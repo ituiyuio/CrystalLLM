@@ -142,7 +142,7 @@ def get_val_batches(val_texts, stoi, T, B=4):
 # 主评估
 # ============================================================
 @torch.no_grad()
-def eval_ppl(decoder, val_batches, val_z, D_Z, V, z_mode):
+def eval_ppl(decoder, val_batches, val_z, D_Z, V, z_mode, T):
     """z_mode: 'encoded' or 'zero'"""
     total_loss = 0.0; n = 0
     for x, i in val_batches:
@@ -154,6 +154,14 @@ def eval_ppl(decoder, val_batches, val_z, D_Z, V, z_mode):
         else:
             raise ValueError(f"Unknown z_mode: {z_mode}")
         logits = decoder(z, x)
+        # v25 DecoderV25.forward 内部已 return logits[:, 1:T+1] -> (B, T, V)
+        # v36 DecoderCrossAttn.forward 返回 (B, T+1, V) 整个序列 logits
+        # v36 中: 输入 [BOS, x[0], ..., x[T-1]] at 位置 0..T, causal 使 logits[:, 0] 预测 x[0]
+        # 所以 v36 需要 logits[:, :T] 预测 x[:, :T]
+        if logits.shape[1] == T + 1:
+            # v36 路径: 取前 T 个位置预测 x
+            logits = logits[:, :T]
+        # else: v25 路径, logits 已是 (B, T, V), 无需切片
         loss = F.cross_entropy(logits.reshape(-1, V), x.reshape(-1), reduction='sum')
         total_loss += loss.item(); n += x.numel()
     avg_loss = total_loss / n
@@ -182,7 +190,7 @@ def main():
     val_batches = get_val_batches(val_texts, stoi, T, B=4)
     print(f"  val_batches: {len(val_batches)} (B=4, T={T})")
 
-    ppl, avg_loss = eval_ppl(decoder, val_batches, val_z, D_Z, V, args.z_mode)
+    ppl, avg_loss = eval_ppl(decoder, val_batches, val_z, D_Z, V, args.z_mode, T)
     print(f"\n  [{args.checkpoint} + {args.z_mode}] PPL = {ppl:.4f} (avg_loss {avg_loss:.4f})")
 
     if args.output_json:
