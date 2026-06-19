@@ -1,0 +1,41 @@
+{
+  "A1_v25_encoded": {
+    "PPL": 2.460454774476842,
+    "avg_loss": 0.9003462005318619
+  },
+  "A2_v25_zero": {
+    "PPL": 2.4713098037341963,
+    "avg_loss": 0.9047482950011576
+  },
+  "A3_v36_encoded": {
+    "PPL": 2.7982382081257984,
+    "avg_loss": 1.0289900077609566
+  },
+  "A4_v36_zero": {
+    "PPL": 2.8093103764492966,
+    "avg_loss": 1.0329390355921166
+  },
+  "delta_ppl_v25_pct": 0.4411797920432096,
+  "delta_ppl_v36_pct": 0.39568355157705204,
+  "cross_attn_contribution_ppl": 0.3380005727151003,
+  "samples": {
+    "v25_encoded": {
+      "avg_non_space": 0.784,
+      "matched": 3
+    },
+    "v25_zero": {
+      "avg_non_space": 0.8480000000000001,
+      "matched": 2
+    },
+    "v36_encoded": {
+      "avg_non_space": 0.836,
+      "matched": 4
+    },
+    "v36_zero": {
+      "avg_non_space": 0.852,
+      "matched": 5
+    }
+  },
+  "decision": "C_with_cross_attn_review",
+  "decision_desc": "z 死路 + cross-attn 装饰 → 战略重定位 (但 cross-attn 也需重新审视)"
+}
