@@ -62,9 +62,10 @@ def compute_mi_lower_bound(x_emb: torch.Tensor, z: torch.Tensor,
     return: (mean, std) over n_runs
     """
     estimates = []
+    device = x_emb.device
     for run in range(n_runs):
         torch.manual_seed(42 + run)
-        mine = MINE(x_emb.shape[1], z.shape[1])
+        mine = MINE(x_emb.shape[1], z.shape[1]).to(device)
         opt = torch.optim.Adam(mine.parameters(), lr=1e-3)
         for step in range(n_steps):
             mi_est = mine(x_emb, z)
@@ -222,3 +223,118 @@ def encode_text_for_mi(val_texts, device: str = "cuda"):
         features.append([length] + one_hot)
 
     return torch.tensor(features, dtype=torch.float32, device=device)
+
+
+# ============================================================
+# 主函数
+# ============================================================
+def main():
+    """
+    v38 z 健康度诊断主函数.
+    测量 v24 encoder 的 z 在 4 个维度上的健康度.
+    """
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--device", default="cuda")
+    parser.add_argument("--n_samples", type=int, default=1016)
+    parser.add_argument("--mine_steps", type=int, default=1000)
+    parser.add_argument("--mine_runs", type=int, default=5)
+    parser.add_argument("--output", default=str(V38_DIR / "z_health_report.json"))
+    args = parser.parse_args()
+
+    print(f"v38 z health check | device={args.device} | n_samples={args.n_samples}")
+
+    # 加载 encoder + 数据
+    encoder_ckpt = load_v24_encoder(args.device)
+    val_texts, val_z_np = load_val_data()
+    val_z = torch.tensor(val_z_np[:args.n_samples], dtype=torch.float32, device=args.device)
+    val_texts = val_texts[:args.n_samples]
+
+    print(f"z shape: {val_z.shape}, mean={val_z.mean():.4f}, std={val_z.std():.4f}")
+
+    # 指标 1: KL
+    print("\n--- Metric 1: KL divergence ---")
+    kl = compute_kl(val_z)
+    print(f"KL: {kl:.4f} nats (healthy < 50, unhealthy > 100)")
+    kl_healthy = kl < 50
+
+    # 指标 3: 维度塌缩
+    print("\n--- Metric 3: Dimension collapse ---")
+    collapse = compute_collapse_ratio(val_z)
+    print(f"Collapse ratio: {collapse:.4f} (healthy < 0.5, unhealthy > 0.7)")
+    collapse_healthy = collapse < 0.5
+
+    # 指标 4: 类别可分性
+    print("\n--- Metric 4: Class separability (JS divergence) ---")
+    labels = np.array([hash(classify_text(t)) % 4 for t in val_texts])
+    class_counts = {int(c): int((labels == c).sum()) for c in np.unique(labels)}
+    print(f"Class distribution: {class_counts}")
+    js = compute_class_separability(val_z.cpu().numpy(), labels, n_pca=32)
+    print(f"JS (class separability): {js:.4f} nats (healthy > 0.05, unhealthy < 0.02)")
+    js_healthy = js > 0.05
+
+    # 指标 2: MINE
+    print(f"\n--- Metric 2: MI lower bound (MINE, {args.mine_runs} runs x {args.mine_steps} steps) ---")
+    text_emb = encode_text_for_mi(val_texts, args.device)
+    mi_mean, mi_std = compute_mi_lower_bound(text_emb, val_z,
+                                              n_steps=args.mine_steps,
+                                              n_runs=args.mine_runs)
+    print(f"MI lower bound: {mi_mean:.4f} +/- {mi_std:.4f} nats (healthy > 0.10, unhealthy < 0.05)")
+    mi_healthy = mi_mean > 0.10
+
+    # 决策矩阵
+    print("\n--- Decision matrix ---")
+    n_healthy = sum([kl_healthy, mi_healthy, collapse_healthy, js_healthy])
+    if n_healthy == 4:
+        scenario = "A"
+        action = "block-diffusion PoC (v39)"
+    elif n_healthy >= 2:
+        if not kl_healthy and mi_healthy and collapse_healthy and js_healthy:
+            scenario = "B"
+            action = "修 z (free_bits ++, 或换 encoder)"
+        else:
+            scenario = "C"
+            action = "二次 brainstorm"
+    else:
+        scenario = "F"
+        action = "战略重定位, 放弃 z 路径"
+
+    print(f"Scenario: {scenario} ({n_healthy}/4 healthy)")
+    print(f"Action: {action}")
+
+    # 写 JSON
+    report = {
+        "model": "v24_encoder",
+        "n_samples": int(val_z.shape[0]),
+        "z_shape": list(val_z.shape),
+        "z_mean": float(val_z.mean()),
+        "z_std": float(val_z.std()),
+        "metrics": {
+            "kl_nats": {"value": float(kl), "healthy": bool(kl_healthy),
+                        "threshold_healthy": 50, "threshold_unhealthy": 100},
+            "mi_lower_bound_nats": {"mean": float(mi_mean), "std": float(mi_std),
+                                     "healthy": bool(mi_healthy),
+                                     "threshold_healthy": 0.10, "threshold_unhealthy": 0.05},
+            "collapse_ratio": {"value": float(collapse), "healthy": bool(collapse_healthy),
+                                "threshold_healthy": 0.5, "threshold_unhealthy": 0.7},
+            "js_class_separability_nats": {"value": float(js), "healthy": bool(js_healthy),
+                                             "threshold_healthy": 0.05, "threshold_unhealthy": 0.02,
+                                             "class_distribution": class_counts}
+        },
+        "decision": {
+            "n_healthy": n_healthy,
+            "scenario": scenario,
+            "action": action
+        },
+        "note": "v25 和 v36 都使用 v24 encoder 的 z (cached_v24_z.npz), 所以本测量对两者都适用"
+    }
+
+    out_path = Path(args.output)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump(report, f, indent=2, ensure_ascii=False)
+    print(f"\nReport written to {out_path}")
+
+
+if __name__ == "__main__":
+    main()

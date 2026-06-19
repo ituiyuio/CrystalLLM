@@ -1,0 +1,47 @@
+{
+  "model": "v24_encoder",
+  "n_samples": 1016,
+  "z_shape": [
+    1016,
+    256
+  ],
+  "z_mean": -0.02980160154402256,
+  "z_std": 0.5651451945304871,
+  "metrics": {
+    "kl_nats": {
+      "value": 184.63714599609375,
+      "healthy": false,
+      "threshold_healthy": 50,
+      "threshold_unhealthy": 100
+    },
+    "mi_lower_bound_nats": {
+      "mean": 0.05977670103311539,
+      "std": 0.01738927545747226,
+      "healthy": false,
+      "threshold_healthy": 0.1,
+      "threshold_unhealthy": 0.05
+    },
+    "collapse_ratio": {
+      "value": 0.0,
+      "healthy": true,
+      "threshold_healthy": 0.5,
+      "threshold_unhealthy": 0.7
+    },
+    "js_class_separability_nats": {
+      "value": 0.04490726068405948,
+      "healthy": false,
+      "threshold_healthy": 0.05,
+      "threshold_unhealthy": 0.02,
+      "class_distribution": {
+        "0": 1000,
+        "3": 16
+      }
+    }
+  },
+  "decision": {
+    "n_healthy": 1,
+    "scenario": "F",
+    "action": "战略重定位, 放弃 z 路径"
+  },
+  "note": "v25 和 v36 都使用 v24 encoder 的 z (cached_v24_z.npz), 所以本测量对两者都适用"
+}
