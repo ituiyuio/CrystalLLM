@@ -1,0 +1,26 @@
+=== v41 Block-Diffusion Loss PoC (warm-start from v25) ===
+Vocab: V_BASE=2261 → V=2262 (added <mask>=2261)
+v24 train: 19307 | val: 1016
+
+=== Warm-start: 加载 v25 decoder (2261 → 2262) ===
+v25 keys: 295, sample: ['z_to_emb.weight', 'z_to_emb.bias', 'tok.weight']
+v41 decoder initialized (V=2262, params=476.14M)
+Loaded: 293, Extended: 2, Skipped: 0
+Loaded v24 cached z: train torch.Size([19307, 256]) | val torch.Size([1016, 256])
+
+=== 准备训练 (run train_main() to start) ===
+(L_total = 0.5*L_AR + 0.5*L_block_diffusion, block_size=16, mask_rate~U(0.1,0.5))
+=== Fast PoC: LR=5e-06, 200 steps, eval every 50 ===
+  step    0/200 | L_AR 0.983 | L_diff 2.765 | L_total 1.874 | val_ppl 2.3859 | lr 6.00e-07 | 1s ETA 279s
+  step   50/200 | L_AR 0.890 | L_diff 2.116 | L_total 1.503 | val_ppl 2.4773 | lr 3.00e-05 | 18s ETA 53s
+  step  100/200 | L_AR 0.955 | L_diff 1.825 | L_total 1.390 | val_ppl 2.5306 | lr 2.22e-05 | 34s ETA 34s
+  step  150/200 | L_AR 0.974 | L_diff 1.737 | L_total 1.355 | val_ppl 2.4110 | lr 7.23e-06 | 51s ETA 17s
+  step  199/200 | L_AR 0.909 | L_diff 1.985 | L_total 1.447 | val_ppl 2.4353 | lr 0.00e+00 | 67s ETA 0s
+
+Model saved: D:\CrystaLLM\crystalllm\versions\v41\v41_decoder.pt
+Log saved: D:\CrystaLLM\crystalllm\versions\v41\v41_train_log.json
+
+=== 训练完成 (69s, best_val_ppl=2.3859) ===
+
+下一步: python eval_v41.py → PPL 对比 v25 (2.47)
+=== Done in 69s ===

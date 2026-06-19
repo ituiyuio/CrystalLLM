@@ -1,0 +1,31 @@
+{
+  "experiment": "v41 block-diffusion loss PoC eval",
+  "checkpoint": "D:\\CrystaLLM\\crystalllm\\versions\\v41\\v41_decoder.pt",
+  "n_val_samples": 1016,
+  "n_batches": 254,
+  "v41_ppl": 2.5485078542854356,
+  "v25_baseline_ppl": 2.4605,
+  "delta_pct": 3.5768280546813838,
+  "avg_loss": 0.9355080327180427,
+  "train_best_ppl": 2.3858703617999,
+  "decision": "block_diffusion_hurts",
+  "action": "→ back to MoE/sparse attention path (v43+)",
+  "decoder_params_M": 476.14336,
+  "config": {
+    "V": 2262,
+    "V_BASE": 2261,
+    "MASK_ID": 2261,
+    "T": 512,
+    "D_Z": 256,
+    "DEC_LAYER": 24,
+    "DEC_HEAD": 20,
+    "DEC_EMBD": 1280,
+    "BLOCK_SIZE": 16,
+    "ALPHA": 0.5,
+    "MASK_RATE_MIN": 0.1,
+    "MASK_RATE_MAX": 0.5,
+    "warm_start_from": "v25_decoder",
+    "best_val_ppl": 2.3858703617999,
+    "arch": "v41-block-diffusion-loss-poc-warm-start"
+  }
+}
