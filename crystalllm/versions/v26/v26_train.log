@@ -1,0 +1,32 @@
+=== v26 100M Draft Decoder (T=512, from scratch) ===
+Vocab 2261
+v25 train: 19307 | val: 1016
+
+=== 初始化 (从零, 不可 warm-start) ===
+v26 draft decoder: 87.38M (12L × 768 × 12, T=512, D_Z=256)
+参数比例: 0.18x of v25 (5.5x 小)
+Loaded v25 cached z: train torch.Size([19307, 256]) | val torch.Size([1016, 256])
+
+=== train 4000 steps, B=16, T=512, LR=0.0002 ===
+  step    0/4000 | recon 7.832 | val_recon 5.900 | KL 309.56 β=0.000 | val_ppl 365.05 | 0s ETA 1878s
+  step  250/4000 | recon 3.385 | val_recon 3.210 | KL 302.80 β=0.250 | val_ppl 24.77 | 31s ETA 466s
+  step  500/4000 | recon 3.015 | val_recon 3.062 | KL 305.93 β=0.500 | val_ppl 21.38 | 62s ETA 434s
+  step  750/4000 | recon 2.706 | val_recon 2.928 | KL 308.98 β=0.750 | val_ppl 18.70 | 93s ETA 403s
+  step 1000/4000 | recon 2.834 | val_recon 2.697 | KL 298.64 β=1.000 | val_ppl 14.84 | 124s ETA 372s
+  step 1250/4000 | recon 2.516 | val_recon 2.521 | KL 307.23 β=1.000 | val_ppl 12.44 | 155s ETA 342s
+  step 1500/4000 | recon 2.375 | val_recon 2.523 | KL 292.48 β=1.000 | val_ppl 12.46 | 187s ETA 311s
+  step 1750/4000 | recon 2.246 | val_recon 2.257 | KL 301.77 β=1.000 | val_ppl 9.55 | 218s ETA 280s
+  step 2000/4000 | recon 2.101 | val_recon 2.321 | KL 306.26 β=1.000 | val_ppl 10.18 | 249s ETA 249s
+  step 2250/4000 | recon 1.817 | val_recon 2.027 | KL 310.47 β=1.000 | val_ppl 7.59 | 280s ETA 218s
+  step 2500/4000 | recon 1.991 | val_recon 1.985 | KL 301.39 β=1.000 | val_ppl 7.28 | 311s ETA 187s
+  step 2750/4000 | recon 1.732 | val_recon 1.656 | KL 304.66 β=1.000 | val_ppl 5.24 | 342s ETA 156s
+  step 3000/4000 | recon 1.706 | val_recon 1.848 | KL 301.97 β=1.000 | val_ppl 6.34 | 374s ETA 125s
+  step 3250/4000 | recon 1.568 | val_recon 1.700 | KL 293.52 β=1.000 | val_ppl 5.47 | 405s ETA 93s
+  step 3500/4000 | recon 1.557 | val_recon 1.553 | KL 297.44 β=1.000 | val_ppl 4.73 | 436s ETA 62s
+  step 3750/4000 | recon 1.665 | val_recon 1.514 | KL 301.20 β=1.000 | val_ppl 4.55 | 467s ETA 31s
+  step 3999/4000 | recon 1.731 | val_recon 1.856 | KL 298.25 β=1.000 | val_ppl 6.40 | 498s ETA 0s
+
+Model saved: v26_draft.pt
+Log saved: v26_draft_train_log.json
+
+=== 训练完成 (498s) ===

@@ -1,0 +1,42 @@
+vocab from char_vocab.json: V=2261 (与 v24 一致)
+v25 decoder: 24L × 1280 × 20, T=512, D_Z=256
+v25 decoder params: 476.14M
+v24 val: 1016 samples
+val_batches: 254
+Loaded cached v24 val_z: torch.Size([1016, 256])
+v24 prior: D_Z=256, D_HID=512, L=6, N_SAMPLE_STEPS=5
+
+--- 模式 1: diffusion_z (5 步 Euler) ---
+  [diffusion_z] avg_loss 0.9059 | PPL 2.4742
+  [encoder_mu] avg_loss 0.9003 | PPL 2.4605
+  [random_z] avg_loss 0.9081 | PPL 2.4795
+
+--- 速度基准 (RTX 5090, batch=1, N_AR=100) ---
+  [v25 端到端 (5步扩散+100 AR)] mean 827.90 ms | p50 822.58
+
+=== v25 端到端 PPL 汇总 ===
+  decoder: 476.14M (T=512)
+  diffusion_z PPL:  2.4742
+  encoder_mu PPL:   2.4605
+  random_z PPL:     2.4795
+  PPL 比率 (diff/enc): 1.0056
+  PPL 范围 (enc/rand): 0.77%
+
+=== 对照 (跨版本) ===
+  v18 (87M, 64z):      e2e 17.71  | 1.9K train
+  v20a (229M, 64z):    e2e 13.05  | 1.9K train
+  v21 (475M, 64z):     e2e 5.83   | 1.9K train
+  v22a (475M, 256z):   e2e 4.39   | 1.9K train
+  v23  (475M, 256z):   e2e 3.37   | 6.3K train (3.3x)
+  v24  (475M, 256z):   e2e 3.28   | 19.3K train (3.1x v23, 10x v22a)
+  v25  (475M, 256z):   e2e 2.47   | 19.3K train, T=512 (4x)
+
+=== 速度 KR1.3 ===
+  v25 端到端: 828 ms
+  v22a 端到端: 847 ms (KR1.3 0.32x)
+  v23 端到端: 761 ms (KR1.3 0.286x)
+  v24 端到端: 751 ms (KR1.3 0.282x)
+  500M AR baseline: 2665 ms
+  v25 vs AR: 0.311x
+
+Saved: v25_e2e.json

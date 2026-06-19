@@ -1,0 +1,32 @@
+vocab V=2261
+v25 verifier: 24L × 1280 × 20, T=512, D_Z=256
+v25 verifier params: 476.14M
+v26 drafter: 12L × 768 × 12, T=512, D_Z=256
+v26 drafter params: 87.38M
+
+=== v25 AR + KV cache ===
+  [v25 AR (KV cache)] mean 767.05 ms | p50 776.11
+
+=== SpS K=5 + KV cache ===
+  [SpS K=5 (KV cache)] mean 1053.89 ms | p50 780.04
+  acceptance rate: 87.0% (100/115)
+
+=== SpS K=10 + KV cache ===
+  [SpS K=10 (KV cache)] mean 2817.90 ms | p50 2821.56
+  acceptance rate: 76.9% (100/130)
+
+=== SpS K=20 + KV cache ===
+  [SpS K=20 (KV cache)] mean 5307.26 ms | p50 4474.26
+  acceptance rate: 62.5% (100/160)
+
+=== PPL 验证 (v25 AR + KV cache) ===
+  v25 PPL: 2.4448
+
+=== v26.5 KV cache 汇总 ===
+  v25 AR (无 KV cache): 764 ms (PPL 2.44)
+  v25 AR (有 KV cache): 767 ms (PPL 2.44, 加速 1.00x)
+  SpS K=5 (有 KV cache): 1054 ms (接受 87.0%)
+  SpS K=10 (有 KV cache): 2818 ms (接受 76.9%)
+  SpS K=20 (有 KV cache): 5307 ms (接受 62.5%)
+
+Saved: v26_5_kv.json

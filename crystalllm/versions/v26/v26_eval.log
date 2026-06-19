@@ -1,0 +1,41 @@
+vocab V=2261
+v25 verifier: 24L × 1280 × 20, T=512, D_Z=256
+v25 verifier params: 476.14M
+v26 drafter: 12L × 768 × 12, T=512, D_Z=256
+v26 drafter params: 87.38M (1/5.4x of verifier)
+
+=== v25 AR baseline (无投机) ===
+  v25 AR mean 764.48 ms | p50 759.29
+
+--- K=5 (draft 5 tokens/round) ---
+  [SpS K=5] mean 663.00 ms | p50 667.53
+  acceptance rate: 65.4% (912/1395)
+  avg accepted/round: 3.27, avg tokens/round: 4.27
+  avg rounds: 27.9, n_ar=100
+  *** Speedup vs v25 AR: 1.15x ***
+
+--- K=10 (draft 10 tokens/round) ---
+  [SpS K=10] mean 785.19 ms | p50 799.15
+  acceptance rate: 47.6% (942/1980)
+  avg accepted/round: 4.76, avg tokens/round: 5.76
+  avg rounds: 19.8, n_ar=100
+  *** Speedup vs v25 AR: 0.97x ***
+
+--- K=20 (draft 20 tokens/round) ---
+  [SpS K=20] mean 1169.70 ms | p50 1180.46
+  acceptance rate: 32.0% (1012/3160)
+  avg accepted/round: 6.41, avg tokens/round: 7.41
+  avg rounds: 15.8, n_ar=100
+  *** Speedup vs v25 AR: 0.65x ***
+
+=== PPL 验证 (SpS K=5 vs v25 AR) ===
+v25 val: 1016 samples
+  v25 AR PPL: 2.4448
+
+=== v26 SpS 汇总 ===
+  v25 AR baseline: 764 ms (PPL 2.44)
+  SpS K= 5: 663 ms | accept 65.4% | speedup 1.15x | tokens/round 4.27
+  SpS K=10: 785 ms | accept 47.6% | speedup 0.97x | tokens/round 5.76
+  SpS K=20: 1170 ms | accept 32.0% | speedup 0.65x | tokens/round 7.41
+
+Saved: v26_sps.json

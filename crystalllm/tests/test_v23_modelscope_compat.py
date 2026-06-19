@@ -1,3 +1,5 @@
+# Copyright (c) 2026 Yiming Wang <yomin_noahwang@foxmail.com>. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
 """Tests for v23_modelscope_compat monkey-patch."""
 import importlib
 

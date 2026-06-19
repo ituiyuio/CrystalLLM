@@ -1,0 +1,18 @@
+=== v35 数据准备 (100K from dedup_v23) ===
+Vocab 2261, BOS_ID 1
+  code files: 232
+  agentic files: 3
+Loading v24 diffusion prior ...
+Prior loaded: 256d, 6 layers, 5 ODE steps
+Collecting texts from jsonl files ...
+  collected 100000 texts in 2.2s
+Tokenizing 100000 texts ...
+  99984 tokenized, 16 skipped
+Sampling 99984 z from prior ...
+  z sampled in 9.2s
+
+Saved: cached_v35_outputs.npz (112.2 MB)
+  z: (99984, 256), tokens: (99984, 100)
+  sources: code=100000, agentic=0
+  Sample text[0]: '#ifndef BOOST_SMART_PTR_DETAIL_YIELD_K_HPP_INCLUDED\n#define '
+  Sample tokens[0][:20]: [1, 11, 81, 78, 86, 76, 77, 78, 8, 42, 55, 55, 59, 60, 71, 59, 53, 41, 58, 60]

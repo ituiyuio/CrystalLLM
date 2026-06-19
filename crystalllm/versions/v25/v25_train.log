@@ -1,0 +1,36 @@
+=== v25 500M Decoder T=512 (warm-start from v24) ===
+Vocab 2261 (v22, 与 v24 decoder 一致)
+v24 train: 19307 | val: 1016
+
+=== Warm-start: 加载 v24 decoder 权重 (T=128→512) ===
+v24 pos.shape: torch.Size([130, 1280])
+v25 pos.shape: torch.Size([514, 1280]) (warm-init from v24, repeat 4x)
+  pos.weight: warm-init 130→514 (repeat 4x)
+
+v25 decoder: 476.14M (warm-started, loaded 295, skipped 0)
+Loaded v24 cached z: train torch.Size([19307, 256]) | val torch.Size([1016, 256])
+
+=== train 4000 steps, B=4, T=512 ===
+(effective tokens/step: 2048 = v24 的 1.00x)
+  step    0/4000 | recon 2.915 | val_recon 2.552 | KL 303.28 β=0.000 | val_ppl 12.84 | 1s ETA 2917s
+  step  250/4000 | recon 1.257 | val_recon 1.149 | KL 295.12 β=0.250 | val_ppl 3.15 | 45s ETA 669s
+  step  500/4000 | recon 1.528 | val_recon 1.236 | KL 308.05 β=0.500 | val_ppl 3.44 | 89s ETA 622s
+  step  750/4000 | recon 1.162 | val_recon 0.797 | KL 298.28 β=0.750 | val_ppl 2.22 | 133s ETA 577s
+  step 1000/4000 | recon 1.027 | val_recon 1.145 | KL 311.05 β=1.000 | val_ppl 3.14 | 177s ETA 532s
+  step 1250/4000 | recon 0.778 | val_recon 1.057 | KL 317.16 β=1.000 | val_ppl 2.88 | 222s ETA 487s
+  step 1500/4000 | recon 1.194 | val_recon 1.308 | KL 291.27 β=1.000 | val_ppl 3.70 | 266s ETA 443s
+  step 1750/4000 | recon 0.804 | val_recon 0.921 | KL 291.36 β=1.000 | val_ppl 2.51 | 310s ETA 399s
+  step 2000/4000 | recon 0.825 | val_recon 0.983 | KL 306.02 β=1.000 | val_ppl 2.67 | 354s ETA 354s
+  step 2250/4000 | recon 1.187 | val_recon 0.822 | KL 301.10 β=1.000 | val_ppl 2.27 | 398s ETA 310s
+  step 2500/4000 | recon 0.931 | val_recon 1.022 | KL 287.36 β=1.000 | val_ppl 2.78 | 443s ETA 266s
+  step 2750/4000 | recon 0.888 | val_recon 0.919 | KL 298.87 β=1.000 | val_ppl 2.51 | 487s ETA 221s
+  step 3000/4000 | recon 1.193 | val_recon 0.826 | KL 308.60 β=1.000 | val_ppl 2.28 | 531s ETA 177s
+  step 3250/4000 | recon 0.967 | val_recon 0.773 | KL 288.94 β=1.000 | val_ppl 2.17 | 575s ETA 133s
+  step 3500/4000 | recon 1.300 | val_recon 0.794 | KL 316.58 β=1.000 | val_ppl 2.21 | 620s ETA 89s
+  step 3750/4000 | recon 0.889 | val_recon 0.924 | KL 309.42 β=1.000 | val_ppl 2.52 | 665s ETA 44s
+  step 3999/4000 | recon 0.935 | val_recon 1.197 | KL 301.01 β=1.000 | val_ppl 3.31 | 709s ETA 0s
+
+Model saved: v25_decoder.pt
+Log saved: v25_decoder_train_log.json
+
+=== 训练完成 (711s) ===

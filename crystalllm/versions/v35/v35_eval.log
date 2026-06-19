@@ -1,0 +1,28 @@
+=== v35 SpS 评估 ===
+v28.5 verifier: 554.85M
+v35 drafter: 28.24M + tok_emb: 1.16M
+
+=== 速度 ===
+  [v35 SpS K=8] mean 1815.36 ms
+
+v35 速度: 1815 ms
+  vs v31 baseline (206ms): 0.11x speedup
+
+=== 接受率测试 ===
+  接受 tokens: 118/1000 = 11.8%
+  平均 rounds: 88.2 (生成 100 tokens, K=8)
+  v31 baseline: 95.5% 接受率, 13 rounds
+
+=== 生成质量 ===
+v35: '<bos>                                                                               '
+
+=== 速度分解 ===
+  prior 采样: 10.59 ms
+  扩散 drafter (K=8): 12.10 ms
+  verifier 1 forward (K=8): 16.40 ms
+
+=== 结果 ===
+  速度: 1815ms (vs v31 206ms)
+  接受率: 11.8% (vs v31 95.5%)
+  Rounds: 88.2 (vs v31 13)
+  总评: ❌ FAILED

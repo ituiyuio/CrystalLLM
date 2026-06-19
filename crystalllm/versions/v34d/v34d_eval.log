@@ -1,0 +1,24 @@
+=== v34d D3PM 评测 ===
+v34d loaded
+
+=== 速度 + 接受率 Benchmark ===
+  速度 (100 tokens): 5852.3 ms
+  接受率 (SpS): 0.1%
+  rounds (avg): 99.0
+
+=== 计算 PPL ===
+  PPL = 1.3900
+
+=== 生成样本 ===
+  't.tkt[t_t_t_t_t_t_t_t_t_t_tkt[tkp et pt es et i   et et et etii_etiiiiit]_et\nt t'
+
+=== D 单独生成 K tokens 质量 ===
+  D 草稿: 'ss.as\nis'
+
+=== 结果 ===
+  速度: FAIL (5852.3ms, vs v31 206ms, v34b 484ms)
+  PPL: PASS (1.3900, vs v31 2.39)
+  接受率: FAIL (0.1%, vs v31 95.5%, v34b 0%)
+  总评: ⚠️ PARTIAL
+
+Saved: v34d_e2e.json

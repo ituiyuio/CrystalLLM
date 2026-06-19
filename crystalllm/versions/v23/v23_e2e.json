@@ -1,0 +1,41 @@
+{
+  "config": {
+    "decoder_params_M": 475.65056,
+    "D_Z": 256,
+    "DEC_LAYER": 24,
+    "n_train": 6317,
+    "n_val": 332,
+    "vocab": 2261,
+    "warm_start_from": "v22a_decoder",
+    "data": "v23 sliding window 5000/5000"
+  },
+  "ppl": {
+    "diffusion_z": 3.3710434747158113,
+    "encoder_mu": 3.3575139558688645,
+    "random_z": 3.3902759880658526
+  },
+  "ppl_ratio_diff_over_enc": 1.004029624008948,
+  "ppl_range_pct": 0.9663529551079075,
+  "domain_ppl": {},
+  "humaneval_pass1": null,
+  "speed_ms": {
+    "v23_e2e": 1170.105504989624
+  },
+  "kr_pass": {
+    "ppl_below_4_39": true,
+    "ratio_below_1_10": true,
+    "speed_below_1000ms": false,
+    "humaneval_present": false
+  },
+  "comparison": {
+    "v18_e2e_ppl": 17.71,
+    "v20a_e2e_ppl": 13.05,
+    "v21_e2e_ppl": 5.83,
+    "v22a_e2e_ppl": 4.39,
+    "v21_speed_ms": 786,
+    "v22a_speed_ms": 847,
+    "v21_train_samples": 1893,
+    "v22a_train_samples": 1893,
+    "v23_train_samples": 6317
+  }
+}

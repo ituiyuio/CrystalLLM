@@ -27,6 +27,12 @@ crystalllm/data/raw/
 crystalllm/data/processed/*.parquet
 crystalllm/data/processed/*.bin
 crystalllm/data/processed/*.pt
+crystalllm/data/
+
+# Training artifacts — model weights and feature caches (all re-generable)
+crystalllm/**/*.pt
+crystalllm/**/*.npz
+crystalllm/**/*.npy
 
 # Local env files (use .env.v23.example as template)
 .env

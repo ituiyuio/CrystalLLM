@@ -1,0 +1,36 @@
+{
+  "config": {
+    "decoder_params_M": 475.65056,
+    "D_Z": 256,
+    "DEC_LAYER": 24,
+    "n_train": 19307,
+    "n_val": 1016,
+    "vocab": 2261,
+    "warm_start_from": "v23_decoder",
+    "data": "v24 from raw_v23 24GB (swift code + agentic)"
+  },
+  "ppl": {
+    "diffusion_z": 3.2839870908337097,
+    "encoder_mu": 3.22738670267707,
+    "random_z": 3.2886456835740057
+  },
+  "ppl_ratio_diff_over_enc": 1.01753752908187,
+  "ppl_range_pct": 1.8627418941149387,
+  "speed_ms": {
+    "v24_e2e": 751.3855934143066
+  },
+  "comparison": {
+    "v18_e2e_ppl": 17.71,
+    "v20a_e2e_ppl": 13.05,
+    "v21_e2e_ppl": 5.83,
+    "v22a_e2e_ppl": 4.39,
+    "v23_e2e_ppl": 3.37,
+    "v21_speed_ms": 786,
+    "v22a_speed_ms": 847,
+    "v23_speed_ms": 761,
+    "v21_train_samples": 1893,
+    "v22a_train_samples": 1893,
+    "v23_train_samples": 6317,
+    "v24_train_samples": 19307
+  }
+}

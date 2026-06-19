@@ -1,0 +1,18 @@
+{
+  "speed_ms": 484.3773603439331,
+  "ppl": 1.30350571829278,
+  "acceptance_rate": 0.0,
+  "n_rounds": 13,
+  "speed_target_ms": 150,
+  "ppl_target": 2.39,
+  "accept_target": 0.955,
+  "speed_pass": false,
+  "ppl_pass": true,
+  "accept_pass": false,
+  "n_backbone_M": 239.82208,
+  "n_dhead_M": 16.3968,
+  "v31_baseline_ms": 206,
+  "v31_ppl": 2.39,
+  "v31_accept": 0.955,
+  "all_pass": false
+}
