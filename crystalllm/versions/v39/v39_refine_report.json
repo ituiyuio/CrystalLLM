@@ -1,0 +1,103 @@
+{
+  "experiment": "v39 z refine",
+  "n_samples": 1016,
+  "direction_b_mi": {
+    "v38_baseline_6dim": {
+      "mean": 0.0598,
+      "std": 0.0174,
+      "note": "weak features"
+    },
+    "b1_random_embed_64dim": {
+      "mean": 1.2063472509384154,
+      "std": 0.16522938907870757
+    },
+    "b2_char_trigrams_64": {
+      "mean": 2.030304789543152,
+      "std": 0.27463647948550646
+    },
+    "improvement_b1_x": 20.173030952147414,
+    "improvement_b2_x": 33.95158510941726,
+    "interpretation": "如果 B1/B2 MI 显著提升 (>0.5), 说明 z 与文本内容强相关, v38 MI=0.06 是特征太弱如果 B1/B2 MI 仍 <0.2, 说明 z 真的与文本内容弱相关, decoder 不消费 z 是合理的"
+  },
+  "direction_c_dim_analysis": {
+    "per_dim_js_max": 1.4096380392904215,
+    "per_dim_js_min": 0.27201468278462215,
+    "per_dim_js_mean": 0.8745282333982488,
+    "per_dim_js_std": 0.27812186565106334,
+    "top_8_dims": [
+      209,
+      186,
+      144,
+      227,
+      76,
+      114,
+      9,
+      224
+    ],
+    "top_16_dims": [
+      209,
+      186,
+      144,
+      227,
+      76,
+      114,
+      9,
+      224,
+      111,
+      77,
+      146,
+      156,
+      32,
+      225,
+      67,
+      5
+    ],
+    "top_32_dims": [
+      209,
+      186,
+      144,
+      227,
+      76,
+      114,
+      9,
+      224,
+      111,
+      77,
+      146,
+      156,
+      32,
+      225,
+      67,
+      5,
+      248,
+      215,
+      40,
+      196,
+      165,
+      214,
+      121,
+      108,
+      100,
+      29,
+      211,
+      158,
+      52,
+      223,
+      0,
+      251
+    ],
+    "cum_js_top_8": 0.047324540870142026,
+    "cum_js_top_16": 0.09244130508378773,
+    "cum_js_top_32": 0.17858689654513765,
+    "cum_js_top_64": 0.34190031427825324,
+    "cum_js_top_128": 0.6343445848729379,
+    "sparsity_verdict": "distributed (JS spread across many dims)",
+    "interpretation": "如果 sparsity=highly sparse, z 是 sparse-coding-like, 可能值得做 top-K 注入 (只注入 top-K dims)如果 sparsity=distributed, z 信息均匀分布, 整体注入更合理 (但 v37 已证 decoder 不消费)"
+  },
+  "decisions_recommendation": {
+    "if_mi_high_and_sparse": "走 block-diffusion PoC with top-K dim injection",
+    "if_mi_high_and_distributed": "走 block-diffusion PoC with full z injection",
+    "if_mi_low_and_sparse": "走修 z (encoder 微调) + top-K dim 注入",
+    "if_mi_low_and_distributed": "战略重定位, 放弃 z 路径 (与 v37 一致)"
+  }
+}
