@@ -33,6 +33,10 @@ crystalllm/data/
 crystalllm/**/*.pt
 crystalllm/**/*.npz
 crystalllm/**/*.npy
+# Root-level training artifacts (same rules, broader scope)
+/*.pt
+/*.npz
+/*.npy
 
 # Local env files (use .env.v23.example as template)
 .env
