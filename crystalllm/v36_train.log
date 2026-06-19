@@ -1,0 +1,28 @@
+=== v36 Cross-Attention Decoder (warm-start from v25) ===
+Vocab 2261 (v22, 与 v25 decoder 一致)
+v24 train: 19307 | val: 1016
+
+=== Warm-start: 加载 v25 decoder 权重 ===
+v36 decoder: 570.37M (loaded 293, skipped 2, fresh 0)
+Loaded v24 cached z: train torch.Size([19307, 256]) | val torch.Size([1016, 256])
+
+=== train 4000 steps, B=4, T=512 ===
+  step    0 | val_ppl 23.816 *saved*
+  step  250 | val_ppl 2.413 *saved*
+  step  500/4000 | recon 1.266 | val_recon 1.095 | KL 308.05 β=0.500 | val_ppl 2.990 | best 2.413 | 111s ETA 780s
+  step  750 | val_ppl 2.089 *saved*
+  step 1000/4000 | recon 0.854 | val_recon 0.991 | KL 311.05 β=1.000 | val_ppl 2.693 | best 2.089 | 216s ETA 648s
+  step 1250/4000 | recon 0.706 | val_recon 0.968 | KL 317.16 β=1.000 | val_ppl 2.632 | best 2.089 | 268s ETA 589s
+  step 1500/4000 | recon 1.022 | val_recon 1.223 | KL 291.27 β=1.000 | val_ppl 3.398 | best 2.089 | 319s ETA 532s
+  step 1750/4000 | recon 0.697 | val_recon 0.889 | KL 291.36 β=1.000 | val_ppl 2.433 | best 2.089 | 371s ETA 477s
+  step 2000/4000 | recon 0.768 | val_recon 0.953 | KL 306.02 β=1.000 | val_ppl 2.593 | best 2.089 | 423s ETA 423s
+  step 2250/4000 | recon 1.067 | val_recon 0.795 | KL 301.10 β=1.000 | val_ppl 2.215 | best 2.089 | 474s ETA 369s
+  step 2500/4000 | recon 0.863 | val_recon 0.962 | KL 287.36 β=1.000 | val_ppl 2.617 | best 2.089 | 526s ETA 316s
+  step 2750/4000 | recon 0.804 | val_recon 0.896 | KL 298.87 β=1.000 | val_ppl 2.450 | best 2.089 | 580s ETA 263s
+  step 3000/4000 | recon 1.128 | val_recon 0.789 | KL 308.60 β=1.000 | val_ppl 2.201 | best 2.089 | 633s ETA 211s
+  step 3250/4000 | recon 0.895 | val_recon 0.745 | KL 288.94 β=1.000 | val_ppl 2.106 | best 2.089 | 686s ETA 158s
+  step 3500/4000 | recon 1.255 | val_recon 0.769 | KL 316.58 β=1.000 | val_ppl 2.158 | best 2.089 | 739s ETA 106s
+  step 3750/4000 | recon 0.856 | val_recon 0.891 | KL 309.42 β=1.000 | val_ppl 2.438 | best 2.089 | 792s ETA 53s
+  step 3999/4000 | recon 0.892 | val_recon 1.162 | KL 301.01 β=1.000 | val_ppl 3.198 | best 2.089 | 845s ETA 0s
+
+=== 训练完成. best val_ppl=2.089 ===
