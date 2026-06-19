@@ -66,7 +66,7 @@ for k, v in v25_state.items():
 decoder.load_state_dict(new_state)
 n_dec = sum(p.numel() for p in decoder.parameters())
 P(f"v36 decoder: {n_dec/1e6:.2f}M (loaded {loaded}, skipped {skipped}, fresh {fresh})")
-assert loaded == 293 and skipped == 2 and fresh == 240
+assert loaded == 293 and skipped == 2 and fresh == 0
 
 opt = torch.optim.AdamW(decoder.parameters(), lr=LR, weight_decay=0.1, betas=(0.9, 0.95))
 sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=STEPS)
