@@ -42,7 +42,7 @@ VOCAB_SIZE = _load_vocab_size()
 class TransformerBlock(nn.Module):
     """单层 Transformer block (no z injection)."""
 
-    def __init__(self, d_model: int, n_heads: int, d_ff: int, dropout: float = 0.1):
+    def __init__(self, d_model: int, n_heads: int, d_ff: int, dropout: float = 0.1, max_seq_len: int = 2048):
         super().__init__()
         self.ln1 = nn.LayerNorm(d_model)
         self.attn = nn.MultiheadAttention(d_model, n_heads, dropout=dropout, batch_first=True)
@@ -53,14 +53,17 @@ class TransformerBlock(nn.Module):
             nn.Linear(d_ff, d_model),
             nn.Dropout(dropout),
         )
+        # 预注册 max_seq_len 大小的 causal mask 作为 buffer，避免每步分配 T*T
+        # (nn.MultiheadAttention 在 train 模式 + 浮点 mask 下走慢路径，仍需显式 attn_mask)
+        causal_mask = torch.triu(torch.ones(max_seq_len, max_seq_len, dtype=torch.bool), diagonal=1)
+        self.register_buffer("causal_mask", causal_mask, persistent=False)
 
-    def forward(self, x, attn_mask=None):
+    def forward(self, x):
         # x: (B, T, D)
         h = self.ln1(x)
-        # Causal mask
         T = x.size(1)
-        causal_mask = torch.triu(torch.ones(T, T, device=x.device), diagonal=1).bool()
-        h_attn, _ = self.attn(h, h, h, attn_mask=causal_mask, is_causal=True, need_weights=False)
+        # 切片预注册的 mask 到当前 T，避免每步重新分配
+        h_attn, _ = self.attn(h, h, h, attn_mask=self.causal_mask[:T, :T], need_weights=False)
         x = x + h_attn
         x = x + self.ffn(self.ln2(x))
         return x
@@ -83,8 +86,8 @@ class Transformer50M(nn.Module):
         })()
         self.token_emb = nn.Embedding(vocab_size, d_model)
         self.pos_emb = nn.Embedding(max_seq_len, d_model)
-        self.blocks = nn.ModuleList([
-            TransformerBlock(d_model, n_heads, d_ff, dropout) for _ in range(n_layers)
+        self.layers = nn.ModuleList([
+            TransformerBlock(d_model, n_heads, d_ff, dropout, max_seq_len=max_seq_len) for _ in range(n_layers)
         ])
         self.ln_f = nn.LayerNorm(d_model)
         self.head = nn.Linear(d_model, vocab_size, bias=False)
@@ -102,8 +105,8 @@ class Transformer50M(nn.Module):
         B, T = x.shape
         pos = torch.arange(T, device=x.device).unsqueeze(0).expand(B, T)
         h = self.token_emb(x) + self.pos_emb(pos)
-        for block in self.blocks:
-            h = block(h)
+        for layer in self.layers:
+            h = layer(h)
         h = self.ln_f(h)
         return self.head(h)
 
@@ -114,7 +117,7 @@ def build_50m_model(vocab_size: int = VOCAB_SIZE, **kwargs) -> Transformer50M:
 
 
 def count_active_params(model: nn.Module) -> int:
-    """统计模型参数总数 (排除 tied weights)."""
+    """统计模型参数总数 (PyTorch 的 parameters() 自动去重 tied weights)."""
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
 
 
