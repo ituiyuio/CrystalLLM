@@ -1,0 +1,21 @@
+=== v36 Cross-Attention Decoder (warm-start from v25) ===
+Vocab 2261 (v22, 与 v25 decoder 一致)
+v24 train: 19307 | val: 1016
+
+=== Warm-start: 加载 v25 decoder 权重 ===
+v36 decoder: 570.37M (loaded 293, skipped 2, fresh 0)
+Loaded v24 cached z: train torch.Size([19307, 256]) | val torch.Size([1016, 256])
+
+=== train 4000 steps, B=4, T=512 ===
+  step    0 | val_ppl 23.816 *saved*
+  step  250 | val_ppl 2.423 *saved*
+  step  500/4000 | recon 1.272 | val_recon 1.098 | KL 308.05 β=0.500 | val_ppl 2.999 | best 2.423 | 109s ETA 760s
+  step  750 | val_ppl 2.109 *saved*
+  step 1000/4000 | recon 0.873 | val_recon 1.041 | KL 311.05 β=1.000 | val_ppl 2.832 | best 2.109 | 215s ETA 646s
+  step 1250/4000 | recon 0.693 | val_recon 0.971 | KL 317.16 β=1.000 | val_ppl 2.641 | best 2.109 | 267s ETA 588s
+  step 1500/4000 | recon 1.019 | val_recon 1.228 | KL 291.27 β=1.000 | val_ppl 3.415 | best 2.109 | 319s ETA 532s
+  step 1750/4000 | recon 0.699 | val_recon 0.877 | KL 291.36 β=1.000 | val_ppl 2.403 | best 2.109 | 372s ETA 478s
+  step 2000/4000 | recon 0.774 | val_recon 0.942 | KL 306.02 β=1.000 | val_ppl 2.565 | best 2.109 | 424s ETA 424s
+  step 2250/4000 | recon 1.061 | val_recon 0.786 | KL 301.10 β=1.000 | val_ppl 2.195 | best 2.109 | 476s ETA 370s
+  step 2500/4000 | recon 0.873 | val_recon 0.969 | KL 287.36 β=1.000 | val_ppl 2.636 | best 2.109 | 528s ETA 317s
+  step 2750/4000 | recon 0.806 | val_recon 0.892 | KL 298.87 β=1.000 | val_ppl 2.441 | best 2.109 | 580s ETA 264s
