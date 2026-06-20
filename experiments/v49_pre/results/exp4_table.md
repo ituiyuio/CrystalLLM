@@ -7,9 +7,13 @@
 | peak mem (MB) | TBD | TBD | TBD |
 
 **环境状态** (T0):
-- bitsandbytes: **未安装** (Windows + Python 3.10 上 uv pip install bitsandbytes 未成功) — 实验将以 fallback 到 torch.optim.AdamW 跑, 即"8bit_compile" 实际只是 torch.compile vs eager 的对比, 8-bit AdamW 路径未在本机触发.
+- bitsandbytes: **0.49.2 已安装** (在 baseline 训练启动后补装, 第二次跑 8bit_compile variant 时将使用真正的 8-bit AdamW 路径).
 - torch.compile: **可用** (torch 2.9.1+cu128).
 - CUDA: 可用 (RTX 5090).
+
+**训练进度**:
+- baseline: 已在后台启动 (--variant baseline, 10000 步, GPU 96% 利用率, 10 GB VRAM).
+- 8bit_compile: 等 baseline 完成后启动.
 
 **结论**: TBD
 
