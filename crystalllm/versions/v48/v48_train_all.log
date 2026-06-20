@@ -1,0 +1,22 @@
+=== v48 Phase 2 Integrated Model Training ===
+Args: {'steps': 10000, 'batch_size': 1, 'T': 1024, 'lr': 0.0001, 'warmup_steps': 1000, 'alpha': 0.5, 'eval_every': 500, 'eval_batches_train': 8, 'eval_batches_final': 128, 'device': 'cuda', 'use_grad_checkpoint': True, 'optimizer': 'adafactor'}
+
+======================================================================
+=== v48 Phase 2 | 单一集成模型 ===
+  MoE (8 experts) + per-block z + sparse attn (±2) + 0.5 L_AR + 0.5 L_diff
+  Steps=10000  B=1  T=1024  LR=0.0001  α=0.5
+  Optimizer=adafactor  grad_ckpt=True
+======================================================================
+
+  Loaded v48_train: 1028971 samples
+V=2262
+val (clean): 1016 samples
+Decoder: active=1.217B, total=3.633B, layers=24, embd=2048, block_pos=1089, sparse=90.77%
+
+=== Training: 10000 steps ===
+  step     0/10000 | L_AR 7.623 | L_diff 7.814 | aux 0.4855 | val_ppl 2023.0619 | lr 1.00e-07 | moe 0.0001 | pos 363.32 | sparse 90.77% | 6s ETA 63985s
+  step   500/10000 | L_AR 2.284 | L_diff 2.210 | aux 0.4825 | val_ppl 9.2487 | lr 5.01e-05 | moe 0.0001 | pos 362.83 | sparse 90.77% | 2931s ETA 55681s
+  step  1000/10000 | L_AR 1.714 | L_diff 2.000 | aux 0.4811 | val_ppl 7.3583 | lr 1.00e-04 | moe 0.0000 | pos 361.43 | sparse 90.77% | 6365s ETA 57282s
+  step  1500/10000 | L_AR 2.101 | L_diff 2.144 | aux 0.4807 | val_ppl 6.3233 | lr 9.92e-05 | moe 0.0000 | pos 359.71 | sparse 90.77% | 10243s ETA 58045s
+  step  2000/10000 | L_AR 1.303 | L_diff 1.516 | aux 0.4806 | val_ppl 6.0965 | lr 9.70e-05 | moe 0.0000 | pos 358.04 | sparse 90.77% | 14324s ETA 57296s
+  step  2500/10000 | L_AR 1.100 | L_diff 1.150 | aux 0.4827 | val_ppl 5.9460 | lr 9.33e-05 | moe 0.0000 | pos 356.38 | sparse 90.77% | 20670s ETA 62010s
