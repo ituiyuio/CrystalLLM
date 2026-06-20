@@ -39,10 +39,23 @@ def _load_vocab():
     return vocab["stoi"], vocab["vocab_size"]
 
 
-def _load_v28_texts():
-    """Return v28 train texts as a list[str]."""
+def load_v28_full() -> list[str]:
+    """加载完整 v28_train 的 text 列 (raw strings).
+
+    Returns:
+        list[str]: 全部样本的原始文本列表.
+    """
     df = pd.read_parquet(V28_TRAIN_PATH)
     return df["text"].tolist()
+
+
+def _load_v28_texts():
+    """Return v28 train texts as a list[str].
+
+    Private alias kept for backward compatibility with internal call sites.
+    Public callers should use :func:`load_v28_full` instead.
+    """
+    return load_v28_full()
 
 
 def _make_token_windows(texts, indices, stoi, seq_len: int, rng: np.random.Generator):
@@ -79,7 +92,7 @@ def build_subset_loader(batch_size: int = 8, seq_len: int = 512, shuffle: bool =
     `(batch_size, seq_len)` and dtype `torch.int64`.
     """
     stoi, _ = _load_vocab()
-    texts = _load_v28_texts()
+    texts = load_v28_full()
 
     rng = np.random.default_rng(seed)
     indices = rng.choice(len(texts), size=SUBSET_SIZE, replace=False)
