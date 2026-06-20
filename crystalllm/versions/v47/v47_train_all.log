@@ -1,0 +1,179 @@
+=== v47 Phase 1 完整训练启动 ===
+时间: Sat Jun 20 03:30:30     2026
+
+
+######################################################################
+## Variant A (200M dense AR baseline)
+## 启动时间: Sat Jun 20 03:30:30     2026
+######################################################################
+=== v47 Phase 1 From-Scratch Training ===
+Args: {'variant': 'A', 'steps': 10000, 'batch_size': 4, 'T': 512, 'lr': 0.00015, 'warmup_steps': 1000, 'alpha': 0.5, 'eval_every': 500, 'eval_batches_train': 32, 'eval_batches_final': 254, 'device': 'cuda'}
+Device: cuda
+
+======================================================================
+=== v47 Phase 1 | Variant A ===
+  ffn=dense  per_block_z=False  sparse_attn=False  loss=ar_only
+  Steps=10000  B=4  T=512  LR=0.00015  α=0.5
+======================================================================
+
+  Loaded v28 train: 69307 samples
+V=2262 (V_BASE=2261 + <mask>=2261)
+train: 88614 samples (v24 + v28)
+val (clean): 1016 samples
+Decoder: active=204.65M, total=204.65M, layers=16, embd=1024, block_pos=514, sparse_ratio=0.00%
+
+=== Training: 10000 steps ===
+  step     0/10000 | L_AR 7.847 | L_diff 0.000 | aux 0.0000 | val_ppl 2661.5742 | lr 1.50e-07 | moe_var nan | pos_norm 0.00 | sparse 0.00% | 1s ETA 10818s
+  step   500/10000 | L_AR 2.914 | L_diff 0.000 | aux 0.0000 | val_ppl 30.8100 | lr 7.51e-05 | moe_var nan | pos_norm 0.00 | sparse 0.00% | 42s ETA 805s
+  step  1000/10000 | L_AR 1.482 | L_diff 0.000 | aux 0.0000 | val_ppl 24.3609 | lr 1.50e-04 | moe_var nan | pos_norm 0.00 | sparse 0.00% | 84s ETA 754s
+  step  1500/10000 | L_AR 0.760 | L_diff 0.000 | aux 0.0000 | val_ppl 18.0859 | lr 1.49e-04 | moe_var nan | pos_norm 0.00 | sparse 0.00% | 125s ETA 710s
+  step  2000/10000 | L_AR 2.465 | L_diff 0.000 | aux 0.0000 | val_ppl 17.7164 | lr 1.45e-04 | moe_var nan | pos_norm 0.00 | sparse 0.00% | 167s ETA 667s
+  step  2500/10000 | L_AR 1.717 | L_diff 0.000 | aux 0.0000 | val_ppl 19.2612 | lr 1.40e-04 | moe_var nan | pos_norm 0.00 | sparse 0.00% | 208s ETA 625s
+  step  3000/10000 | L_AR 0.755 | L_diff 0.000 | aux 0.0000 | val_ppl 12.0715 | lr 1.32e-04 | moe_var nan | pos_norm 0.00 | sparse 0.00% | 250s ETA 583s
+  step  3500/10000 | L_AR 1.542 | L_diff 0.000 | aux 0.0000 | val_ppl 12.5641 | lr 1.23e-04 | moe_var nan | pos_norm 0.00 | sparse 0.00% | 291s ETA 541s
+  step  4000/10000 | L_AR 1.343 | L_diff 0.000 | aux 0.0000 | val_ppl 11.1373 | lr 1.12e-04 | moe_var nan | pos_norm 0.00 | sparse 0.00% | 333s ETA 500s
+  step  4500/10000 | L_AR 0.691 | L_diff 0.000 | aux 0.0000 | val_ppl 9.8038 | lr 1.01e-04 | moe_var nan | pos_norm 0.00 | sparse 0.00% | 375s ETA 458s
+  step  5000/10000 | L_AR 1.747 | L_diff 0.000 | aux 0.0000 | val_ppl 8.7788 | lr 8.80e-05 | moe_var nan | pos_norm 0.00 | sparse 0.00% | 416s ETA 416s
+  step  5500/10000 | L_AR 0.029 | L_diff 0.000 | aux 0.0000 | val_ppl 8.0615 | lr 7.50e-05 | moe_var nan | pos_norm 0.00 | sparse 0.00% | 458s ETA 374s
+  step  6000/10000 | L_AR 0.027 | L_diff 0.000 | aux 0.0000 | val_ppl 7.5555 | lr 6.20e-05 | moe_var nan | pos_norm 0.00 | sparse 0.00% | 499s ETA 333s
+  step  6500/10000 | L_AR 0.851 | L_diff 0.000 | aux 0.0000 | val_ppl 7.4637 | lr 4.93e-05 | moe_var nan | pos_norm 0.00 | sparse 0.00% | 541s ETA 291s
+  step  7000/10000 | L_AR 0.397 | L_diff 0.000 | aux 0.0000 | val_ppl 7.4296 | lr 3.75e-05 | moe_var nan | pos_norm 0.00 | sparse 0.00% | 583s ETA 250s
+  step  7500/10000 | L_AR 0.600 | L_diff 0.000 | aux 0.0000 | val_ppl 6.0061 | lr 2.68e-05 | moe_var nan | pos_norm 0.00 | sparse 0.00% | 627s ETA 209s
+  step  8000/10000 | L_AR 0.359 | L_diff 0.000 | aux 0.0000 | val_ppl 5.3995 | lr 1.75e-05 | moe_var nan | pos_norm 0.00 | sparse 0.00% | 669s ETA 167s
+  step  8500/10000 | L_AR 0.839 | L_diff 0.000 | aux 0.0000 | val_ppl 5.7922 | lr 1.00e-05 | moe_var nan | pos_norm 0.00 | sparse 0.00% | 711s ETA 125s
+  step  9000/10000 | L_AR 0.887 | L_diff 0.000 | aux 0.0000 | val_ppl 5.2318 | lr 4.51e-06 | moe_var nan | pos_norm 0.00 | sparse 0.00% | 752s ETA 84s
+  step  9500/10000 | L_AR 1.246 | L_diff 0.000 | aux 0.0000 | val_ppl 5.1963 | lr 1.13e-06 | moe_var nan | pos_norm 0.00 | sparse 0.00% | 794s ETA 42s
+  step  9999/10000 | L_AR 0.266 | L_diff 0.000 | aux 0.0000 | val_ppl 5.1857 | lr 0.00e+00 | moe_var nan | pos_norm 0.00 | sparse 0.00% | 835s ETA 0s
+
+=== Final eval on 254 batches ===
+  Final val_ppl: 5.5408  (best during train: 5.1857)
+  Model saved: D:\CrystaLLM\crystalllm\versions\v47\v47_A_decoder.pt
+  Log saved: D:\CrystaLLM\crystalllm\versions\v47\v47_A_train_log.json
+
+=== Variant A 训练完成 (842s) ===
+  best_val_ppl: 5.1857
+  final_val_ppl: 5.5408
+
+=== Final PPL for variant A: 5.5408 ===
+
+######################################################################
+## Variant A 完成: Sat Jun 20 03:44:36     2026
+######################################################################
+
+######################################################################
+## Variant B (200M MoE AR)
+## 启动时间: Sat Jun 20 03:44:36     2026
+######################################################################
+=== v47 Phase 1 From-Scratch Training ===
+Args: {'variant': 'B', 'steps': 10000, 'batch_size': 4, 'T': 512, 'lr': 0.00015, 'warmup_steps': 1000, 'alpha': 0.5, 'eval_every': 500, 'eval_batches_train': 32, 'eval_batches_final': 254, 'device': 'cuda'}
+Device: cuda
+
+======================================================================
+=== v47 Phase 1 | Variant B ===
+  ffn=moe  per_block_z=False  sparse_attn=False  loss=ar_only
+  Steps=10000  B=4  T=512  LR=0.00015  α=0.5
+======================================================================
+
+  Loaded v28 train: 69307 samples
+V=2262 (V_BASE=2261 + <mask>=2261)
+train: 88614 samples (v24 + v28)
+val (clean): 1016 samples
+Decoder: active=204.79M, total=607.74M, layers=16, embd=1024, block_pos=514, sparse_ratio=0.00%
+
+=== Training: 10000 steps ===
+  step     0/10000 | L_AR 7.799 | L_diff 0.000 | aux 0.3244 | val_ppl 2559.1110 | lr 1.50e-07 | moe_var 0.0001 | pos_norm 0.00 | sparse 0.00% | 4s ETA 38599s
+  step   500/10000 | L_AR 2.922 | L_diff 0.000 | aux 0.3248 | val_ppl 29.7943 | lr 7.51e-05 | moe_var 0.0000 | pos_norm 0.00 | sparse 0.00% | 143s ETA 2714s
+  step  1000/10000 | L_AR 1.816 | L_diff 0.000 | aux 0.3278 | val_ppl 28.4943 | lr 1.50e-04 | moe_var 0.0000 | pos_norm 0.00 | sparse 0.00% | 282s ETA 2539s
+  step  1500/10000 | L_AR 0.957 | L_diff 0.000 | aux 0.3271 | val_ppl 23.5651 | lr 1.49e-04 | moe_var 0.0000 | pos_norm 0.00 | sparse 0.00% | 421s ETA 2386s
+  step  2000/10000 | L_AR 2.685 | L_diff 0.000 | aux 0.3284 | val_ppl 18.4968 | lr 1.45e-04 | moe_var 0.0000 | pos_norm 0.00 | sparse 0.00% | 563s ETA 2251s
+  step  2500/10000 | L_AR 1.931 | L_diff 0.000 | aux 0.3236 | val_ppl 20.9745 | lr 1.40e-04 | moe_var 0.0000 | pos_norm 0.00 | sparse 0.00% | 703s ETA 2109s
+  step  3000/10000 | L_AR 0.867 | L_diff 0.000 | aux 0.3250 | val_ppl 16.2446 | lr 1.32e-04 | moe_var 0.0000 | pos_norm 0.00 | sparse 0.00% | 841s ETA 1963s
+  step  3500/10000 | L_AR 1.716 | L_diff 0.000 | aux 0.3234 | val_ppl 17.8676 | lr 1.23e-04 | moe_var 0.0000 | pos_norm 0.00 | sparse 0.00% | 980s ETA 1819s
+  step  4000/10000 | L_AR 1.477 | L_diff 0.000 | aux 0.3223 | val_ppl 14.3833 | lr 1.12e-04 | moe_var 0.0000 | pos_norm 0.00 | sparse 0.00% | 1118s ETA 1676s
+  step  4500/10000 | L_AR 0.776 | L_diff 0.000 | aux 0.3214 | val_ppl 16.2485 | lr 1.01e-04 | moe_var 0.0000 | pos_norm 0.00 | sparse 0.00% | 1256s ETA 1535s
+  step  5000/10000 | L_AR 2.096 | L_diff 0.000 | aux 0.3232 | val_ppl 12.7851 | lr 8.80e-05 | moe_var 0.0000 | pos_norm 0.00 | sparse 0.00% | 1394s ETA 1394s
+  step  5500/10000 | L_AR 0.030 | L_diff 0.000 | aux 0.3231 | val_ppl 11.2590 | lr 7.50e-05 | moe_var 0.0001 | pos_norm 0.00 | sparse 0.00% | 1533s ETA 1254s
+  step  6000/10000 | L_AR 0.031 | L_diff 0.000 | aux 0.3211 | val_ppl 11.3591 | lr 6.20e-05 | moe_var 0.0001 | pos_norm 0.00 | sparse 0.00% | 1684s ETA 1123s
+  step  6500/10000 | L_AR 1.103 | L_diff 0.000 | aux 0.3217 | val_ppl 11.1188 | lr 4.93e-05 | moe_var 0.0001 | pos_norm 0.00 | sparse 0.00% | 1844s ETA 993s
+  step  7000/10000 | L_AR 0.604 | L_diff 0.000 | aux 0.3204 | val_ppl 10.8363 | lr 3.75e-05 | moe_var 0.0001 | pos_norm 0.00 | sparse 0.00% | 2000s ETA 857s
+  step  7500/10000 | L_AR 0.915 | L_diff 0.000 | aux 0.3217 | val_ppl 9.7239 | lr 2.68e-05 | moe_var 0.0001 | pos_norm 0.00 | sparse 0.00% | 2155s ETA 718s
+  step  8000/10000 | L_AR 0.525 | L_diff 0.000 | aux 0.3203 | val_ppl 8.8984 | lr 1.75e-05 | moe_var 0.0001 | pos_norm 0.00 | sparse 0.00% | 2297s ETA 574s
+  step  8500/10000 | L_AR 1.428 | L_diff 0.000 | aux 0.3215 | val_ppl 8.9131 | lr 1.00e-05 | moe_var 0.0001 | pos_norm 0.00 | sparse 0.00% | 2434s ETA 430s
+  step  9000/10000 | L_AR 1.271 | L_diff 0.000 | aux 0.3207 | val_ppl 8.4318 | lr 4.51e-06 | moe_var 0.0001 | pos_norm 0.00 | sparse 0.00% | 2572s ETA 286s
+  step  9500/10000 | L_AR 1.719 | L_diff 0.000 | aux 0.3210 | val_ppl 8.2540 | lr 1.13e-06 | moe_var 0.0001 | pos_norm 0.00 | sparse 0.00% | 2709s ETA 143s
+  step  9999/10000 | L_AR 0.387 | L_diff 0.000 | aux 0.3204 | val_ppl 8.2775 | lr 0.00e+00 | moe_var 0.0001 | pos_norm 0.00 | sparse 0.00% | 2845s ETA 0s
+
+=== Final eval on 254 batches ===
+  Final val_ppl: 8.9854  (best during train: 8.2540)
+  Model saved: D:\CrystaLLM\crystalllm\versions\v47\v47_B_decoder.pt
+  Log saved: D:\CrystaLLM\crystalllm\versions\v47\v47_B_train_log.json
+
+=== Variant B 训练完成 (2871s) ===
+  best_val_ppl: 8.2540
+  final_val_ppl: 8.9854
+
+=== Final PPL for variant B: 8.9854 ===
+
+######################################################################
+## Variant B 完成: Sat Jun 20 04:32:32     2026
+######################################################################
+
+######################################################################
+## Variant C (200M MoE + per-block z + sparse attn + 0.5 L_AR + 0.5 L_diff)
+## 启动时间: Sat Jun 20 04:32:32     2026
+######################################################################
+=== v47 Phase 1 From-Scratch Training ===
+Args: {'variant': 'C', 'steps': 10000, 'batch_size': 4, 'T': 512, 'lr': 0.00015, 'warmup_steps': 1000, 'alpha': 0.5, 'eval_every': 500, 'eval_batches_train': 32, 'eval_batches_final': 254, 'device': 'cuda'}
+Device: cuda
+
+======================================================================
+=== v47 Phase 1 | Variant C ===
+  ffn=moe  per_block_z=True  sparse_attn=True  loss=ar_diff_mix
+  Steps=10000  B=4  T=512  LR=0.00015  α=0.5
+======================================================================
+
+  Loaded v28 train: 69307 samples
+V=2262 (V_BASE=2261 + <mask>=2261)
+train: 88614 samples (v24 + v28)
+val (clean): 1016 samples
+Decoder: active=204.86M, total=607.81M, layers=16, embd=1024, block_pos=545, sparse_ratio=89.99%
+
+=== Training: 10000 steps ===
+  step     0/10000 | L_AR 7.607 | L_diff 7.916 | aux 0.3228 | val_ppl 2000.8807 | lr 1.50e-07 | moe_var 0.0001 | pos_norm 182.05 | sparse 89.99% | 4s ETA 42146s
+  step   500/10000 | L_AR 2.727 | L_diff 2.771 | aux 0.3292 | val_ppl 30.8720 | lr 7.51e-05 | moe_var 0.0000 | pos_norm 181.70 | sparse 89.99% | 266s ETA 5055s
+  step  1000/10000 | L_AR 1.570 | L_diff 1.674 | aux 0.3332 | val_ppl 23.7067 | lr 1.50e-04 | moe_var 0.0000 | pos_norm 180.75 | sparse 89.99% | 528s ETA 4750s
+  step  1500/10000 | L_AR 0.900 | L_diff 1.249 | aux 0.3299 | val_ppl 15.5143 | lr 1.49e-04 | moe_var 0.0000 | pos_norm 179.45 | sparse 89.99% | 789s ETA 4470s
+  step  2000/10000 | L_AR 2.027 | L_diff 2.801 | aux 0.3322 | val_ppl 4.6550 | lr 1.45e-04 | moe_var 0.0000 | pos_norm 178.19 | sparse 89.99% | 1051s ETA 4205s
+  step  2500/10000 | L_AR 0.898 | L_diff 2.098 | aux 0.3248 | val_ppl 3.3701 | lr 1.40e-04 | moe_var 0.0001 | pos_norm 176.98 | sparse 89.99% | 1313s ETA 3939s
+  step  3000/10000 | L_AR 0.308 | L_diff 0.937 | aux 0.3242 | val_ppl 2.3324 | lr 1.32e-04 | moe_var 0.0001 | pos_norm 175.82 | sparse 89.99% | 1575s ETA 3675s
+  step  3500/10000 | L_AR 0.649 | L_diff 2.197 | aux 0.3230 | val_ppl 1.9116 | lr 1.23e-04 | moe_var 0.0002 | pos_norm 174.73 | sparse 89.99% | 1837s ETA 3412s
+  step  4000/10000 | L_AR 0.248 | L_diff 1.762 | aux 0.3231 | val_ppl 1.5187 | lr 1.12e-04 | moe_var 0.0003 | pos_norm 173.73 | sparse 89.99% | 2099s ETA 3148s
+  step  4500/10000 | L_AR 0.046 | L_diff 0.856 | aux 0.3239 | val_ppl 1.1737 | lr 1.01e-04 | moe_var 0.0003 | pos_norm 172.83 | sparse 89.99% | 2361s ETA 2886s
+  step  5000/10000 | L_AR 0.048 | L_diff 2.543 | aux 0.3226 | val_ppl 1.0951 | lr 8.80e-05 | moe_var 0.0004 | pos_norm 172.03 | sparse 89.99% | 2623s ETA 2623s
+  step  5500/10000 | L_AR 0.004 | L_diff 0.025 | aux 0.3258 | val_ppl 1.0611 | lr 7.50e-05 | moe_var 0.0004 | pos_norm 171.34 | sparse 89.99% | 2885s ETA 2361s
+  step  6000/10000 | L_AR 0.000 | L_diff 0.027 | aux 0.3221 | val_ppl 1.0955 | lr 6.20e-05 | moe_var 0.0005 | pos_norm 170.76 | sparse 89.99% | 3147s ETA 2098s
+  step  6500/10000 | L_AR 0.004 | L_diff 1.803 | aux 0.3210 | val_ppl 1.0301 | lr 4.93e-05 | moe_var 0.0005 | pos_norm 170.30 | sparse 89.99% | 3409s ETA 1836s
+  step  7000/10000 | L_AR 0.001 | L_diff 0.813 | aux 0.3209 | val_ppl 1.0243 | lr 3.75e-05 | moe_var 0.0005 | pos_norm 169.93 | sparse 89.99% | 3674s ETA 1575s
+  step  7500/10000 | L_AR 0.002 | L_diff 1.570 | aux 0.3223 | val_ppl 1.0146 | lr 2.68e-05 | moe_var 0.0005 | pos_norm 169.66 | sparse 89.99% | 3937s ETA 1312s
+  step  8000/10000 | L_AR 0.000 | L_diff 0.864 | aux 0.3204 | val_ppl 1.0087 | lr 1.75e-05 | moe_var 0.0006 | pos_norm 169.47 | sparse 89.99% | 4199s ETA 1050s
+  step  8500/10000 | L_AR 0.001 | L_diff 2.347 | aux 0.3208 | val_ppl 1.0126 | lr 1.00e-05 | moe_var 0.0006 | pos_norm 169.36 | sparse 89.99% | 4461s ETA 787s
+  step  9000/10000 | L_AR 0.000 | L_diff 1.833 | aux 0.3206 | val_ppl 1.0088 | lr 4.51e-06 | moe_var 0.0006 | pos_norm 169.30 | sparse 89.99% | 4724s ETA 525s
+  step  9500/10000 | L_AR 0.002 | L_diff 2.604 | aux 0.3207 | val_ppl 1.0083 | lr 1.13e-06 | moe_var 0.0006 | pos_norm 169.27 | sparse 89.99% | 4986s ETA 262s
+  step  9999/10000 | L_AR 0.000 | L_diff 0.687 | aux 0.3206 | val_ppl 1.0079 | lr 0.00e+00 | moe_var 0.0006 | pos_norm 169.27 | sparse 89.99% | 5248s ETA 1s
+
+=== Final eval on 254 batches ===
+  Final val_ppl: 1.0158  (best during train: 1.0079)
+  Model saved: D:\CrystaLLM\crystalllm\versions\v47\v47_C_decoder.pt
+  Log saved: D:\CrystaLLM\crystalllm\versions\v47\v47_C_train_log.json
+
+=== Variant C 训练完成 (5275s) ===
+  best_val_ppl: 1.0079
+  final_val_ppl: 1.0158
+
+=== Final PPL for variant C: 1.0158 ===
+
+######################################################################
+## Variant C 完成: Sat Jun 20 06:00:42     2026
+######################################################################
+
+=== v47 Phase 1 全部训练完成 ===
