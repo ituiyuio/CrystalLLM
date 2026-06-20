@@ -25,7 +25,7 @@ import torch
 import torch.nn as nn
 
 from experiments.v49_pre.exp_runner import (
-    build_50m_model, count_active_params, train_step, evaluate_ppl,
+    build_50m_model, count_active_params, train_step,
 )
 from experiments.v49_pre.data_loader import build_subset_loader
 from experiments.v49_pre.metrics import MetricsCollector, format_metrics
@@ -137,6 +137,33 @@ def build_complex_kan_50m(kan_dim: int = DEFAULT_KAN_DIM, grid_size: int = DEFAU
     return base_model
 
 
+def _evaluate_ppl_device_aware(model, val_loader, device, max_batches: int = 20):
+    """Device-aware perplexity evaluation (avoids the cpu/cuda mismatch bug in
+    exp_runner.evaluate_ppl when model is on cuda but loader yields cpu tensors)."""
+    import math as _math
+    model.eval()
+    loss_fn = nn.CrossEntropyLoss(reduction="sum")
+    total_loss = 0.0
+    total_tokens = 0
+    with torch.no_grad():
+        for i, batch in enumerate(val_loader):
+            if i >= max_batches:
+                break
+            if isinstance(batch, (tuple, list)):
+                x = batch[0]
+            else:
+                x = batch
+            x = x.to(device)
+            x, y = x[:, :-1], x[:, 1:]
+            logits = model(x)
+            loss = loss_fn(logits.reshape(-1, logits.size(-1)), y.reshape(-1))
+            total_loss += loss.item()
+            total_tokens += y.numel()
+    model.train()
+    avg_loss = total_loss / max(total_tokens, 1)
+    return _math.exp(avg_loss)
+
+
 def run_training(model, n_steps: int = 10000, batch_size: int = 8, seq_len: int = 512,
                  learning_rate: float = 1e-4, eval_every: int = 2000):
     """运行训练循环, 收集 metrics."""
@@ -159,7 +186,7 @@ def run_training(model, n_steps: int = 10000, batch_size: int = 8, seq_len: int 
         metrics.update_peak_memory()
 
         if step % eval_every == 0 or step == n_steps:
-            val_ppl = evaluate_ppl(model, loader)
+            val_ppl = _evaluate_ppl_device_aware(model, loader, device)
             val_ppls.append((step, val_ppl))
             print(
                 f"Step {step}: loss={loss:.4f}, val_ppl={val_ppl:.4f}, "
