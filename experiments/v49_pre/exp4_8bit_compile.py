@@ -54,6 +54,12 @@ def build_compiled_model(model):
     Returns:
         编译后的 model (CompiledGraphWrapper) 或原 model.
     """
+    # Triton 在 Windows 上没有 wheel, 提前检查避免运行时报错
+    try:
+        import triton  # noqa: F401
+    except ImportError:
+        print("triton 未装 (Windows 无 wheel), torch.compile 不可用, 使用 eager mode")
+        return model
     try:
         compiled = torch.compile(model, mode="reduce-overhead")
         return compiled

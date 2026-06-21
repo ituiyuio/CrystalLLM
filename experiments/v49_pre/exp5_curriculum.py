@@ -154,11 +154,11 @@ def run_training_with_curriculum(model, n_steps: int = 10000, batch_size: int = 
             loss.backward()
             optimizer.step()
 
-        # 估计每个 sample 的难度 (用 1000 个样本, 在 CPU 上跑避免显存压力)
+        # 估计每个 sample 的难度 (用 100 个样本在 GPU 上, 避免 10k CPU inference 卡死)
         full = load_v28_full()
         scores = estimate_difficulty(
             model, full, seq_len=seq_len,
-            max_samples=SUBSET_SIZE, device="cpu",
+            max_samples=100, device=device,
         )
         print(f"Estimated difficulty for {len(scores)} samples")
 

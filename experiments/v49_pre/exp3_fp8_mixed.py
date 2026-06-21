@@ -117,13 +117,19 @@ def run_training(model, n_steps: int = 10000, batch_size: int = 8, seq_len: int 
 
     # 应用 FP8 包装
     fp8_kind = "bf16_autocast"
+    fp8_applied = False
     if use_fp8:
         ctx = setup_fp8()
         fp8_kind, handle = ctx
         if fp8_kind == "torchao":
             try:
-                model = handle(model)
-                print("Using torchao FP8")
+                # FP8 conversion 在这个 PyTorch 版本 + 这个 50M 模型上, 因为 autograd 内部
+                # reshape 产生 (640x4088) 等不能 /16 的 shape, 不可用.
+                # 标记为不可用, 回退 BF16 (但记录尝试).
+                print("torchao FP8 importable but incompatible with this model (autograd reshape produces non-/16 dims)")
+                print("Falling back to BF16 (FP8 unavailable in current env)")
+                fp8_kind = "bf16_unavailable"
+                fp8_applied = False
             except Exception as e:
                 print(f"torchao FP8 failed: {e}, falling back to BF16 autocast")
                 fp8_kind = "bf16_autocast"

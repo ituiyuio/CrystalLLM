@@ -1,14 +1,18 @@
 """Exp 15 (CMT ablation Fix-6): cmt_full_v2 - 三刀同步 v2 组合 fix.
 
-修复内容:
-  - 同时应用 Fix-1 (WaveAttentionSoftmax) + Fix-2 (ComplexKANFFN_TrueMul) + Fix-3 (LieRE_RealCayley)
-  - 这是 "all-in" 尝试: 如果任何单 fix 起作用, 组合应带来乘性收益
-  - 通过条件: PPL < 10 (vs Exp 8 = 32.58)
+修复内容 (修订版):
+  - 原 spec: Fix-1 + Fix-2 + Fix-3 (LieRE_RealCayley)
+  - 修订原因: Fix-3 真 Cayley O(d^3) 在 d=640 时 OOM, 训练不可承受 (Exp 12 INCONCLUSIVE)
+  - 实际跑: Fix-1 + Fix-2 + Fix-5 (LieRE_NoContext)
+    - Fix-5 是 Exp 14 验证有效的 PE 修复 (PPL 从 32.58 降至 1.01)
+    - 本实验测试: 在 Fix-5 基础上加 Fix-1/Fix-2 是否带来额外收益
+  - 通过条件: PPL ≤ Fix-5 单独效果 (1.01), 表明组合无副作用或更好
 
-架构: Embedding -> N x CMTBlockV2(LieRE_RealCayley + WaveAttentionSoftmax + ComplexKANFFN_TrueMul) -> LN -> Head
+架构: Embedding -> N x CMTBlockV2(LieRE_NoContext + WaveAttentionSoftmax + ComplexKANFFN_TrueMul) -> LN -> Head
 
 参考文档:
   - docs/superpowers/specs/2026-06-21-cmt-ablation-fix-design.md §8 (决策树)
+  - Exp 14 实测结果 (PPL 1.01, Fix-5 单独已能解 CMT 失败)
 """
 import argparse
 import json
@@ -25,7 +29,7 @@ import torch.nn as nn
 from experiments.v49_pre.exp_runner import VOCAB_SIZE
 from experiments.v49_pre.cmt_v2 import (
     CMTBlockV2,
-    LieRE_RealCayley,
+    LieRE_NoContext,
     WaveAttentionSoftmax,
     ComplexKANFFN_TrueMul,
 )
@@ -47,11 +51,11 @@ class CMT50M_Fix6(nn.Module):
         })()
         self.token_emb = nn.Embedding(vocab_size, 2 * d_model)
         self.pos_emb = nn.Embedding(max_seq_len, 2 * d_model)
-        # 三模块同时应用 fix
+        # 三模块同时应用 fix (修订: 用 Fix-5 替代 Fix-3)
         self.layers = nn.ModuleList([
             CMTBlockV2(
                 d_model, n_heads=n_heads, kan_dim=kan_dim, dropout=dropout,
-                pe_module=LieRE_RealCayley(d_model),
+                pe_module=LieRE_NoContext(d_model),
                 attn_module=WaveAttentionSoftmax(d_model, n_heads=n_heads),
                 ffn_module=ComplexKANFFN_TrueMul(d_model, kan_dim=kan_dim, dropout=dropout),
             )
@@ -172,12 +176,12 @@ def main():
     parser.add_argument("--output", type=str, required=True)
     args = parser.parse_args()
 
-    print(f"=== Exp 15: Fix-6 (三刀同步 v2) - Fix-1+2+3 组合 ===")
+    print(f"=== Exp 15: Fix-6 (三刀同步 v2 修订) - Fix-1+2+5 组合 ===")
     print(f"配置: d_model={args.d_model}, n_layers={args.n_layers}, "
           f"n_heads={args.n_heads}, kan_dim={args.kan_dim}, "
           f"batch={args.batch_size}, T={args.seq_len}, lr={args.learning_rate}")
-    print(f"组合: LieRE_RealCayley + WaveAttentionSoftmax + ComplexKANFFN_TrueMul")
-    print(f"预期: 50 min (O(d^3) 求逆开销大)\n")
+    print(f"修订组合: LieRE_NoContext (Fix-5) + WaveAttentionSoftmax (Fix-1) + ComplexKANFFN_TrueMul (Fix-2)")
+    print(f"原 spec 用 LieRE_RealCayley (Fix-3), 但 OOM 不可行, 改用 Fix-5 (Exp 14 验证 PPL 1.01)")
 
     model = build_cmt_fix6_50m(
         d_model=args.d_model, n_layers=args.n_layers,
@@ -218,16 +222,19 @@ def main():
         print(f"\nFinal val PPL @ step {args.n_steps}: {final_ppl:.4f}")
 
         # 决策树
-        print(f"\n=== 决策树 ===")
-        print(f"  Exp 8 (原始 cmt_full):     32.58")
-        print(f"  Exp 15 (cmt_full_v2):      {final_ppl:.4f}")
-        print(f"  baseline (Exp 4):          2.0733")
-        if final_ppl <= 3.0:
-            print(f"  [OK] PPL ≤ 3.0 → CMT 可救, 写 spec 推荐 v49 架构 pivot")
-        elif final_ppl <= 10.0:
-            print(f"  [PARTIAL] PPL ∈ [3, 10] → 部分救, 评估单 fix 收益")
+        print(f"\n=== 决策树 (修订) ===")
+        print(f"  Exp 8 (原始 cmt_full):         32.58")
+        print(f"  Exp 14 (Fix-5 only):           1.01")
+        print(f"  Exp 15 (Fix-1+2+5 combo):     {final_ppl:.4f}")
+        print(f"  baseline (Exp 4):              2.0733")
+        if final_ppl < 1.01:
+            print(f"  [OK] PPL < Fix-5 单独 (1.01), 组合带来额外收益, Fix-1/Fix-2 有边际改善")
+        elif final_ppl < 2.0:
+            print(f"  [OK] PPL < 2.0, 接近 Fix-5, 组合无显著副作用")
+        elif final_ppl < 5.0:
+            print(f"  [PARTIAL] PPL ∈ [2, 5], Fix-1/Fix-2 略微恶化效果")
         else:
-            print(f"  [X] PPL ≥ 15 → CMT 不可救, 写终结 spec + v50+ 入口永久关闭")
+            print(f"  [X] PPL ≥ 5, Fix-1/Fix-2 在 Fix-5 基础上反而有害")
 
 
 if __name__ == "__main__":

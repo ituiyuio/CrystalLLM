@@ -48,7 +48,7 @@ def main():
     for name, path, fix_id in experiments:
         r = load_result(path)
         if r is None:
-            print(f"⚠ {name}: {path} 不存在或为空, 跳过")
+            print(f"[WARN] {name}: {path} 不存在或为空, 跳过")
             data.append({"name": name, "fix_id": fix_id, "missing": True})
             continue
         ppl_2k = get_ppl_at(r, 2000)
@@ -119,7 +119,7 @@ def main():
                 continue
             f.write(f"- `{d['name'].split()[1]}.json` — {d['fix_id']}\n")
 
-    print(f"✓ 写出 {table_path}")
+    print(f"[OK] 写出 {table_path}")
 
     # --- 写出综合报告 docs/experiments/2026-06-22-cmt-ablation-fix-results.md ---
     report_path = docs_dir / "2026-06-22-cmt-ablation-fix-results.md"
@@ -158,7 +158,7 @@ def main():
         f.write("## 5. 后续行动\n\n")
         f.write("(待 7 实验完成后填写)\n")
 
-    print(f"✓ 写出 {report_path}")
+    print(f"[OK] 写出 {report_path}")
     print(f"\n聚合完成. {sum(1 for d in data if not d['missing'])}/7 实验结果已加载.")
 
 
