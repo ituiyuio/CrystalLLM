@@ -1,0 +1,517 @@
+{
+  "exp_id": "eval_lm_v1",
+  "model_type": "cmt_fixed",
+  "ckpt": "experiments/v49_pre/results/v49_30k_full.final.pt",
+  "timestamp": "2026-06-21T23:24:24.630988",
+  "n_params": 68787200,
+  "trained_n_steps": 30000,
+  "in_dist_ppl": 1.0120868602068502,
+  "generation_diversity_avg": 0.05266666666666668,
+  "n_coherent": 0,
+  "n_repetition": 14,
+  "generation_details": {
+    "english_simple": {
+      "T0.5": {
+        "diversity": 0.045,
+        "n_unique": 9,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            "n",
+            121
+          ],
+          [
+            " ",
+            30
+          ],
+          [
+            "u",
+            28
+          ],
+          [
+            "o",
+            10
+          ],
+          [
+            "r",
+            5
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 9,
+        "is_locally_coherent": false,
+        "text": "unnuuuocu   nouuunonn norrwnnnnnnnnnoonnnn nn nnnnnu  nnnnuxn nn nonnnnnnnnrnnnnnnnnowornnnnornnnnun"
+      },
+      "T0.8": {
+        "diversity": 0.05,
+        "n_unique": 10,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            "n",
+            76
+          ],
+          [
+            "r",
+            69
+          ],
+          [
+            " ",
+            16
+          ],
+          [
+            "x",
+            16
+          ],
+          [
+            "w",
+            10
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 4,
+        "is_locally_coherent": false,
+        "text": "nr fn frxrrex rrecixxrfrrrwnnnrwncnnr wnnnnnnnrennnue nrnnnxnrwr rrnnnrnnnnrnnnrnnrnrnrrnnxrwrnxrnrr"
+      },
+      "T1.0": {
+        "diversity": 0.06,
+        "n_unique": 12,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            "u",
+            92
+          ],
+          [
+            "o",
+            30
+          ],
+          [
+            "i",
+            21
+          ],
+          [
+            " ",
+            18
+          ],
+          [
+            "n",
+            11
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 4,
+        "is_locally_coherent": false,
+        "text": "nr fn ocxci   Bqucixioiorr uuuuuouow  owuu oo ounonuiuiu  oxunouuuuiuuuuo  oiuuunui oocuuwoioouuowic"
+      }
+    },
+    "english_story": {
+      "T0.5": {
+        "diversity": 0.07,
+        "n_unique": 14,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            52
+          ],
+          [
+            "u",
+            41
+          ],
+          [
+            "a",
+            38
+          ],
+          [
+            ",",
+            24
+          ],
+          [
+            "y",
+            20
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 3,
+        "is_locally_coherent": false,
+        "text": " fcula   uuuu ,   dwmanw ,      ,u,     ya  uo yau,luauluuuuuul y ya  y,aa  y,aay,a, ,ay,y,awauna wu"
+      },
+      "T0.8": {
+        "diversity": 0.07,
+        "n_unique": 14,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            "a",
+            72
+          ],
+          [
+            "y",
+            34
+          ],
+          [
+            "w",
+            20
+          ],
+          [
+            ",",
+            16
+          ],
+          [
+            "f",
+            14
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 1,
+        "is_locally_coherent": false,
+        "text": "  anatwmifffytw aw wawaw ff fa fwu, fytafywwawwyty,tatff ft, fftyOwy,,aayaayaaway,aan,ay,yaawypaauaw"
+      },
+      "T1.0": {
+        "diversity": 0.055,
+        "n_unique": 11,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            "u",
+            121
+          ],
+          [
+            "f",
+            28
+          ],
+          [
+            " ",
+            22
+          ],
+          [
+            "a",
+            10
+          ],
+          [
+            "n",
+            10
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 9,
+        "is_locally_coherent": false,
+        "text": "dfcpfa u uuuu u    wfunu ff fafffun ffuuuuf uof aunuuauuuufuuuuua wn  aa punufuuy fuufuuuufuunuauuuu"
+      }
+    },
+    "code_python": {
+      "T0.5": {
+        "diversity": 0.04,
+        "n_unique": 8,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            133
+          ],
+          [
+            ":",
+            38
+          ],
+          [
+            "n",
+            18
+          ],
+          [
+            "c",
+            4
+          ],
+          [
+            "\n",
+            2
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 9,
+        "is_locally_coherent": false,
+        "text": " :\ncb       :       :::: nnn: n: :  : :n nn nn f\nin :       :    : fc:n n::: :            ::   :   :"
+      },
+      "T0.8": {
+        "diversity": 0.055,
+        "n_unique": 11,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            "i",
+            82
+          ],
+          [
+            "f",
+            70
+          ],
+          [
+            " ",
+            22
+          ],
+          [
+            "\n",
+            6
+          ],
+          [
+            ":",
+            6
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 2,
+        "is_locally_coherent": false,
+        "text": "n iDf\n \n)   ::::f f  if((iiiifof ficfifi(if(ff f\nif f   :if fififi\n)n)ii\n:i fii  \nif  ffi)ififiiifff"
+      },
+      "T1.0": {
+        "diversity": 0.045,
+        "n_unique": 9,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            69
+          ],
+          [
+            "f",
+            63
+          ],
+          [
+            "i",
+            21
+          ],
+          [
+            "a",
+            15
+          ],
+          [
+            "c",
+            13
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 8,
+        "is_locally_coherent": false,
+        "text": " :\ncb :     :     f :aa((i(fiaa     : fafffaif f\nif f     f fifiacffcai  fffff   fif         f :  fa"
+      }
+    },
+    "code_c": {
+      "T0.5": {
+        "diversity": 0.04,
+        "n_unique": 8,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            "u",
+            162
+          ],
+          [
+            " ",
+            14
+          ],
+          [
+            "t",
+            9
+          ],
+          [
+            "n",
+            9
+          ],
+          [
+            ")",
+            3
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 9,
+        "is_locally_coherent": false,
+        "text": " tr   tuun tuun    ttuuuuuuuuuuututuuuunnunu nuuuanu uuuuuuuuuuiuuuuun uuuuuuu unu uuuuutuuuuutuuuuu"
+      },
+      "T0.8": {
+        "diversity": 0.035,
+        "n_unique": 7,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            "u",
+            161
+          ],
+          [
+            " ",
+            16
+          ],
+          [
+            "t",
+            13
+          ],
+          [
+            "n",
+            6
+          ],
+          [
+            "i",
+            2
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 6,
+        "is_locally_coherent": false,
+        "text": " th   tuuntuuuu    tuuuuuuuuuuuututuuu nn nu muuuutu uuuutuuuuuiuuuuun uuuutuu unuuuiuuutuutut uuuuu"
+      },
+      "T1.0": {
+        "diversity": 0.055,
+        "n_unique": 11,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            "u",
+            161
+          ],
+          [
+            "{",
+            17
+          ],
+          [
+            "t",
+            9
+          ],
+          [
+            "r",
+            3
+          ],
+          [
+            "m",
+            2
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 8,
+        "is_locally_coherent": false,
+        "text": "umr{urtuun tuuu{\n{rtuuuuuuuuuuuututuuuu({u{{umuuuatuuuu{uu{uuuuiuuutuuuuuuuuuu{{u{uuuuuutuuuuutuuuuu"
+      }
+    },
+    "agentic": {
+      "T0.5": {
+        "diversity": 0.05,
+        "n_unique": 10,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            "h",
+            46
+          ],
+          [
+            "y",
+            31
+          ],
+          [
+            "t",
+            30
+          ],
+          [
+            "u",
+            25
+          ],
+          [
+            "o",
+            24
+          ]
+        ],
+        "has_repetition_run": false,
+        "n_repetition_runs": 0,
+        "is_locally_coherent": false,
+        "text": "ththehertoeuoy tuuu ohyo yolowryowyolywwelyyrtherrowhyuteluyorthtuuth tuteoryhoworyhhtyoyoywhuuuhtho"
+      },
+      "T0.8": {
+        "diversity": 0.06,
+        "n_unique": 12,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            "p",
+            69
+          ],
+          [
+            "y",
+            50
+          ],
+          [
+            "t",
+            31
+          ],
+          [
+            "h",
+            23
+          ],
+          [
+            "o",
+            9
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 2,
+        "is_locally_coherent": false,
+        "text": "thtwetputpwFoy tttyphhyp ythth typpolypteltythhh tyo oFypyytpythppytypyppythyhtpyyppthtpytyptthyythp"
+      },
+      "T1.0": {
+        "diversity": 0.06,
+        "n_unique": 12,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            "y",
+            121
+          ],
+          [
+            "t",
+            34
+          ],
+          [
+            "o",
+            11
+          ],
+          [
+            "h",
+            10
+          ],
+          [
+            " ",
+            7
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 5,
+        "is_locally_coherent": false,
+        "text": "ththltl l .Foy tyyiuyh o ytyyy youhoytyyy yythyhytyoyyFyyoyyyii5yyltyuyoyoy'yytyyyytyyyyytyytytyytht"
+      }
+    }
+  },
+  "ood_ppls": {
+    "v46_python": {
+      "ppl": 1.005771294723737,
+      "tokens": 6643
+    },
+    "english_prose": {
+      "ppl": 1.003630882923065,
+      "tokens": 7665
+    },
+    "code_javascript": {
+      "ppl": 1.0023598737521344,
+      "tokens": 7154
+    }
+  },
+  "ood_ppl_avg": 1.0039206837996455,
+  "ood_ratio": 0.9919313482584531,
+  "bpc": 0.017333111585748257,
+  "pass_count": 3,
+  "decision": "FAIL",
+  "checks": {
+    "1.1 PPL 合理范围 (1.5-3.0)": false,
+    "1.2 Diversity ≥ 0.3": false,
+    "1.3 ≥ 9/15 局部合理": false,
+    "1.4 OOD ratio ≤ 5x": true,
+    "1.5 BPC 报告": true,
+    "无字符重复循环": false,
+    "PPL 远低于 random (<500)": true
+  }
+}

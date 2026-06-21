@@ -1,0 +1,138 @@
+Device: cuda
+
+train: 10000 samples, 25471 windows
+
+Baseline Scale params: 1,214,281,728 (1214.3M)
+  d_model=2048, n_layers=24, n_heads=16, d_ff=8192
+[OK] สนำร bnb.optim.AdamW8bit (8-bit)
+  optimizer: adamw_8bit, lr=0.0001
+  step     1/10000 | loss=8.2567 | lr=2.00e-07 | tps=3466 | mem=18301MB | elapsed=1s
+  step   100/10000 | loss=4.0151 | lr=2.00e-05 | tps=3144 | mem=25085MB | elapsed=130s
+  step   200/10000 | loss=3.0077 | lr=4.00e-05 | tps=2934 | mem=25085MB | elapsed=279s
+  step   300/10000 | loss=2.7843 | lr=6.00e-05 | tps=2947 | mem=25085MB | elapsed=417s
+  step   400/10000 | loss=2.7289 | lr=8.00e-05 | tps=2694 | mem=25085MB | elapsed=608s
+  step   500/10000 | loss=2.6993 | lr=1.00e-04 | tps=2302 | mem=25085MB | elapsed=890s
+  step   600/10000 | loss=2.6096 | lr=1.00e-04 | tps=2401 | mem=25085MB | elapsed=1024s
+  step   700/10000 | loss=2.4869 | lr=9.99e-05 | tps=2609 | mem=25085MB | elapsed=1099s
+  step   800/10000 | loss=2.3736 | lr=9.98e-05 | tps=2345 | mem=25085MB | elapsed=1397s
+  step   900/10000 | loss=2.2743 | lr=9.96e-05 | tps=2500 | mem=25085MB | elapsed=1475s
+  step  1000/10000 | loss=2.2176 | lr=9.94e-05 | tps=2638 | mem=25085MB | elapsed=1552s
+  step  1100/10000 | loss=2.0775 | lr=9.91e-05 | tps=2770 | mem=25085MB | elapsed=1627s
+  step  1200/10000 | loss=1.9508 | lr=9.88e-05 | tps=2892 | mem=25085MB | elapsed=1699s
+  step  1300/10000 | loss=1.9254 | lr=9.84e-05 | tps=3004 | mem=25085MB | elapsed=1773s
+  step  1400/10000 | loss=1.8518 | lr=9.80e-05 | tps=3108 | mem=25085MB | elapsed=1845s
+  step  1500/10000 | loss=1.8290 | lr=9.76e-05 | tps=2730 | mem=25085MB | elapsed=2250s
+  step  1600/10000 | loss=1.6882 | lr=9.71e-05 | tps=2579 | mem=25085MB | elapsed=2541s
+  step  1700/10000 | loss=1.5370 | lr=9.65e-05 | tps=2207 | mem=25085MB | elapsed=3154s
+  step  1800/10000 | loss=1.4535 | lr=9.59e-05 | tps=2284 | mem=25085MB | elapsed=3228s
+  step  1900/10000 | loss=1.3536 | lr=9.53e-05 | tps=2213 | mem=25085MB | elapsed=3516s
+  step  2000/10000 | loss=1.3020 | lr=9.46e-05 | tps=1573 | mem=25085MB | elapsed=5209s
+  [EVAL] step  2000 | val_ppl=4.9664
+  step  2100/10000 | loss=1.2259 | lr=9.38e-05 | tps=1518 | mem=25085MB | elapsed=5668s
+  step  2200/10000 | loss=1.1937 | lr=9.31e-05 | tps=1570 | mem=25085MB | elapsed=5741s
+  step  2300/10000 | loss=1.1933 | lr=9.23e-05 | tps=1620 | mem=25085MB | elapsed=5817s
+  step  2400/10000 | loss=1.1116 | lr=9.14e-05 | tps=1669 | mem=25085MB | elapsed=5889s
+  step  2500/10000 | loss=1.0906 | lr=9.05e-05 | tps=1718 | mem=25085MB | elapsed=5961s
+  step  2600/10000 | loss=1.0536 | lr=8.96e-05 | tps=1765 | mem=25085MB | elapsed=6034s
+  step  2700/10000 | loss=1.0370 | lr=8.86e-05 | tps=1811 | mem=25085MB | elapsed=6107s
+  step  2800/10000 | loss=1.0173 | lr=8.76e-05 | tps=1856 | mem=25085MB | elapsed=6181s
+  step  2900/10000 | loss=1.0073 | lr=8.66e-05 | tps=1899 | mem=25085MB | elapsed=6253s
+  step  3000/10000 | loss=1.0048 | lr=8.55e-05 | tps=1943 | mem=25085MB | elapsed=6326s
+  step  3100/10000 | loss=0.9983 | lr=8.44e-05 | tps=1985 | mem=25085MB | elapsed=6398s
+  step  3200/10000 | loss=0.9467 | lr=8.32e-05 | tps=2026 | mem=25085MB | elapsed=6471s
+  step  3300/10000 | loss=0.9476 | lr=8.20e-05 | tps=2066 | mem=25085MB | elapsed=6544s
+  step  3400/10000 | loss=0.9145 | lr=8.08e-05 | tps=2105 | mem=25085MB | elapsed=6616s
+  step  3500/10000 | loss=0.9101 | lr=7.96e-05 | tps=2143 | mem=25085MB | elapsed=6688s
+  step  3600/10000 | loss=0.8946 | lr=7.84e-05 | tps=2181 | mem=25085MB | elapsed=6760s
+  step  3700/10000 | loss=0.9029 | lr=7.71e-05 | tps=2218 | mem=25085MB | elapsed=6833s
+  step  3800/10000 | loss=0.9050 | lr=7.58e-05 | tps=2254 | mem=25085MB | elapsed=6905s
+  step  3900/10000 | loss=0.8691 | lr=7.44e-05 | tps=2289 | mem=25085MB | elapsed=6977s
+  step  4000/10000 | loss=0.8312 | lr=7.31e-05 | tps=2324 | mem=25085MB | elapsed=7049s
+  [EVAL] step  4000 | val_ppl=2.9862
+  step  4100/10000 | loss=0.8756 | lr=7.17e-05 | tps=2357 | mem=25085MB | elapsed=7126s
+  step  4200/10000 | loss=0.8620 | lr=7.03e-05 | tps=2390 | mem=25085MB | elapsed=7199s
+  step  4300/10000 | loss=0.8406 | lr=6.89e-05 | tps=2423 | mem=25085MB | elapsed=7270s
+  step  4400/10000 | loss=0.8281 | lr=6.75e-05 | tps=2454 | mem=25085MB | elapsed=7344s
+  step  4500/10000 | loss=0.7916 | lr=6.60e-05 | tps=2486 | mem=25085MB | elapsed=7414s
+  step  4600/10000 | loss=0.8097 | lr=6.46e-05 | tps=2517 | mem=25085MB | elapsed=7486s
+  step  4700/10000 | loss=0.8267 | lr=6.31e-05 | tps=2546 | mem=25085MB | elapsed=7560s
+  step  4800/10000 | loss=0.8372 | lr=6.17e-05 | tps=2576 | mem=25085MB | elapsed=7632s
+  step  4900/10000 | loss=0.7760 | lr=6.02e-05 | tps=2605 | mem=25085MB | elapsed=7703s
+  step  5000/10000 | loss=0.8029 | lr=5.87e-05 | tps=2635 | mem=25085MB | elapsed=7773s
+  step  5100/10000 | loss=0.8101 | lr=5.72e-05 | tps=2664 | mem=25085MB | elapsed=7843s
+  step  5200/10000 | loss=0.7745 | lr=5.57e-05 | tps=2692 | mem=25085MB | elapsed=7913s
+  step  5300/10000 | loss=0.7613 | lr=5.43e-05 | tps=2719 | mem=25085MB | elapsed=7983s
+  step  5400/10000 | loss=0.7874 | lr=5.28e-05 | tps=2747 | mem=25085MB | elapsed=8053s
+  step  5500/10000 | loss=0.7633 | lr=5.13e-05 | tps=2773 | mem=25085MB | elapsed=8122s
+  step  5600/10000 | loss=0.7531 | lr=4.98e-05 | tps=2800 | mem=25085MB | elapsed=8192s
+  step  5700/10000 | loss=0.7643 | lr=4.83e-05 | tps=2826 | mem=25085MB | elapsed=8262s
+  step  5800/10000 | loss=0.7348 | lr=4.69e-05 | tps=2851 | mem=25085MB | elapsed=8332s
+  step  5900/10000 | loss=0.7689 | lr=4.54e-05 | tps=2876 | mem=25085MB | elapsed=8402s
+  step  6000/10000 | loss=0.7410 | lr=4.40e-05 | tps=2901 | mem=25085MB | elapsed=8472s
+  [EVAL] step  6000 | val_ppl=2.7045
+  step  6100/10000 | loss=0.7486 | lr=4.25e-05 | tps=2923 | mem=25085MB | elapsed=8547s
+  step  6200/10000 | loss=0.7423 | lr=4.11e-05 | tps=2947 | mem=25085MB | elapsed=8617s
+  step  6300/10000 | loss=0.7518 | lr=3.97e-05 | tps=2971 | mem=25085MB | elapsed=8687s
+  step  6400/10000 | loss=0.6977 | lr=3.83e-05 | tps=2994 | mem=25085MB | elapsed=8756s
+  step  6500/10000 | loss=0.6660 | lr=3.69e-05 | tps=3016 | mem=25085MB | elapsed=8826s
+  step  6600/10000 | loss=0.6724 | lr=3.56e-05 | tps=3039 | mem=25085MB | elapsed=8896s
+  step  6700/10000 | loss=0.6592 | lr=3.42e-05 | tps=3061 | mem=25085MB | elapsed=8966s
+  step  6800/10000 | loss=0.6955 | lr=3.29e-05 | tps=3082 | mem=25085MB | elapsed=9036s
+  step  6900/10000 | loss=0.6549 | lr=3.16e-05 | tps=3104 | mem=25085MB | elapsed=9106s
+  step  7000/10000 | loss=0.6524 | lr=3.04e-05 | tps=3125 | mem=25085MB | elapsed=9176s
+  step  7100/10000 | loss=0.6553 | lr=2.92e-05 | tps=3145 | mem=25085MB | elapsed=9246s
+  step  7200/10000 | loss=0.6437 | lr=2.80e-05 | tps=3166 | mem=25085MB | elapsed=9316s
+  step  7300/10000 | loss=0.6453 | lr=2.68e-05 | tps=3186 | mem=25085MB | elapsed=9386s
+  step  7400/10000 | loss=0.6534 | lr=2.56e-05 | tps=3205 | mem=25085MB | elapsed=9456s
+  step  7500/10000 | loss=0.6448 | lr=2.45e-05 | tps=3225 | mem=25085MB | elapsed=9526s
+  step  7600/10000 | loss=0.6300 | lr=2.34e-05 | tps=3244 | mem=25085MB | elapsed=9596s
+  step  7700/10000 | loss=0.6457 | lr=2.24e-05 | tps=3263 | mem=25085MB | elapsed=9666s
+  step  7800/10000 | loss=0.6320 | lr=2.14e-05 | tps=3282 | mem=25085MB | elapsed=9736s
+  step  7900/10000 | loss=0.6418 | lr=2.04e-05 | tps=3300 | mem=25085MB | elapsed=9806s
+  step  8000/10000 | loss=0.6282 | lr=1.95e-05 | tps=3318 | mem=25085MB | elapsed=9876s
+  [EVAL] step  8000 | val_ppl=2.5895
+  step  8100/10000 | loss=0.6106 | lr=1.86e-05 | tps=3334 | mem=25085MB | elapsed=9950s
+  step  8200/10000 | loss=0.6321 | lr=1.77e-05 | tps=3352 | mem=25085MB | elapsed=10020s
+  step  8300/10000 | loss=0.6271 | lr=1.69e-05 | tps=3369 | mem=25085MB | elapsed=10090s
+  step  8400/10000 | loss=0.6379 | lr=1.62e-05 | tps=3386 | mem=25085MB | elapsed=10160s
+  step  8500/10000 | loss=0.6308 | lr=1.54e-05 | tps=3403 | mem=25085MB | elapsed=10230s
+  step  8600/10000 | loss=0.6098 | lr=1.47e-05 | tps=3420 | mem=25085MB | elapsed=10300s
+  step  8700/10000 | loss=0.6226 | lr=1.41e-05 | tps=3436 | mem=25085MB | elapsed=10370s
+  step  8800/10000 | loss=0.6139 | lr=1.35e-05 | tps=3452 | mem=25085MB | elapsed=10440s
+  step  8900/10000 | loss=0.6175 | lr=1.29e-05 | tps=3469 | mem=25085MB | elapsed=10510s
+  step  9000/10000 | loss=0.6169 | lr=1.24e-05 | tps=3484 | mem=25085MB | elapsed=10580s
+  step  9100/10000 | loss=0.6173 | lr=1.20e-05 | tps=3500 | mem=25085MB | elapsed=10650s
+  step  9200/10000 | loss=0.6099 | lr=1.16e-05 | tps=3515 | mem=25085MB | elapsed=10720s
+  step  9300/10000 | loss=0.6230 | lr=1.12e-05 | tps=3530 | mem=25085MB | elapsed=10790s
+  step  9400/10000 | loss=0.6480 | lr=1.09e-05 | tps=3545 | mem=25085MB | elapsed=10860s
+  step  9500/10000 | loss=0.6130 | lr=1.06e-05 | tps=3559 | mem=25085MB | elapsed=10932s
+  step  9600/10000 | loss=0.5820 | lr=1.04e-05 | tps=3573 | mem=25085MB | elapsed=11004s
+  step  9700/10000 | loss=0.5734 | lr=1.02e-05 | tps=3587 | mem=25085MB | elapsed=11076s
+  step  9800/10000 | loss=0.5352 | lr=1.01e-05 | tps=3601 | mem=25085MB | elapsed=11148s
+  step  9900/10000 | loss=0.5277 | lr=1.00e-05 | tps=3614 | mem=25085MB | elapsed=11220s
+  step 10000/10000 | loss=0.5286 | lr=1.00e-05 | tps=3627 | mem=25085MB | elapsed=11292s
+  [EVAL] step 10000 | val_ppl=2.5546
+
+final val_ppl (50 batches): 2.4168
+
+Generation test:
+
+  prompt: 'The quick brown fox '
+    T=0.5: 'The quick brown fox the comparison.\n            :param model_th: The quick brown fox the quick brown fox the comparison '
+    T=0.8: 'The quick brown fox the method.\n# You may need the Apache License Version 2.0 (the "License");\nyou may not use this file'
+    T=1.0: 'The quick brown fox modelm.\n            """\n            self._quick_brown()\n\n        self.assertEqual(EXISTSIZES in data'
+
+  prompt: 'def fibonacci(n):\n    '
+    T=0.5: 'def fibonacci(n):\n        """\n        Set the fibonaci implementation of the fibonaci implementation of\n        in the fib'
+    T=0.8: 'def fibonacci(n):\n    #    entry invalid generated and objects\n    n = n   # build filter with maintains\n    f = n / n ord'
+    T=1.0: "def fibonacci(n):\n        s = []\n        if n == 'short_planer':\n            s.owner_short(f)\n        while True:\n        "
+
+  prompt: 'Once upon a time'
+    T=0.5: 'Once upon a timeout containing the range (public between the timeout and the timeout and the\n  // only of the genera'
+    T=0.8: 'Once upon a time is a bit transparent function.\n    // Helper all construction of time by default green a vectors.\n '
+    T=1.0: 'Once upon a time format epand as a time-search-point\n\n        // there time-search entry times from the selection ti'
+
+  [CKPT] saved v49_scale_1.2b.final.pt
+
+[OK] saved: experiments/v49_pre/results/v49_scale_1.2b.json
+     total time: 188.8 min

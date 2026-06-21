@@ -1,0 +1,517 @@
+{
+  "exp_id": "eval_lm_v1",
+  "model_type": "baseline",
+  "ckpt": "experiments/v49_pre/results/v49_scale_1.2b.final.pt",
+  "timestamp": "2026-06-22T04:18:33.969744",
+  "n_params": 1214281728,
+  "trained_n_steps": 10000,
+  "in_dist_ppl": 2.356357082956624,
+  "generation_diversity_avg": 0.15733333333333335,
+  "n_coherent": 11,
+  "n_repetition": 8,
+  "generation_details": {
+    "english_simple": {
+      "T0.5": {
+        "diversity": 0.095,
+        "n_unique": 19,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            155
+          ],
+          [
+            "n",
+            7
+          ],
+          [
+            "i",
+            5
+          ],
+          [
+            "t",
+            5
+          ],
+          [
+            "e",
+            4
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 1,
+        "is_locally_coherent": true,
+        "text": "an implementation in the following return a string\n    #                                            "
+      },
+      "T0.8": {
+        "diversity": 0.15,
+        "n_unique": 30,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            53
+          ],
+          [
+            "e",
+            18
+          ],
+          [
+            "t",
+            16
+          ],
+          [
+            "s",
+            15
+          ],
+          [
+            "a",
+            12
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 3,
+        "is_locally_coherent": true,
+        "text": "this test sub logs.\"\n\n    def instance(self, app):\n        \"\"\"\n        Gets the present as a row agg"
+      },
+      "T1.0": {
+        "diversity": 0.175,
+        "n_unique": 35,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            34
+          ],
+          [
+            "e",
+            27
+          ],
+          [
+            "r",
+            12
+          ],
+          [
+            "s",
+            12
+          ],
+          [
+            "n",
+            11
+          ]
+        ],
+        "has_repetition_run": false,
+        "n_repetition_runs": 0,
+        "is_locally_coherent": true,
+        "text": "an icknover more condition after * warp. Use\n/*\n * GNU Lesser General Public License Usage\n * Altern"
+      }
+    },
+    "english_story": {
+      "T0.5": {
+        "diversity": 0.13,
+        "n_unique": 26,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            66
+          ],
+          [
+            "t",
+            18
+          ],
+          [
+            "a",
+            18
+          ],
+          [
+            "e",
+            17
+          ],
+          [
+            "f",
+            9
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 3,
+        "is_locally_coherent": true,
+        "text": "the false on the passed time and time the file (... and the fact once).\n            \"\"\"\n            "
+      },
+      "T0.8": {
+        "diversity": 0.14,
+        "n_unique": 28,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            35
+          ],
+          [
+            "t",
+            20
+          ],
+          [
+            "e",
+            16
+          ],
+          [
+            "a",
+            14
+          ],
+          [
+            "i",
+            12
+          ]
+        ],
+        "has_repetition_run": false,
+        "n_repetition_runs": 0,
+        "is_locally_coherent": true,
+        "text": "but it was sample to research pixels for start row the form input\n# data the data is component in co"
+      },
+      "T1.0": {
+        "diversity": 0.2,
+        "n_unique": 40,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            22
+          ],
+          [
+            "e",
+            17
+          ],
+          [
+            "t",
+            13
+          ],
+          [
+            "o",
+            10
+          ],
+          [
+            "h",
+            10
+          ]
+        ],
+        "has_repetition_run": false,
+        "n_repetition_runs": 0,
+        "is_locally_coherent": true,
+        "text": "other own right\n## the License, i.e. (they are as added Normally, the\n## http://www.qt-projectorn.or"
+      }
+    },
+    "code_python": {
+      "T0.5": {
+        "diversity": 0.105,
+        "n_unique": 21,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            147
+          ],
+          [
+            "'",
+            6
+          ],
+          [
+            "n",
+            5
+          ],
+          [
+            "\n",
+            5
+          ],
+          [
+            "=",
+            5
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 6,
+        "is_locally_coherent": true,
+        "text": "                for k in default_names:\n                        if n == 'c':\n                       "
+      },
+      "T0.8": {
+        "diversity": 0.18,
+        "n_unique": 36,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            36
+          ],
+          [
+            "t",
+            16
+          ],
+          [
+            "e",
+            12
+          ],
+          [
+            "n",
+            11
+          ],
+          [
+            "o",
+            10
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 1,
+        "is_locally_coherent": true,
+        "text": "return n.grid(n)\n\n\n\ndef mock_context(mock_file, x, x):\n    \"\"\"Context with the mock path.\n\n    @mock"
+      },
+      "T1.0": {
+        "diversity": 0.19,
+        "n_unique": 38,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            38
+          ],
+          [
+            "i",
+            18
+          ],
+          [
+            "n",
+            13
+          ],
+          [
+            "a",
+            12
+          ],
+          [
+            "r",
+            11
+          ]
+        ],
+        "has_repetition_run": false,
+        "n_repetition_runs": 0,
+        "is_locally_coherent": true,
+        "text": "\"\"\"Maring to test browser maring into image.\n\n    ::Param rows into CPU in npu_data(s):\n    :ROWS in"
+      }
+    },
+    "code_c": {
+      "T0.5": {
+        "diversity": 0.12,
+        "n_unique": 24,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            37
+          ],
+          [
+            "t",
+            19
+          ],
+          [
+            "\n",
+            17
+          ],
+          [
+            "a",
+            15
+          ],
+          [
+            "i",
+            14
+          ]
+        ],
+        "has_repetition_run": false,
+        "n_repetition_runs": 0,
+        "is_locally_coherent": false,
+        "text": "main()->isCommand();\n}\n\nvoid InsertionState() {\n    state = main;\n    state = main;\n}\n\nvoid Insertio"
+      },
+      "T0.8": {
+        "diversity": 0.185,
+        "n_unique": 37,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            "t",
+            20
+          ],
+          [
+            " ",
+            20
+          ],
+          [
+            "e",
+            20
+          ],
+          [
+            "a",
+            14
+          ],
+          [
+            "\n",
+            12
+          ]
+        ],
+        "has_repetition_run": false,
+        "n_repetition_runs": 0,
+        "is_locally_coherent": false,
+        "text": "static_cast<const char *>(str() + str());\n}\n\n\ntemplate <typename T>\ntypename Schema::get_prefix(int "
+      },
+      "T1.0": {
+        "diversity": 0.22,
+        "n_unique": 44,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            27
+          ],
+          [
+            "a",
+            12
+          ],
+          [
+            "s",
+            10
+          ],
+          [
+            "l",
+            10
+          ],
+          [
+            "r",
+            10
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 1,
+        "is_locally_coherent": false,
+        "text": "install_ref(mask, install_mask_label);\n}\n\nQString QStringLiteral() {\n    Q_LOG(LOG_DEBUG, \"Log Call "
+      }
+    },
+    "agentic": {
+      "T0.5": {
+        "diversity": 0.09,
+        "n_unique": 18,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            161
+          ],
+          [
+            "e",
+            6
+          ],
+          [
+            "s",
+            6
+          ],
+          [
+            "t",
+            5
+          ],
+          [
+            "a",
+            4
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 1,
+        "is_locally_coherent": true,
+        "text": "and exist an error messages that the results '\n                                                     "
+      },
+      "T0.8": {
+        "diversity": 0.18,
+        "n_unique": 36,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            66
+          ],
+          [
+            "e",
+            15
+          ],
+          [
+            "l",
+            12
+          ],
+          [
+            "t",
+            11
+          ],
+          [
+            "a",
+            9
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 3,
+        "is_locally_coherent": true,
+        "text": "the activity below only text and attention them fixed to check added them.''''\n                self."
+      },
+      "T1.0": {
+        "diversity": 0.2,
+        "n_unique": 40,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            42
+          ],
+          [
+            "e",
+            15
+          ],
+          [
+            "o",
+            14
+          ],
+          [
+            "t",
+            11
+          ],
+          [
+            "r",
+            11
+          ]
+        ],
+        "has_repetition_run": false,
+        "n_repetition_runs": 0,
+        "is_locally_coherent": false,
+        "text": "after here on improves your will\n    // draw us location have DKL so, we http moves or you with that"
+      }
+    }
+  },
+  "ood_ppls": {
+    "v46_python": {
+      "ppl": 2.357236031838116,
+      "tokens": 6643
+    },
+    "english_prose": {
+      "ppl": 1.4169111348830532,
+      "tokens": 7665
+    },
+    "code_javascript": {
+      "ppl": 1.3812680179818928,
+      "tokens": 7154
+    }
+  },
+  "ood_ppl_avg": 1.718471728234354,
+  "ood_ratio": 0.7292917277538058,
+  "bpc": 1.236558182111862,
+  "pass_count": 5,
+  "decision": "PARTIAL",
+  "checks": {
+    "1.1 PPL 合理范围 (1.5-3.0)": true,
+    "1.2 Diversity ≥ 0.3": false,
+    "1.3 ≥ 9/15 局部合理": true,
+    "1.4 OOD ratio ≤ 5x": true,
+    "1.5 BPC 报告": true,
+    "无字符重复循环": false,
+    "PPL 远低于 random (<500)": true
+  }
+}

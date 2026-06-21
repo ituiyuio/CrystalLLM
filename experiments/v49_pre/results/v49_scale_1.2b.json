@@ -1,0 +1,55 @@
+{
+  "exp_id": "v49_baseline_scale_1214M",
+  "model_type": "Baseline_Scale_Transformer",
+  "timestamp": "2026-06-22T04:14:32.056821",
+  "config": {
+    "n_steps": 10000,
+    "batch_size": 8,
+    "seq_len": 512,
+    "d_model": 2048,
+    "n_layers": 24,
+    "n_heads": 16,
+    "d_ff": 8192,
+    "lr": 0.0001,
+    "warmup": 500,
+    "max_train_samples": 10000,
+    "seed": 42,
+    "log_every": 100,
+    "eval_every": 2000,
+    "checkpoint_every": 0,
+    "use_8bit": true,
+    "output": "experiments/v49_pre/results/v49_scale_1.2b.json"
+  },
+  "n_params": 1214281728,
+  "n_train_samples": 10000,
+  "metrics": {
+    "tokens_per_sec": 3627.250260169717,
+    "peak_memory_mb": 25084.57861328125,
+    "total_tokens": 40958464,
+    "elapsed_time": 11291.87705898285
+  },
+  "val_ppls": [
+    [
+      2000,
+      4.966389214214195
+    ],
+    [
+      4000,
+      2.9861815191510668
+    ],
+    [
+      6000,
+      2.7045437878803433
+    ],
+    [
+      8000,
+      2.589504734922761
+    ],
+    [
+      10000,
+      2.5545620598930356
+    ]
+  ],
+  "final_val_ppl": 2.4167960409500058,
+  "total_time_s": 11325.424151182175
+}

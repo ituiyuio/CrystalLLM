@@ -1,0 +1,501 @@
+{
+  "exp_id": "eval_lm_v1",
+  "model_type": "baseline",
+  "ckpt": "experiments/v49_pre/results/v49_scale_200m.final.pt",
+  "timestamp": "2026-06-22T01:04:05.870313",
+  "n_params": 204381184,
+  "trained_n_steps": 10000,
+  "in_dist_ppl": 2.4522400841041856,
+  "generation_diversity_avg": 0.134,
+  "n_coherent": 10,
+  "n_repetition": 10,
+  "generation_details": {
+    "english_simple": {
+      "T0.5": {
+        "diversity": 0.09,
+        "n_unique": 18,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            123
+          ],
+          [
+            "t",
+            10
+          ],
+          [
+            "o",
+            9
+          ],
+          [
+            "a",
+            8
+          ],
+          [
+            "n",
+            8
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 1,
+        "is_locally_coherent": true,
+        "text": "and admin to be process the normal process that the data finition of the cannot before and to\n      "
+      },
+      "T0.8": {
+        "diversity": 0.135,
+        "n_unique": 27,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            42
+          ],
+          [
+            "t",
+            28
+          ],
+          [
+            "e",
+            21
+          ],
+          [
+            "h",
+            14
+          ],
+          [
+            "r",
+            13
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 1,
+        "is_locally_coherent": true,
+        "text": "the nteg corracts  for the ntegration for the right.\n     Also with the set can be right consistent "
+      },
+      "T1.0": {
+        "diversity": 0.155,
+        "n_unique": 31,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            34
+          ],
+          [
+            "t",
+            22
+          ],
+          [
+            "e",
+            16
+          ],
+          [
+            "r",
+            15
+          ],
+          [
+            "n",
+            13
+          ]
+        ],
+        "has_repetition_run": false,
+        "n_repetition_runs": 0,
+        "is_locally_coherent": true,
+        "text": "return the\n   // for example transacting list other software\n   // return the we documentation may b"
+      }
+    },
+    "english_story": {
+      "T0.5": {
+        "diversity": 0.09,
+        "n_unique": 18,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            165
+          ],
+          [
+            "o",
+            5
+          ],
+          [
+            "t",
+            4
+          ],
+          [
+            "r",
+            3
+          ],
+          [
+            "h",
+            3
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 4,
+        "is_locally_coherent": true,
+        "text": "or when the copy of the contributors\n        *                                                      "
+      },
+      "T0.8": {
+        "diversity": 0.12,
+        "n_unique": 24,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            75
+          ],
+          [
+            "e",
+            19
+          ],
+          [
+            "t",
+            17
+          ],
+          [
+            "a",
+            12
+          ],
+          [
+            "h",
+            11
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 2,
+        "is_locally_coherent": true,
+        "text": "or peak sub with the time set. The\n                       name, pair both of time pair, otherwise wa"
+      },
+      "T1.0": {
+        "diversity": 0.185,
+        "n_unique": 37,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            42
+          ],
+          [
+            "\t",
+            16
+          ],
+          [
+            "e",
+            14
+          ],
+          [
+            "\\",
+            13
+          ],
+          [
+            "n",
+            11
+          ]
+        ],
+        "has_repetition_run": false,
+        "n_repetition_runs": 0,
+        "is_locally_coherent": false,
+        "text": "or\n\t\t  (  ( \".*.\\u\" + self name file name, ansignment - me a files failes:\\n\"\n\t\t\t  ( \".*\\u\", 30 land"
+      }
+    },
+    "code_python": {
+      "T0.5": {
+        "diversity": 0.005,
+        "n_unique": 1,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            200
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 1,
+        "is_locally_coherent": false,
+        "text": "                                                                                                    "
+      },
+      "T0.8": {
+        "diversity": 0.1,
+        "n_unique": 20,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            57
+          ],
+          [
+            "n",
+            21
+          ],
+          [
+            "i",
+            13
+          ],
+          [
+            ".",
+            13
+          ],
+          [
+            "t",
+            12
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 5,
+        "is_locally_coherent": false,
+        "text": "        non_api.api.widget = non_api.widget.opts.widget.get\n            non_api.widget.connect(n)\n  "
+      },
+      "T1.0": {
+        "diversity": 0.24,
+        "n_unique": 48,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            40
+          ],
+          [
+            "e",
+            12
+          ],
+          [
+            "s",
+            10
+          ],
+          [
+            "_",
+            9
+          ],
+          [
+            "r",
+            8
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 4,
+        "is_locally_coherent": false,
+        "text": "    raw_shourd += 2\n\n     key = self._ENABLE_FIELD_EX_FIELD_SETS[np.load.pyarams[0][0] else or set\n "
+      }
+    },
+    "code_c": {
+      "T0.5": {
+        "diversity": 0.165,
+        "n_unique": 33,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            19
+          ],
+          [
+            "e",
+            16
+          ],
+          [
+            "t",
+            16
+          ],
+          [
+            "n",
+            14
+          ],
+          [
+            "o",
+            13
+          ]
+        ],
+        "has_repetition_run": false,
+        "n_repetition_runs": 0,
+        "is_locally_coherent": true,
+        "text": "main();\n}\n\nbool SymbolSettings(tructure_settings.SettingSymbol_Results & main_context) {\n    return "
+      },
+      "T0.8": {
+        "diversity": 0.185,
+        "n_unique": 37,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            30
+          ],
+          [
+            "t",
+            24
+          ],
+          [
+            "a",
+            16
+          ],
+          [
+            "r",
+            13
+          ],
+          [
+            "e",
+            11
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 1,
+        "is_locally_coherent": true,
+        "text": "match_at_metadata();\n}\n\nbool Match::setOrderAttributes(const Match& attributes, const Match& argv) {"
+      },
+      "T1.0": {
+        "diversity": 0.17,
+        "n_unique": 34,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            42
+          ],
+          [
+            "s",
+            17
+          ],
+          [
+            "\n",
+            13
+          ],
+          [
+            "t",
+            13
+          ],
+          [
+            "r",
+            12
+          ]
+        ],
+        "has_repetition_run": false,
+        "n_repetition_runs": 0,
+        "is_locally_coherent": false,
+        "text": "0;\n  }\n\n\n  static bool pass2sm(int, char* n, char* n) {\n    g_ps2sm(char* n, char* n++);\n    return "
+      }
+    },
+    "agentic": {
+      "T0.5": {
+        "diversity": 0.07,
+        "n_unique": 14,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            175
+          ],
+          [
+            "t",
+            5
+          ],
+          [
+            "l",
+            3
+          ],
+          [
+            "o",
+            3
+          ],
+          [
+            "h",
+            2
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 1,
+        "is_locally_coherent": true,
+        "text": "call the output of the list of\n                                                                     "
+      },
+      "T0.8": {
+        "diversity": 0.16,
+        "n_unique": 32,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            78
+          ],
+          [
+            "n",
+            10
+          ],
+          [
+            "e",
+            10
+          ],
+          [
+            "i",
+            9
+          ],
+          [
+            "a",
+            8
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 4,
+        "is_locally_coherent": true,
+        "text": "cat an exist in these required by collapping\n                  if not when is not exist, return Fals"
+      },
+      "T1.0": {
+        "diversity": 0.14,
+        "n_unique": 28,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            36
+          ],
+          [
+            "e",
+            22
+          ],
+          [
+            "t",
+            16
+          ],
+          [
+            "i",
+            14
+          ],
+          [
+            "l",
+            12
+          ]
+        ],
+        "has_repetition_run": false,
+        "n_repetition_runs": 0,
+        "is_locally_coherent": true,
+        "text": "see help sect,\n *  found in the following complete puills in sues all\n * visual and of its (the indi"
+      }
+    }
+  },
+  "ood_ppls": {
+    "v46_python": {
+      "ppl": 2.5386220207674732,
+      "tokens": 6643
+    },
+    "english_prose": {
+      "ppl": 1.5751235491110944,
+      "tokens": 7665
+    },
+    "code_javascript": {
+      "ppl": 1.2711211381425531,
+      "tokens": 7154
+    }
+  },
+  "ood_ppl_avg": 1.7949555693403736,
+  "ood_ratio": 0.7319656753739424,
+  "bpc": 1.2941002315533838,
+  "pass_count": 5,
+  "decision": "PARTIAL",
+  "checks": {
+    "1.1 PPL 合理范围 (1.5-3.0)": true,
+    "1.2 Diversity ≥ 0.3": false,
+    "1.3 ≥ 9/15 局部合理": true,
+    "1.4 OOD ratio ≤ 5x": true,
+    "1.5 BPC 报告": true,
+    "无字符重复循环": false,
+    "PPL 远低于 random (<500)": true
+  }
+}

@@ -1,0 +1,104 @@
+Device: cuda
+
+[1] 加载数据...
+  train: 69307 samples, 172686 windows
+  val: ready
+
+[2] 构建 CMT-Fixed 50M...
+  参数量: 68,787,200 (68.8M)
+
+[3] 构建优化器...
+[OK] 使用 bnb.optim.AdamW8bit (8-bit)
+  type: adamw_8bit, lr: 0.0003
+
+[4] 开始训练 (30000 steps)...
+  step     1/30000 | loss=8.2326 | lr=3.00e-07 | tps=7879 | mem=4355MB | elapsed=1s
+  step   500/30000 | loss=3.3638 | lr=1.50e-04 | tps=36774 | mem=4696MB | elapsed=56s
+  step  1000/30000 | loss=1.6754 | lr=3.00e-04 | tps=34276 | mem=4696MB | elapsed=119s
+  step  1500/30000 | loss=0.0122 | lr=3.00e-04 | tps=32228 | mem=4696MB | elapsed=191s
+  step  2000/30000 | loss=0.0100 | lr=2.99e-04 | tps=33107 | mem=4696MB | elapsed=247s
+  [EVAL] step  2000 | val_ppl=1.0088
+  step  2500/30000 | loss=0.0079 | lr=2.98e-04 | tps=32657 | mem=4696MB | elapsed=314s
+  step  3000/30000 | loss=0.0085 | lr=2.97e-04 | tps=32995 | mem=4696MB | elapsed=372s
+  step  3500/30000 | loss=0.0080 | lr=2.95e-04 | tps=32839 | mem=4696MB | elapsed=437s
+  step  4000/30000 | loss=0.0077 | lr=2.93e-04 | tps=33378 | mem=4696MB | elapsed=491s
+  [EVAL] step  4000 | val_ppl=1.0068
+  step  4500/30000 | loss=0.0088 | lr=2.90e-04 | tps=33979 | mem=4696MB | elapsed=542s
+  step  5000/30000 | loss=0.0074 | lr=2.88e-04 | tps=34470 | mem=4696MB | elapsed=594s
+  step  5500/30000 | loss=0.0076 | lr=2.84e-04 | tps=34822 | mem=4696MB | elapsed=647s
+  step  6000/30000 | loss=0.0077 | lr=2.81e-04 | tps=34923 | mem=4696MB | elapsed=704s
+  [EVAL] step  6000 | val_ppl=1.0061
+  step  6500/30000 | loss=0.0073 | lr=2.77e-04 | tps=35082 | mem=4696MB | elapsed=759s
+  step  7000/30000 | loss=0.0073 | lr=2.72e-04 | tps=35212 | mem=4696MB | elapsed=814s
+  step  7500/30000 | loss=0.0077 | lr=2.68e-04 | tps=35330 | mem=4696MB | elapsed=870s
+  step  8000/30000 | loss=0.0078 | lr=2.63e-04 | tps=35434 | mem=4696MB | elapsed=925s
+  [EVAL] step  8000 | val_ppl=1.0061
+  step  8500/30000 | loss=0.0075 | lr=2.58e-04 | tps=35503 | mem=4696MB | elapsed=981s
+  step  9000/30000 | loss=0.0072 | lr=2.52e-04 | tps=35695 | mem=4696MB | elapsed=1033s
+  step  9500/30000 | loss=0.0079 | lr=2.47e-04 | tps=35766 | mem=4696MB | elapsed=1088s
+  step 10000/30000 | loss=0.0075 | lr=2.41e-04 | tps=35845 | mem=4696MB | elapsed=1143s
+  [EVAL] step 10000 | val_ppl=1.0060
+  [CKPT] saved v49_30k_full.step10000.pt
+  step 10500/30000 | loss=0.0075 | lr=2.35e-04 | tps=35875 | mem=4696MB | elapsed=1199s
+  step 11000/30000 | loss=0.0071 | lr=2.28e-04 | tps=35987 | mem=4696MB | elapsed=1252s
+  step 11500/30000 | loss=0.0079 | lr=2.22e-04 | tps=36049 | mem=4696MB | elapsed=1307s
+  step 12000/30000 | loss=0.0072 | lr=2.15e-04 | tps=36046 | mem=4696MB | elapsed=1364s
+  [EVAL] step 12000 | val_ppl=1.0060
+  step 12500/30000 | loss=0.0078 | lr=2.08e-04 | tps=36061 | mem=4696MB | elapsed=1420s
+  step 13000/30000 | loss=0.0071 | lr=2.01e-04 | tps=36132 | mem=4696MB | elapsed=1474s
+  step 13500/30000 | loss=0.0067 | lr=1.94e-04 | tps=36064 | mem=4696MB | elapsed=1533s
+  step 14000/30000 | loss=0.0071 | lr=1.87e-04 | tps=35625 | mem=4696MB | elapsed=1610s
+  [EVAL] step 14000 | val_ppl=1.0060
+  step 14500/30000 | loss=0.0065 | lr=1.80e-04 | tps=35340 | mem=4696MB | elapsed=1681s
+  step 15000/30000 | loss=0.0073 | lr=1.72e-04 | tps=35177 | mem=4696MB | elapsed=1747s
+  step 15500/30000 | loss=0.0080 | lr=1.65e-04 | tps=35039 | mem=4696MB | elapsed=1812s
+  step 16000/30000 | loss=0.0069 | lr=1.58e-04 | tps=35101 | mem=4696MB | elapsed=1867s
+  [EVAL] step 16000 | val_ppl=1.0058
+  step 16500/30000 | loss=0.0072 | lr=1.50e-04 | tps=35177 | mem=4696MB | elapsed=1921s
+  step 17000/30000 | loss=0.0065 | lr=1.43e-04 | tps=35275 | mem=4696MB | elapsed=1974s
+  step 17500/30000 | loss=0.0070 | lr=1.36e-04 | tps=35389 | mem=4696MB | elapsed=2025s
+  step 18000/30000 | loss=0.0066 | lr=1.29e-04 | tps=35492 | mem=4696MB | elapsed=2077s
+  [EVAL] step 18000 | val_ppl=1.0058
+  step 18500/30000 | loss=0.0069 | lr=1.22e-04 | tps=35539 | mem=4696MB | elapsed=2132s
+  step 19000/30000 | loss=0.0067 | lr=1.15e-04 | tps=35633 | mem=4696MB | elapsed=2184s
+  step 19500/30000 | loss=0.0064 | lr=1.08e-04 | tps=35692 | mem=4696MB | elapsed=2238s
+  step 20000/30000 | loss=0.0066 | lr=1.02e-04 | tps=35789 | mem=4696MB | elapsed=2289s
+  [EVAL] step 20000 | val_ppl=1.0057
+  [CKPT] saved v49_30k_full.step20000.pt
+  step 20500/30000 | loss=0.0064 | lr=9.54e-05 | tps=35868 | mem=4696MB | elapsed=2341s
+  step 21000/30000 | loss=0.0064 | lr=8.92e-05 | tps=35961 | mem=4696MB | elapsed=2392s
+  step 21500/30000 | loss=0.0061 | lr=8.33e-05 | tps=36048 | mem=4696MB | elapsed=2443s
+  step 22000/30000 | loss=0.0069 | lr=7.76e-05 | tps=36132 | mem=4696MB | elapsed=2494s
+  [EVAL] step 22000 | val_ppl=1.0058
+  step 22500/30000 | loss=0.0060 | lr=7.22e-05 | tps=36202 | mem=4696MB | elapsed=2546s
+  step 23000/30000 | loss=0.0060 | lr=6.70e-05 | tps=36298 | mem=4696MB | elapsed=2595s
+  step 23500/30000 | loss=0.0064 | lr=6.21e-05 | tps=36386 | mem=4696MB | elapsed=2645s
+  step 24000/30000 | loss=0.0064 | lr=5.75e-05 | tps=36472 | mem=4696MB | elapsed=2695s
+  [EVAL] step 24000 | val_ppl=1.0056
+  step 24500/30000 | loss=0.0061 | lr=5.33e-05 | tps=36536 | mem=4696MB | elapsed=2747s
+  step 25000/30000 | loss=0.0064 | lr=4.93e-05 | tps=36604 | mem=4696MB | elapsed=2797s
+  step 25500/30000 | loss=0.0058 | lr=4.57e-05 | tps=36669 | mem=4696MB | elapsed=2848s
+  step 26000/30000 | loss=0.0060 | lr=4.25e-05 | tps=36558 | mem=4696MB | elapsed=2913s
+  [EVAL] step 26000 | val_ppl=1.0055
+  step 26500/30000 | loss=0.0062 | lr=3.96e-05 | tps=36503 | mem=4696MB | elapsed=2974s
+  step 27000/30000 | loss=0.0069 | lr=3.71e-05 | tps=36458 | mem=4696MB | elapsed=3033s
+  step 27500/30000 | loss=0.0065 | lr=3.49e-05 | tps=36505 | mem=4696MB | elapsed=3086s
+  step 28000/30000 | loss=0.0062 | lr=3.32e-05 | tps=36557 | mem=4696MB | elapsed=3137s
+  [EVAL] step 28000 | val_ppl=1.0055
+  step 28500/30000 | loss=0.0072 | lr=3.18e-05 | tps=36616 | mem=4696MB | elapsed=3188s
+  step 29000/30000 | loss=0.0067 | lr=3.08e-05 | tps=36642 | mem=4696MB | elapsed=3242s
+  step 29500/30000 | loss=0.0060 | lr=3.02e-05 | tps=36594 | mem=4696MB | elapsed=3302s
+  step 30000/30000 | loss=0.0063 | lr=3.00e-05 | tps=36621 | mem=4696MB | elapsed=3355s
+  [EVAL] step 30000 | val_ppl=1.0055
+
+[5] 训练完成, 最终评估...
+  final val_ppl (50 batches): 1.0053
+
+[6] 文本生成测试...
+  T=0.7: 'The quick brown foxkunnuuuoruci nouuunkkewnorrwnnnnnnnnnoonnnnnnnnnnnnnuinnnnnuunroownoinnnnnnnonnnnnnnnoknrnnnonnnnwnu'
+  T=1.0: 'The quick brown foxkorkforr rwrerorwwwokeororrwnnnnwowowoowwrwI  w ekoww owrwwwxwrwownor rcinwnownnowwLwwworrwrrwrwwrwr'
+  [CKPT] saved final v49_30k_full.final.pt
+
+[OK] 结果已保存: experiments/v49_pre/results/v49_30k_full.json
+     Checkpoint: experiments\v49_pre\results\v49_30k_full.final.pt
+     总耗时: 56.0 min (0.93 h)

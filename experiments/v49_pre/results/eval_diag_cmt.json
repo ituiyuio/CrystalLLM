@@ -1,0 +1,413 @@
+{
+  "exp_id": "eval_lm_v1",
+  "model_type": "cmt_fixed",
+  "ckpt": "experiments/v49_pre/results/_rerun_diag_cmt.final.pt",
+  "timestamp": "2026-06-21T23:56:39.941573",
+  "n_params": 68787200,
+  "trained_n_steps": 10000,
+  "in_dist_ppl": 1.0114755093635406,
+  "generation_diversity_avg": 0.016333333333333335,
+  "n_coherent": 0,
+  "n_repetition": 14,
+  "generation_details": {
+    "english_simple": {
+      "T0.5": {
+        "diversity": 0.015,
+        "n_unique": 3,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            "b",
+            198
+          ],
+          [
+            "x",
+            1
+          ],
+          [
+            "u",
+            1
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 1,
+        "is_locally_coherent": false,
+        "text": "bxbubbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "T0.8": {
+        "diversity": 0.015,
+        "n_unique": 3,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            "x",
+            189
+          ],
+          [
+            " ",
+            10
+          ],
+          [
+            "f",
+            1
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 2,
+        "is_locally_coherent": false,
+        "text": " x f   x x xx  xxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+      },
+      "T1.0": {
+        "diversity": 0.015,
+        "n_unique": 3,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            "x",
+            188
+          ],
+          [
+            " ",
+            11
+          ],
+          [
+            "f",
+            1
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 2,
+        "is_locally_coherent": false,
+        "text": " x f   x x x   xxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+      }
+    },
+    "english_story": {
+      "T0.5": {
+        "diversity": 0.015,
+        "n_unique": 3,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            194
+          ],
+          [
+            "n",
+            3
+          ],
+          [
+            "a",
+            3
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 3,
+        "is_locally_coherent": false,
+        "text": "n n n   a            a                                                    a                         "
+      },
+      "T0.8": {
+        "diversity": 0.015,
+        "n_unique": 3,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            197
+          ],
+          [
+            "a",
+            2
+          ],
+          [
+            "n",
+            1
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 2,
+        "is_locally_coherent": false,
+        "text": "    n   a                                                                 a                         "
+      },
+      "T1.0": {
+        "diversity": 0.015,
+        "n_unique": 3,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            "n",
+            117
+          ],
+          [
+            "a",
+            81
+          ],
+          [
+            " ",
+            2
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 2,
+        "is_locally_coherent": false,
+        "text": "a a nanaaanananananananaanaananannanaanannannnnnanannnanannananannannnaanannananannnanananannananana"
+      }
+    },
+    "code_python": {
+      "T0.5": {
+        "diversity": 0.02,
+        "n_unique": 4,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            "f",
+            188
+          ],
+          [
+            " ",
+            8
+          ],
+          [
+            "(",
+            3
+          ],
+          [
+            ":",
+            1
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 1,
+        "is_locally_coherent": false,
+        "text": " : f(f(f fff ffff(ff    ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+      },
+      "T0.8": {
+        "diversity": 0.025,
+        "n_unique": 5,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            191
+          ],
+          [
+            "i",
+            4
+          ],
+          [
+            "c",
+            3
+          ],
+          [
+            "f",
+            1
+          ],
+          [
+            "(",
+            1
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 2,
+        "is_locally_coherent": false,
+        "text": " i f(cc  i i  i     c                                                                               "
+      },
+      "T1.0": {
+        "diversity": 0.02,
+        "n_unique": 4,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            197
+          ],
+          [
+            "i",
+            1
+          ],
+          [
+            "n",
+            1
+          ],
+          [
+            "o",
+            1
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 1,
+        "is_locally_coherent": false,
+        "text": " i no                                                                                               "
+      }
+    },
+    "code_c": {
+      "T0.5": {
+        "diversity": 0.01,
+        "n_unique": 2,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            199
+          ],
+          [
+            "m",
+            1
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 1,
+        "is_locally_coherent": false,
+        "text": " m                                                                                                  "
+      },
+      "T0.8": {
+        "diversity": 0.02,
+        "n_unique": 4,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            197
+          ],
+          [
+            "m",
+            1
+          ],
+          [
+            ")",
+            1
+          ],
+          [
+            "n",
+            1
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 2,
+        "is_locally_coherent": false,
+        "text": " m     )n                                                                                           "
+      },
+      "T1.0": {
+        "diversity": 0.015,
+        "n_unique": 3,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            196
+          ],
+          [
+            "m",
+            3
+          ],
+          [
+            "r",
+            1
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 1,
+        "is_locally_coherent": false,
+        "text": " m   r mm                                                                                           "
+      }
+    },
+    "agentic": {
+      "T0.5": {
+        "diversity": 0.015,
+        "n_unique": 3,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            "h",
+            106
+          ],
+          [
+            "t",
+            93
+          ],
+          [
+            "o",
+            1
+          ]
+        ],
+        "has_repetition_run": false,
+        "n_repetition_runs": 0,
+        "is_locally_coherent": false,
+        "text": "ttthththtohthhthhththhhhthththtththththhththththhththhththththhhththththththththththththhthththththt"
+      },
+      "T0.8": {
+        "diversity": 0.015,
+        "n_unique": 3,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            194
+          ],
+          [
+            "h",
+            4
+          ],
+          [
+            "t",
+            2
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 1,
+        "is_locally_coherent": false,
+        "text": "thth h    h                                                                                         "
+      },
+      "T1.0": {
+        "diversity": 0.015,
+        "n_unique": 3,
+        "n_total": 200,
+        "top5_chars": [
+          [
+            " ",
+            194
+          ],
+          [
+            "t",
+            3
+          ],
+          [
+            "h",
+            3
+          ]
+        ],
+        "has_repetition_run": true,
+        "n_repetition_runs": 1,
+        "is_locally_coherent": false,
+        "text": "ttth h    h                                                                                         "
+      }
+    }
+  },
+  "ood_ppls": {
+    "v46_python": {
+      "ppl": 1.006407275676398,
+      "tokens": 6643
+    },
+    "english_prose": {
+      "ppl": 1.0028119907405053,
+      "tokens": 7665
+    },
+    "code_javascript": {
+      "ppl": 1.0016682830529713,
+      "tokens": 7154
+    }
+  },
+  "ood_ppl_avg": 1.0036291831566249,
+  "ood_ratio": 0.9922426928439889,
+  "bpc": 0.01646138865792196,
+  "pass_count": 3,
+  "decision": "FAIL",
+  "checks": {
+    "1.1 PPL 合理范围 (1.5-3.0)": false,
+    "1.2 Diversity ≥ 0.3": false,
+    "1.3 ≥ 9/15 局部合理": false,
+    "1.4 OOD ratio ≤ 5x": true,
+    "1.5 BPC 报告": true,
+    "无字符重复循环": false,
+    "PPL 远低于 random (<500)": true
+  }
+}
