@@ -1,0 +1,16 @@
+{
+  "model": "V49 50M",
+  "n_params": 51994240,
+  "n_steps": 4000,
+  "val_ppl": 2.419073199459569,
+  "train_ppl": 2.360413641173942,
+  "val_train_ppl_gap": 0.05865955828562708,
+  "n_gram_entropy_bits": 1.2568609714508057,
+  "top_1_confidence_mean": 0.7679593563079834,
+  "top_1_confidence_std": 0.2800914943218231,
+  "calibration_verdict": {
+    "entropy_in_real_lm_range": true,
+    "confidence_in_real_lm_range": false,
+    "gap_positive": true
+  }
+}

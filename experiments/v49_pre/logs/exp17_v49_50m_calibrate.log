@@ -1,0 +1,22 @@
+=== V49 50M Calibration (Exp 17) ===
+Device: cuda, steps: 4000, batch: 8, T: 512, lr: 0.0001
+V49 50M params: 51,994,240
+Training 4k step...
+  step 1000: train_loss=2.1402
+  step 2000: train_loss=1.9138
+  step 3000: train_loss=0.8967
+  step 4000: train_loss=0.9987
+Evaluating V49 50M at step 4k...
+
+=== V49 50M Calibration Result ===
+  val_ppl:                   2.4191
+  train_ppl:                 2.3604
+  val_train_ppl_gap:         0.0587
+  n_gram_entropy_bits:       1.2569
+  top_1_confidence (mean):   0.7680
+  top_1_confidence (std):    0.2801
+  Verdict: entropy_in_real_lm_range = True
+           confidence_in_real_lm_range = False
+           gap_positive = True
+
+Saved to experiments\v49_pre\results\exp17_v49_50m_calibrate.json
