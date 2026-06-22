@@ -1,0 +1,86 @@
+{
+  "exp_id": "exp21_baseline_bpe_5k",
+  "config": {
+    "n_steps": 5000,
+    "eval_every": 500,
+    "batch_size": 8,
+    "seq_len": 512,
+    "d_model": 128,
+    "n_layers": 2,
+    "n_heads": 4,
+    "d_ff": 512,
+    "subset_size": 2000,
+    "seed": 42,
+    "lr": 0.0001,
+    "val_parquet": "crystalllm/data/processed/v28_val.parquet",
+    "output": "experiments/v49_pre/results/exp21_baseline_bpe_5k.json"
+  },
+  "n_params": 987136,
+  "bpe_vocab_size": 4100,
+  "val_ppl_curve": [
+    [
+      500,
+      1319.2624340824711
+    ],
+    [
+      1000,
+      870.6532173818513
+    ],
+    [
+      1500,
+      579.9396875454241
+    ],
+    [
+      2000,
+      452.5687876523464
+    ],
+    [
+      2500,
+      392.670703551283
+    ],
+    [
+      3000,
+      357.9196171410133
+    ],
+    [
+      3500,
+      338.06284866562663
+    ],
+    [
+      4000,
+      326.73939943344726
+    ],
+    [
+      4500,
+      320.3572659951803
+    ],
+    [
+      5000,
+      316.242660380888
+    ]
+  ],
+  "ppl_trend": "decreasing",
+  "final_ppl": 316.242660380888,
+  "bits_per_char": 2.7682960622400348,
+  "avg_diversity": 0.5333333333333333,
+  "coherent": 1,
+  "n_repetition": 1,
+  "comparison": {
+    "exp19_cmt_char": {
+      "ppl": 18.02,
+      "bpc": 4.17,
+      "coherent": 0
+    },
+    "exp20_cmt_bpe": {
+      "ppl": 990.45,
+      "bpc": 3.32,
+      "coherent": 2
+    },
+    "exp21_base_bpe": {
+      "ppl": 316.242660380888,
+      "bpc": 2.7682960622400348,
+      "coherent": 1
+    }
+  },
+  "decision": "[BPE_IS_KEY] baseline + BPE < CMT + BPE bits/char → BPE 单独就够, CMT 没功劳"
+}
