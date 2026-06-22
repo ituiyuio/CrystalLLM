@@ -1,0 +1,85 @@
+{
+  "calibration": {
+    "model": "V49 50M",
+    "n_params": 51994240,
+    "n_steps": 4000,
+    "val_ppl": 2.419073199459569,
+    "train_ppl": 2.360413641173942,
+    "val_train_ppl_gap": 0.05865955828562708,
+    "n_gram_entropy_bits": 1.2568609714508057,
+    "top_1_confidence_mean": 0.7679593563079834,
+    "top_1_confidence_std": 0.2800914943218231,
+    "calibration_verdict": {
+      "entropy_in_real_lm_range": true,
+      "confidence_in_real_lm_range": false,
+      "gap_positive": true
+    }
+  },
+  "all_checkpoints": [
+    {
+      "step": 2000,
+      "config": "A1_long_v28",
+      "val_ppl": 17.38238845298387,
+      "train_ppl_estimate": 13.446043369016406,
+      "val_train_ppl_gap": 3.936345083967465,
+      "diversity": 0.06133333333333334,
+      "n_coherent": 0,
+      "n_repetition": 13,
+      "n_gram_entropy_bits": 3.5520896911621094,
+      "top_1_confidence_mean": 0.40144386887550354,
+      "top_1_confidence_std": 0.2870490849018097,
+      "state": "underfit"
+    },
+    {
+      "step": 4000,
+      "config": "A1_long_v28",
+      "val_ppl": 14.330405241358067,
+      "train_ppl_estimate": 14.968659604857528,
+      "val_train_ppl_gap": -0.6382543634994615,
+      "diversity": 0.09405882352941176,
+      "n_coherent": 0,
+      "n_repetition": 10,
+      "n_gram_entropy_bits": 3.518498659133911,
+      "top_1_confidence_mean": 0.4015445113182068,
+      "top_1_confidence_std": 0.2951720356941223,
+      "state": "underfit"
+    },
+    {
+      "step": 6000,
+      "config": "A1_long_v28",
+      "val_ppl": 12.806615336203098,
+      "train_ppl_estimate": 10.884358000129781,
+      "val_train_ppl_gap": 1.9222573360733168,
+      "diversity": 0.11999999999999998,
+      "n_coherent": 0,
+      "n_repetition": 3,
+      "n_gram_entropy_bits": 3.569364547729492,
+      "top_1_confidence_mean": 0.3292658030986786,
+      "top_1_confidence_std": 0.21315020322799683,
+      "state": "underfit"
+    },
+    {
+      "step": 8000,
+      "config": "A1_long_v28",
+      "val_ppl": 11.77492388441378,
+      "train_ppl_estimate": 9.42261773410407,
+      "val_train_ppl_gap": 2.35230615030971,
+      "diversity": 0.13431171442936146,
+      "n_coherent": 0,
+      "n_repetition": 2,
+      "n_gram_entropy_bits": 3.3120293617248535,
+      "top_1_confidence_mean": 0.407206654548645,
+      "top_1_confidence_std": 0.255923867225647,
+      "state": "underfit"
+    }
+  ],
+  "decision": "H1_HARDENED",
+  "detail": "All 4 checkpoints are underfit (val_ppl > 3.0). Critically, val_ppl is still decreasing (17.38 -> 11.77), meaning A1 (lr=3e-5) has not converged yet at 8k step. v50 has 3 options: (1) try longer training (15k+ step) to see if A1 eventually reaches real_lm or hits memorizer; (2) try medium lr (1e-4) with longer warmup to avoid A0's phase transition; (3) pivot to V49 1.2B + BPE + external data.",
+  "val_ppl_trajectory": [
+    17.38238845298387,
+    14.330405241358067,
+    12.806615336203098,
+    11.77492388441378
+  ],
+  "val_ppl_still_decreasing": true
+}

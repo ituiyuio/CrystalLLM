@@ -1,0 +1,19 @@
+V49 50M calibration: val_ppl=2.419, entropy=1.257 bit, conf=0.7680
+
+Evaluating A1_long_v28 step 2000...
+  val_ppl=17.3824, entropy=3.552, conf=0.4014, gap=3.936 -> underfit
+
+Evaluating A1_long_v28 step 4000...
+  val_ppl=14.3304, entropy=3.518, conf=0.4015, gap=-0.638 -> underfit
+
+Evaluating A1_long_v28 step 6000...
+  val_ppl=12.8066, entropy=3.569, conf=0.3293, gap=1.922 -> underfit
+
+Evaluating A1_long_v28 step 8000...
+  val_ppl=11.7749, entropy=3.312, conf=0.4072, gap=2.352 -> underfit
+
+=== Decision: H1_HARDENED ===
+  All 4 checkpoints are underfit (val_ppl > 3.0). Critically, val_ppl is still decreasing (17.38 -> 11.77), meaning A1 (lr=3e-5) has not converged yet at 8k step. v50 has 3 options: (1) try longer training (15k+ step) to see if A1 eventually reaches real_lm or hits memorizer; (2) try medium lr (1e-4) with longer warmup to avoid A0's phase transition; (3) pivot to V49 1.2B + BPE + external data.
+  val_ppl trajectory: [17.38238845298387, 14.330405241358067, 12.806615336203098, 11.77492388441378]
+  Still decreasing: True
+  Saved to experiments\v49_pre\results\exp18_aggregate.json
