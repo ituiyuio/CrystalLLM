@@ -42,3 +42,4 @@ crystalllm/**/*.npy
 .env
 crystalllm/.env
 experiments/v49_pre/results/exp17_ckpts/
+experiments/v49_pre/results/exp22_ckpts/
