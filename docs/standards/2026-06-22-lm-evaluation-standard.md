@@ -322,3 +322,70 @@ def compute_bpc(ppl, chars_per_token=1.0):
 | 10.0 | 3.32 | 差 |
 | 100.0 | 6.64 | 极差 |
 | 2261.0 | 11.14 | random |
+
+---
+
+## v1.1 更新 (2026-06-22, Exp 17)
+
+Exp 17 phase-transition diagnostic 暴露 v1.0 标准的盲区, 升级到 v1.1:
+
+### 新增 3 个硬性指标 (Phase-2 评估必须)
+
+1. **n-gram entropy of next-token distribution** >= 0.63 bit (>= 0.5 * V49 50M 校准)
+   - 计算: `H = -sum_v p_v * log2(p_v)` 在所有 next-token 位置上的均值
+   - 真 LM 范围: 0.63 - 11.0 bit (char-level V49 校准: 1.26)
+   - Memorizer 范围: < 0.3 bit
+   - 工具: `experiments/v49_pre/exp17_metrics.py::n_gram_entropy`
+
+2. **top-1 confidence distribution**: 均值 < 0.95
+   - 计算: `max P(next | context)` 在所有位置上的均值
+   - 真 LM 范围: 0.0 - 0.95 (V49 50M 4k 校准: 0.77)
+   - Memorizer 范围: > 0.95
+   - 工具: `experiments/v49_pre/exp17_metrics.py::top_1_confidence_stats`
+
+3. **val-train PPL gap** > 0
+   - 计算: `val_ppl - train_ppl`
+   - 真 LM 范围: > 0 (V49 50M 4k 校准: 0.06)
+   - Memorizer 范围: < 0.05
+   - 工具: `experiments/v49_pre/exp17_metrics.py::val_train_ppl_gap`
+
+### v1.1 修正
+
+- **diversity 阈值在 char-level 数据上降为记录指标** (不作为硬性 PASS/FAIL 判定)
+  - 原因: char-level vocab=2261 结构性限制, V49 1.2B 也只 0.157, 0.3 阈值不可达
+  - BPE tokenization 后 diversity 可作为硬性指标 (vocab=16K, scale 后可达 0.4+)
+
+- **评估需要对照已知真 LM baseline** (如 V49 50M) 进行指标校准
+  - 校准值在 `experiments/v49_pre/results/exp17_v49_50m_calibrate.json`
+  - V49 50M 校准: val_ppl 2.42, entropy 1.26, conf 0.77, gap 0.06
+
+### v1.0 → v1.1 检查清单
+
+旧 v1.0 PASS 判定 (PPL ∈ [1.5, 3.0] + diversity ≥ 0.3) **不足以**判定"真 LM":
+- 已被 Exp 17 证明 CMT-clean PPL=1.0097 仍 memorizer (entropy 0.07, conf 0.99)
+- 已被 Exp 17 证明 V49 50M PPL=2.42 是真 LM (entropy 1.26, conf 0.77) 即使 diversity=0.135 < 0.3
+
+新 v1.1 PASS 判定 (Phase-2 强制):
+- v1.0 三项 + 3 个新指标 (entropy >= 0.63 bit AND conf < 0.95 AND gap > 0)
+- 通过 = 真 LM; 失败 = memorizer 或 underfit
+
+### 工具函数引用
+
+```python
+from experiments.v49_pre.exp17_metrics import (
+    n_gram_entropy,           # 期望 [0.63, 11.0] bit (char-level, 用 V49 50M 校准)
+    top_1_confidence_stats,   # 期望 mean < 0.95
+    val_train_ppl_gap,        # 期望 > 0
+)
+```
+
+### How to apply (v1.1)
+
+任何 v50+ 实验的最终评估必须使用 v1.1 标准. v1.0 已不足以判定"真 LM".
+
+### 实验依据
+
+- [[exp16-cmt-clean]]: 0-bug 公平对照 PPL 1.0097 仍 memorizer (v1.0 PPL 通过但 v1.1 新指标全失败)
+- [[2026-06-22-cmt-phase-transition-results]]: Exp 17 12 检查点分析
+- V49 50M 校准: `experiments/v49_pre/results/exp17_v49_50m_calibrate.json`
+- Exp 17 aggregate: `experiments/v49_pre/results/exp17_aggregate.json`
