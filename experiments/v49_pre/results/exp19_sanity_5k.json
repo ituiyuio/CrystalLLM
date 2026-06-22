@@ -1,0 +1,73 @@
+{
+  "exp_id": "exp19_sanity_5k",
+  "config": {
+    "n_steps": 5000,
+    "eval_every": 500,
+    "batch_size": 8,
+    "seq_len": 512,
+    "d_model": 128,
+    "n_layers": 2,
+    "n_heads": 4,
+    "kan_dim": 64,
+    "subset_size": 2000,
+    "seed": 42,
+    "lr": 0.0001,
+    "val_parquet": "crystalllm/data/processed/v28_val.parquet",
+    "output": "experiments/v49_pre/results/exp19_sanity_5k.json"
+  },
+  "n_params": 2110592,
+  "val_ppl_curve": [
+    [
+      500,
+      33.253997844390454
+    ],
+    [
+      1000,
+      25.44675115788078
+    ],
+    [
+      1500,
+      22.021085694575675
+    ],
+    [
+      2000,
+      20.280988884059045
+    ],
+    [
+      2500,
+      19.348243869956562
+    ],
+    [
+      3000,
+      18.780792602589703
+    ],
+    [
+      3500,
+      18.393812496615645
+    ],
+    [
+      4000,
+      18.23194919654163
+    ],
+    [
+      4500,
+      18.099642509866754
+    ],
+    [
+      5000,
+      18.023660413042453
+    ]
+  ],
+  "ppl_trend": "decreasing",
+  "ppl_drop_ratio": 0.38461938668769746,
+  "final_ppl": 18.023660413042453,
+  "avg_diversity": 0.245,
+  "coherent_ratio": 0.0,
+  "n_repetition": 3,
+  "imag_energy": {
+    "input": 0.04927555099129677,
+    "output": 1.5243481397628784,
+    "ratio": 30.935182034435584
+  },
+  "decision": "[UNDERFIT_IN_PROGRESS] 仍在下降, 需更长训练 (16k-30k step)"
+}
