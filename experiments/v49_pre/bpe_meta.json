@@ -1,0 +1,12 @@
+{
+  "vocab_size": 4100,
+  "base_vocab": 4096,
+  "special_tokens": [
+    "<|endoftext|>",
+    "<|reserved_0|>",
+    "<|reserved_1|>",
+    "<|reserved_2|>"
+  ],
+  "train_time_s": 4.804783344268799,
+  "n_docs": 50000
+}
