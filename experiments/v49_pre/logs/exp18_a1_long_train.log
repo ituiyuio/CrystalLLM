@@ -1,0 +1,10 @@
+=== Exp 18: A1 Long Training (8k step on v28 alone) ===
+Device: cuda, lr=3e-05, dropout=0.1, total_steps=8000
+Reason: v23 incompatible with v28 (Task 1 finding), using v28-only 8k step (single epoch)
+CMT-Clean params: 72,025,600
+  step 2000: val_ppl=17.3824 | ckpt saved | 360s elapsed
+  step 4000: val_ppl=14.3304 | ckpt saved | 729s elapsed
+  step 6000: val_ppl=12.8066 | ckpt saved | 1097s elapsed
+  step 8000: val_ppl=11.7749 | ckpt saved | 1464s elapsed
+
+val_ppl curve saved to experiments\v49_pre\results\exp18_val_ppl_curve.json
