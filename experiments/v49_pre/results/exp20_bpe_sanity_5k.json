@@ -1,0 +1,75 @@
+{
+  "exp_id": "exp20_bpe_sanity_5k",
+  "config": {
+    "n_steps": 5000,
+    "eval_every": 500,
+    "batch_size": 8,
+    "seq_len": 512,
+    "d_model": 128,
+    "n_layers": 2,
+    "n_heads": 4,
+    "kan_dim": 64,
+    "subset_size": 2000,
+    "seed": 42,
+    "lr": 0.0001,
+    "val_parquet": "crystalllm/data/processed/v28_val.parquet",
+    "output": "experiments/v49_pre/results/exp20_bpe_sanity_5k.json"
+  },
+  "n_params": 3052160,
+  "bpe_vocab_size": 4100,
+  "val_ppl_curve": [
+    [
+      500,
+      1392.911665464807
+    ],
+    [
+      1000,
+      1412.2075836305933
+    ],
+    [
+      1500,
+      1382.5691077181154
+    ],
+    [
+      2000,
+      1193.9278163763506
+    ],
+    [
+      2500,
+      1030.885616782556
+    ],
+    [
+      3000,
+      973.559832891466
+    ],
+    [
+      3500,
+      955.4600322828195
+    ],
+    [
+      4000,
+      966.2145422978305
+    ],
+    [
+      4500,
+      974.0902995538993
+    ],
+    [
+      5000,
+      990.4538375428049
+    ]
+  ],
+  "ppl_trend": "decreasing",
+  "ppl_drop_ratio": 0.29965753230268766,
+  "final_ppl": 990.4538375428049,
+  "avg_diversity": 0.45999999999999996,
+  "coherent_ratio": 0.3333333333333333,
+  "n_repetition": 4,
+  "imag_energy": {
+    "input": 0.04704747349023819,
+    "output": 1.0672483444213867,
+    "ratio": 22.68449855533323
+  },
+  "exp19_baseline_ppl": 18.02,
+  "decision": "[UNDERFIT_IN_PROGRESS] BPE 仍未走完 Phase 1, 需更长训练"
+}
