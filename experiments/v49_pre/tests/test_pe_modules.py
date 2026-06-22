@@ -25,9 +25,9 @@ def test_t1_block_cayley_forward_shape():
 
 
 def test_t2_block_cayley_position_sensitive():
-    """T2: 同样输入, 不同位置 → 不同输出."""
+    """T2: 同样输入, 不同位置 → 不同输出 (非零输入下, 因为零向量经任意旋转仍为零)."""
     pe = BlockCayleyPE(d_model=D_MODEL, n_blocks=N_BLOCKS)
-    z = torch.zeros(1, T, D_MODEL)
+    z = torch.randn(1, T, D_MODEL)  # 非零输入
     out = pe(z)
     # pos=0 vs pos=T-1 应该不同
     diff = (out[0, 0] - out[0, T-1]).abs().mean().item()
