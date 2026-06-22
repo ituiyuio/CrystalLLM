@@ -1,0 +1,9 @@
+
+[Config A0] lr=0.0001, dropout=0.1, device=cuda
+  CMT-Clean params: 72,025,600
+  step 1000: val_ppl=17.2035 | ckpt saved | 182s elapsed
+  step 2000: val_ppl=13.7867 | ckpt saved | 364s elapsed
+  step 3000: val_ppl=1.0552 | ckpt saved | 546s elapsed
+  step 4000: val_ppl=1.0375 | ckpt saved | 728s elapsed
+
+Training metadata saved to experiments\v49_pre\results\exp17_train_meta.json
