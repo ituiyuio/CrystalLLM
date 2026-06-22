@@ -1,0 +1,30 @@
+Found 9 checkpoints for model=baseline
+
+=== Eval baseline ckpt @ step 4000 ===
+  PPL=155.34, OOD=315.67, div=0.357, coherent=2/6, repetition=2/6, bpc=2.43
+
+=== Eval baseline ckpt @ step 5000 ===
+  PPL=192.01, OOD=394.61, div=0.360, coherent=2/6, repetition=2/6, bpc=2.53
+
+=== Eval baseline ckpt @ step 8000 ===
+  PPL=94.00, OOD=212.46, div=0.498, coherent=3/6, repetition=5/6, bpc=2.18
+
+=== Eval baseline ckpt @ step 12000 ===
+  PPL=71.32, OOD=174.71, div=0.392, coherent=1/6, repetition=2/6, bpc=2.05
+
+=== Eval baseline ckpt @ step 16000 ===
+  PPL=61.00, OOD=160.09, div=0.343, coherent=0/6, repetition=3/6, bpc=1.98
+
+=== Eval baseline ckpt @ step 20000 ===
+  PPL=56.02, OOD=155.37, div=0.357, coherent=1/6, repetition=4/6, bpc=1.94
+
+=== Eval baseline ckpt @ step 24000 ===
+  PPL=53.12, OOD=153.44, div=0.470, coherent=3/6, repetition=2/6, bpc=1.91
+
+=== Eval baseline ckpt @ step 28000 ===
+  PPL=51.73, OOD=150.75, div=0.363, coherent=1/6, repetition=3/6, bpc=1.90
+
+=== Eval baseline ckpt @ step 32000 ===
+  PPL=50.92, OOD=151.98, div=0.333, coherent=0/6, repetition=5/6, bpc=1.89
+
+5-dim results saved to D:\CrystaLLM\experiments\v49_pre\results\exp25_5dim_baseline.json

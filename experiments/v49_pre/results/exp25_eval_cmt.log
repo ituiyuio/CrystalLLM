@@ -1,0 +1,30 @@
+Found 9 checkpoints for model=cmt
+
+=== Eval cmt ckpt @ step 4000 ===
+  PPL=331.34, OOD=1029.59, div=0.505, coherent=0/6, repetition=1/6, bpc=2.79
+
+=== Eval cmt ckpt @ step 5000 ===
+  PPL=482.52, OOD=1675.25, div=0.443, coherent=2/6, repetition=0/6, bpc=2.97
+
+=== Eval cmt ckpt @ step 8000 ===
+  PPL=151.81, OOD=393.23, div=0.545, coherent=3/6, repetition=1/6, bpc=2.42
+
+=== Eval cmt ckpt @ step 12000 ===
+  PPL=1.40, OOD=4.96, div=0.598, coherent=0/6, repetition=0/6, bpc=0.16
+
+=== Eval cmt ckpt @ step 16000 ===
+  PPL=1.03, OOD=1.27, div=0.275, coherent=1/6, repetition=1/6, bpc=0.02
+
+=== Eval cmt ckpt @ step 20000 ===
+  PPL=1.02, OOD=1.09, div=0.230, coherent=0/6, repetition=2/6, bpc=0.01
+
+=== Eval cmt ckpt @ step 24000 ===
+  PPL=1.02, OOD=1.07, div=0.230, coherent=0/6, repetition=1/6, bpc=0.01
+
+=== Eval cmt ckpt @ step 28000 ===
+  PPL=1.02, OOD=1.06, div=0.208, coherent=0/6, repetition=1/6, bpc=0.01
+
+=== Eval cmt ckpt @ step 32000 ===
+  PPL=1.02, OOD=1.06, div=0.238, coherent=0/6, repetition=2/6, bpc=0.01
+
+5-dim results saved to D:\CrystaLLM\experiments\v49_pre\results\exp25_5dim_cmt.json

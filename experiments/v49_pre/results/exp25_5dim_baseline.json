@@ -1,0 +1,123 @@
+{
+  "model": "baseline",
+  "n_ckpts": 9,
+  "metrics": [
+    {
+      "step": 4000,
+      "val_ppl": 155.34380599497567,
+      "val_ppl_ood": 315.6667468322383,
+      "ood_ratio": 2.032052355164055,
+      "diversity": 0.3566666666666667,
+      "coherent": 2,
+      "n_total": 6,
+      "repetition": 2,
+      "bpc": 2.42644030265807,
+      "val_train_gap_proxy": null,
+      "ckpt_path": "D:\\CrystaLLM\\experiments\\v49_pre\\results\\exp25_ckpts\\baseline_step_4000.pt"
+    },
+    {
+      "step": 5000,
+      "val_ppl": 192.0106304512078,
+      "val_ppl_ood": 394.60696989481295,
+      "ood_ratio": 2.0551308485760496,
+      "diversity": 0.36000000000000004,
+      "coherent": 2,
+      "n_total": 6,
+      "repetition": 2,
+      "bpc": 2.5283474587033856,
+      "val_train_gap_proxy": null,
+      "ckpt_path": "D:\\CrystaLLM\\experiments\\v49_pre\\results\\exp25_ckpts\\baseline_step_5000.pt"
+    },
+    {
+      "step": 8000,
+      "val_ppl": 94.00292354244526,
+      "val_ppl_ood": 212.45706912331354,
+      "ood_ratio": 2.260111293532084,
+      "diversity": 0.4983333333333333,
+      "coherent": 3,
+      "n_total": 6,
+      "repetition": 5,
+      "bpc": 2.1848779069939614,
+      "val_train_gap_proxy": null,
+      "ckpt_path": "D:\\CrystaLLM\\experiments\\v49_pre\\results\\exp25_ckpts\\baseline_step_8000.pt"
+    },
+    {
+      "step": 12000,
+      "val_ppl": 71.3185941962403,
+      "val_ppl_ood": 174.7114941551673,
+      "ood_ratio": 2.449732725724108,
+      "diversity": 0.39166666666666666,
+      "coherent": 1,
+      "n_total": 6,
+      "repetition": 2,
+      "bpc": 2.052068786766591,
+      "val_train_gap_proxy": null,
+      "ckpt_path": "D:\\CrystaLLM\\experiments\\v49_pre\\results\\exp25_ckpts\\baseline_step_12000.pt"
+    },
+    {
+      "step": 16000,
+      "val_ppl": 60.99769808449216,
+      "val_ppl_ood": 160.08936991963327,
+      "ood_ratio": 2.624514939856949,
+      "diversity": 0.3433333333333333,
+      "coherent": 0,
+      "n_total": 6,
+      "repetition": 3,
+      "bpc": 1.9768942981780675,
+      "val_train_gap_proxy": null,
+      "ckpt_path": "D:\\CrystaLLM\\experiments\\v49_pre\\results\\exp25_ckpts\\baseline_step_16000.pt"
+    },
+    {
+      "step": 20000,
+      "val_ppl": 56.01522302799996,
+      "val_ppl_ood": 155.37029040819107,
+      "ood_ratio": 2.7737154653571077,
+      "diversity": 0.3566666666666667,
+      "coherent": 1,
+      "n_total": 6,
+      "repetition": 4,
+      "bpc": 1.9359156835575682,
+      "val_train_gap_proxy": null,
+      "ckpt_path": "D:\\CrystaLLM\\experiments\\v49_pre\\results\\exp25_ckpts\\baseline_step_20000.pt"
+    },
+    {
+      "step": 24000,
+      "val_ppl": 53.12285179656283,
+      "val_ppl_ood": 153.44345962855587,
+      "ood_ratio": 2.8884642755282957,
+      "diversity": 0.47,
+      "coherent": 3,
+      "n_total": 6,
+      "repetition": 2,
+      "bpc": 1.9104202306390485,
+      "val_train_gap_proxy": null,
+      "ckpt_path": "D:\\CrystaLLM\\experiments\\v49_pre\\results\\exp25_ckpts\\baseline_step_24000.pt"
+    },
+    {
+      "step": 28000,
+      "val_ppl": 51.726420128942074,
+      "val_ppl_ood": 150.75261834052506,
+      "ood_ratio": 2.914422029684897,
+      "diversity": 0.36333333333333334,
+      "coherent": 1,
+      "n_total": 6,
+      "repetition": 3,
+      "bpc": 1.897609814717689,
+      "val_train_gap_proxy": null,
+      "ckpt_path": "D:\\CrystaLLM\\experiments\\v49_pre\\results\\exp25_ckpts\\baseline_step_28000.pt"
+    },
+    {
+      "step": 32000,
+      "val_ppl": 50.92136044794053,
+      "val_ppl_ood": 151.97567230362947,
+      "ood_ratio": 2.984517125362388,
+      "diversity": 0.3333333333333333,
+      "coherent": 0,
+      "n_total": 6,
+      "repetition": 5,
+      "bpc": 1.8900663528712134,
+      "val_train_gap_proxy": null,
+      "ckpt_path": "D:\\CrystaLLM\\experiments\\v49_pre\\results\\exp25_ckpts\\baseline_step_32000.pt"
+    }
+  ]
+}
