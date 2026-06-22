@@ -35,12 +35,23 @@
 
 **Layer 1 (合并 v23) 边际改善有限**: 12k step 仍撞 1 epoch 边界, 只是减少 11% 重复. **不能根本解决"撞 1 epoch"问题, 只能稍微缓解**.
 
-### 1.3 必须先做的分布验证
+### 1.3 分布验证结果 (Task 1 完成)
 
-v23 是早期版本, 与 v28 分布可能不同. 合并前必须验证:
-- char n-gram 分布 KL 散度 < 阈值
-- 高频 char 重叠度 > 阈值
-- 字符集是否一致 (vocab 是否需要合并)
+**v23 vs v28 严重不兼容** (实测):
+- KL(v23 || v28) = 0.82 bits (BORDERLINE)
+- Vocab overlap = **0.27** (POOR, 远低于 0.9 阈值)
+- Top-100 char overlap = 0.83 (POOR)
+- v23: 2152 unique chars; v28: 1415 unique chars
+
+**结论**: v23 字符集更大 (有 raw bytes / 未清理字符), v28 是清理过的 code/agentic 子集. **v23 + v28 不能直接合并**.
+
+### 1.4 Fallback 方案 (激活)
+
+根据 spec §3.1 的 fallback 规则, 改为:
+- **只用 v28 训练, 8k step (单 epoch 内, 不撞 1 epoch 边界)**
+- 牺牲: 没法在 epoch 边界外验证 phase transition
+- 优势: 数据干净, 不引入分布漂移变量
+- 5 检查点改为: 2000/4000/6000/8000 (4 个)
 
 ## 2. 假设
 
