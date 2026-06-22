@@ -1,0 +1,53 @@
+=== Exp 16: CMT-Clean (修复后) 公平对照 ===
+配置: d_model=640, n_layers=8, n_heads=8, kan_dim=96, batch=8, T=512, lr=0.0001
+
+训练: 30000 steps on v28_train FULL
+评估: held-out v28_val (NOT train subset)
+
+CMT-Clean 模型参数数: 72,025,600
+
+Step  2000 | train_loss=2.4489 | val_ppl=12.5730 | 68474 tokens
+Step  4000 | train_loss=0.0054 | val_ppl=1.0252 | 68474 tokens
+Step  6000 | train_loss=0.0057 | val_ppl=1.0210 | 68474 tokens
+Step  8000 | train_loss=0.0056 | val_ppl=1.0215 | 68474 tokens
+Step 10000 | train_loss=0.6750 | val_ppl=1.0176 | 68474 tokens
+Step 12000 | train_loss=0.0038 | val_ppl=1.0161 | 68474 tokens
+Step 14000 | train_loss=0.0050 | val_ppl=1.0154 | 68474 tokens
+Step 16000 | train_loss=0.0038 | val_ppl=1.0144 | 68474 tokens
+Step 18000 | train_loss=0.0067 | val_ppl=1.0133 | 68474 tokens
+Step 20000 | train_loss=0.0029 | val_ppl=1.0137 | 68474 tokens
+Step 22000 | train_loss=0.0050 | val_ppl=1.0120 | 68474 tokens
+Step 24000 | train_loss=0.0026 | val_ppl=1.0118 | 68474 tokens
+Step 26000 | train_loss=0.0044 | val_ppl=1.0106 | 68474 tokens
+Step 28000 | train_loss=0.0023 | val_ppl=1.0101 | 68474 tokens
+Step 30000 | train_loss=0.0025 | val_ppl=1.0097 | 68474 tokens
+
+[5-dim eval] generation diversity × coherent × repetition...
+  english_simple T0.5: div=0.040, sample='              ohhhhhhhohhhhhhhh      hhhhhhhhhhhhhhhhhhhhhhh'
+  english_simple T0.8: div=0.085, sample='            ffooooo_  ooooooooo      oo出出出出*********//ooo///'
+  english_simple T1.0: div=0.085, sample='              ohhhhhhhohhhhhhhh      hhhhhhhhhhhhhhhhhhhhhhh'
+  english_story T0.5: div=0.060, sample='            nddppeeennnnnnnnnaaaaaaaaaappp  aaaaaaa.       .'
+  english_story T0.8: div=0.075, sample='            nddddeeenn111111wuuuuuu                         '
+  english_story T1.0: div=0.030, sample='            nddeeeeennnnnnnnnaaaaaa                         '
+  code_python T0.5: div=0.120, sample=' }}}}}}}}}}}       ##     ::}}}}}}}}}???????}???????????????'
+  code_python T0.8: div=0.060, sample=' iiixxnnnnnn\n              :ixxxxn                          '
+  code_python T1.0: div=0.065, sample=' iiixxnnnnnnooooooooooooooooixxxxxxrr//////////////ooooouuoo'
+  code_c T0.5: div=0.040, sample='          reeee uureeeee                  uuuuuuuuuuuu      '
+  code_c T0.8: div=0.030, sample='          reeee uureeeee                  uuuuuuuuuuuu      '
+  code_c T1.0: div=0.030, sample='          reeee uuree                            uuuuu      '
+  agentic T0.5: div=0.050, sample='tthhhhhuuuhhh...tthiirrggghhhhhhhhthhhhhuuthhhhhhhhhhhhhh#hh'
+  agentic T0.8: div=0.067, sample='tthhhhhuuuhhh...tthiirrrrrhhhhhhhhttthhhuutthhiiiiiiiiiiiiir'
+  agentic T1.0: div=0.074, sample='tthhhhhuuuhhh...tthiirrggghhhhhhhhthhhhhuuthhhhhhhhhhhhhh#hh'
+
+=== 5 维评估结果 ===
+  in-dist PPL (held-out v28_val): 1.0097
+  imag energy ratio:              5966.8584
+  avg diversity:                  0.0607
+  coherent:                       0/15
+  repetition runs:                15/15
+  Pass: 3/7
+
+=== 决策 ===
+  [MEMORIZER] 即便 0-bug 实现, CMT 仍 memorizer — 架构本质问题
+
+结果已保存到 experiments\v49_pre\results\exp16_cmt_clean.json
