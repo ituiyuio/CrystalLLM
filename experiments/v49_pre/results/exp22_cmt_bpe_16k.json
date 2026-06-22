@@ -1,0 +1,283 @@
+{
+  "exp_id": "exp22_cmt_bpe_16k",
+  "config": {
+    "n_steps": 16000,
+    "eval_every": 1000,
+    "gen_eval_every": 4000,
+    "save_every": 4000,
+    "batch_size": 8,
+    "seq_len": 512,
+    "d_model": 128,
+    "n_layers": 2,
+    "n_heads": 4,
+    "kan_dim": 64,
+    "subset_size": 2000,
+    "seed": 42,
+    "lr": 0.0001,
+    "val_parquet": "crystalllm/data/processed/v28_val.parquet",
+    "ckpt_dir": "experiments/v49_pre/results/exp22_ckpts",
+    "output": "experiments/v49_pre/results/exp22_cmt_bpe_16k.json"
+  },
+  "n_params": 3052160,
+  "bpe_vocab_size": 4100,
+  "val_ppl_curve": [
+    [
+      1000,
+      1391.6294044530077
+    ],
+    [
+      2000,
+      1199.1131011469633
+    ],
+    [
+      3000,
+      830.5972535989364
+    ],
+    [
+      4000,
+      787.789681412625
+    ],
+    [
+      5000,
+      832.7439547088908
+    ],
+    [
+      6000,
+      937.6064996409389
+    ],
+    [
+      7000,
+      1101.6606299689913
+    ],
+    [
+      8000,
+      1317.6632224849563
+    ],
+    [
+      9000,
+      1577.7869611217193
+    ],
+    [
+      10000,
+      1942.9568923792563
+    ],
+    [
+      11000,
+      2281.988247128498
+    ],
+    [
+      12000,
+      2656.7875955238133
+    ],
+    [
+      13000,
+      2989.3045433892585
+    ],
+    [
+      14000,
+      3331.3883828648877
+    ],
+    [
+      15000,
+      3579.0451583725685
+    ],
+    [
+      16000,
+      3860.4706205108187
+    ]
+  ],
+  "phase": "PHASE_TRANSITION_rebounding_after_memorization_pressure",
+  "min_ppl": 787.789681412625,
+  "min_ppl_step": 4000,
+  "avg_last_3k_ppl": 3440.0521762843837,
+  "final_ppl": 3860.4706205108187,
+  "final_bits_per_char": 3.9715203394309273,
+  "final_coherent": 5,
+  "final_diversity": 0.6366666666666667,
+  "final_repetition": 1,
+  "gen_eval_history": [
+    {
+      "step": 4000,
+      "gen_results": {
+        "english_simple": {
+          "T0.8": {
+            "diversity": 0.46,
+            "n_unique": 46,
+            "n_total": 100
+          },
+          "T1.0": {
+            "diversity": 0.39,
+            "n_unique": 39,
+            "n_total": 100
+          }
+        },
+        "english_story": {
+          "T0.8": {
+            "diversity": 0.31,
+            "n_unique": 31,
+            "n_total": 100
+          },
+          "T1.0": {
+            "diversity": 0.48,
+            "n_unique": 48,
+            "n_total": 100
+          }
+        },
+        "code_python": {
+          "T0.8": {
+            "diversity": 0.3,
+            "n_unique": 30,
+            "n_total": 100
+          },
+          "T1.0": {
+            "diversity": 0.51,
+            "n_unique": 51,
+            "n_total": 100
+          }
+        }
+      },
+      "avg_diversity": 0.4083333333333334,
+      "n_coherent": 0,
+      "n_repetition": 3
+    },
+    {
+      "step": 8000,
+      "gen_results": {
+        "english_simple": {
+          "T0.8": {
+            "diversity": 0.52,
+            "n_unique": 52,
+            "n_total": 100
+          },
+          "T1.0": {
+            "diversity": 0.7,
+            "n_unique": 70,
+            "n_total": 100
+          }
+        },
+        "english_story": {
+          "T0.8": {
+            "diversity": 0.39,
+            "n_unique": 39,
+            "n_total": 100
+          },
+          "T1.0": {
+            "diversity": 0.52,
+            "n_unique": 52,
+            "n_total": 100
+          }
+        },
+        "code_python": {
+          "T0.8": {
+            "diversity": 0.49,
+            "n_unique": 49,
+            "n_total": 100
+          },
+          "T1.0": {
+            "diversity": 0.62,
+            "n_unique": 62,
+            "n_total": 100
+          }
+        }
+      },
+      "avg_diversity": 0.54,
+      "n_coherent": 3,
+      "n_repetition": 3
+    },
+    {
+      "step": 12000,
+      "gen_results": {
+        "english_simple": {
+          "T0.8": {
+            "diversity": 0.53,
+            "n_unique": 53,
+            "n_total": 100
+          },
+          "T1.0": {
+            "diversity": 0.57,
+            "n_unique": 57,
+            "n_total": 100
+          }
+        },
+        "english_story": {
+          "T0.8": {
+            "diversity": 0.51,
+            "n_unique": 51,
+            "n_total": 100
+          },
+          "T1.0": {
+            "diversity": 0.51,
+            "n_unique": 51,
+            "n_total": 100
+          }
+        },
+        "code_python": {
+          "T0.8": {
+            "diversity": 0.65,
+            "n_unique": 65,
+            "n_total": 100
+          },
+          "T1.0": {
+            "diversity": 0.54,
+            "n_unique": 54,
+            "n_total": 100
+          }
+        }
+      },
+      "avg_diversity": 0.5516666666666666,
+      "n_coherent": 2,
+      "n_repetition": 1
+    },
+    {
+      "step": 16000,
+      "gen_results": {
+        "english_simple": {
+          "T0.8": {
+            "diversity": 0.73,
+            "n_unique": 73,
+            "n_total": 100
+          },
+          "T1.0": {
+            "diversity": 0.69,
+            "n_unique": 69,
+            "n_total": 100
+          }
+        },
+        "english_story": {
+          "T0.8": {
+            "diversity": 0.52,
+            "n_unique": 52,
+            "n_total": 100
+          },
+          "T1.0": {
+            "diversity": 0.75,
+            "n_unique": 75,
+            "n_total": 100
+          }
+        },
+        "code_python": {
+          "T0.8": {
+            "diversity": 0.51,
+            "n_unique": 51,
+            "n_total": 100
+          },
+          "T1.0": {
+            "diversity": 0.62,
+            "n_unique": 62,
+            "n_total": 100
+          }
+        }
+      },
+      "avg_diversity": 0.6366666666666667,
+      "n_coherent": 5,
+      "n_repetition": 1
+    }
+  ],
+  "ckpt_history": [
+    "experiments\\v49_pre\\results\\exp22_ckpts\\step_4000.pt",
+    "experiments\\v49_pre\\results\\exp22_ckpts\\step_8000.pt",
+    "experiments\\v49_pre\\results\\exp22_ckpts\\step_12000.pt",
+    "experiments\\v49_pre\\results\\exp22_ckpts\\step_16000.pt"
+  ],
+  "decision": "[REBOUNDING] val_ppl 反弹, Phase 2 跳变可能在 20k-30k 之间"
+}
