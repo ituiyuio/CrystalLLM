@@ -1,0 +1,8 @@
+{
+  "kl_divergence": 0.8174181439627658,
+  "vocab_overlap": 0.2739285714285714,
+  "top_100_overlap": 0.83,
+  "v23_unique_chars": 2152,
+  "v28_unique_chars": 1415,
+  "decision": "USE_V28_ONLY"
+}

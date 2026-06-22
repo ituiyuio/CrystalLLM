@@ -1,0 +1,20 @@
+Computing char frequency distributions (n_samples=5000)...
+  v23: 2152 unique chars
+  v28: 1415 unique chars
+
+=== Distribution Compatibility Report ===
+
+KL(v23 || v28): 0.8174 bits
+  Verdict: BORDERLINE (consider v28-only fallback)
+
+Vocab overlap: 0.2739
+  Verdict: POOR
+
+Top-100 char overlap: 0.8300
+  Verdict: POOR
+
+=== Final Decision ===
+  Distribution incompatible. Use v28 only with 8k step (single epoch).
+  Decision: USE_V28_ONLY
+
+Report saved to experiments\v49_pre\results\exp18_data_validation.json
