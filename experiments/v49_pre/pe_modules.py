@@ -69,16 +69,49 @@ class BlockCayleyPE(nn.Module):
             R = torch.linalg.pinv(IA) @ IB
         return R
 
-    def get_rotation_matrix(self, position: int) -> torch.Tensor:
-        """返回位置 m 处的 (d_model, d_model) 总旋转矩阵 (用于 T3/T4 测试)."""
+    def _build_rotation_stack_vectorized(self, T: int) -> torch.Tensor:
+        """向量化构造 (T, n_blocks, s, s) 旋转矩阵 stack.
+
+        公式: A_stack[t, b] = t * skew(A_params[b])
+              R_stack[t, b] = (I - A_stack[t, b])^{-1} (I + A_stack[t, b])
+        """
         s = self.block_size
         n = self.n_blocks
+        device = self.A_params.device
+        dtype = self.A_params.dtype
+
+        # 1. 构造 (n, s, s) skew-symmetric 基矩阵
+        A_base = torch.zeros(n, s, s, device=device, dtype=dtype)
+        A_base[:, self.triu_i, self.triu_j] = self.A_params
+        A_base[:, self.triu_j, self.triu_i] = -self.A_params
+
+        # 2. 扩展到 (T, n, s, s), 乘以位置 t
+        positions = torch.arange(T, device=device, dtype=dtype).view(T, 1, 1, 1)
+        A_stack = A_base.unsqueeze(0) * positions  # (T, n, s, s)
+
+        # 3. Cayley 变换: R = (I - A)^{-1} (I + A), 用 batched solve
+        I = self.I_block.to(dtype=dtype)  # (s, s)
+        IA = I.unsqueeze(0).unsqueeze(0) - A_stack  # (T, n, s, s)
+        IB = I.unsqueeze(0).unsqueeze(0) + A_stack
+        # batched solve: solve(IA, IB) → IA^{-1} @ IB
+        try:
+            R_stack = torch.linalg.solve(IA, IB)
+        except RuntimeError:
+            R_stack = torch.linalg.pinv(IA) @ IB
+        return R_stack
+
+    def get_rotation_matrix(self, position: int) -> torch.Tensor:
+        """返回位置 m 处的 (d_model, d_model) 总旋转矩阵 (用于 T3/T4 测试)."""
+        R_stack = self._build_rotation_stack_vectorized(position + 1)
+        # 取 position 处的旋转
+        R_blocks = R_stack[position]  # (n, s, s)
+        # 拼成 (d, d) block-diagonal
         R_full = torch.zeros(self.d_model, self.d_model,
-                             device=self.A_params.device, dtype=self.A_params.dtype)
-        for b in range(n):
-            R_b = self._build_block_rotation(self.A_params[b], position)
+                             device=R_blocks.device, dtype=R_blocks.dtype)
+        s = self.block_size
+        for b in range(self.n_blocks):
             start = b * s
-            R_full[start:start+s, start:start+s] = R_b
+            R_full[start:start+s, start:start+s] = R_blocks[b]
         return R_full
 
     def forward(self, z: torch.Tensor) -> torch.Tensor:
@@ -89,14 +122,9 @@ class BlockCayleyPE(nn.Module):
         n = self.n_blocks
         # reshape: (B, T, n, s)
         z_blocks = z.view(B, T, n, s)
-        # 构造每个块在每个位置的旋转矩阵 (T, n, s, s)
-        R_stack = torch.zeros(T, n, s, s,
-                             device=z.device, dtype=z.dtype)
-        for t in range(T):
-            for b in range(n):
-                R_stack[t, b] = self._build_block_rotation(self.A_params[b], t)
-        # 应用: out_blocks[b, t, n, s] = sum_k R_stack[t, b, s, k] * z_blocks[b, t, n, k]
-        # einsum: 't n s k, b t n k -> b t n s'
+        # 向量化构造 (T, n, s, s) 旋转矩阵 stack
+        R_stack = self._build_rotation_stack_vectorized(T)  # (T, n, s, s)
+        # 应用: einsum 't n s k, b t n k -> b t n s'
         out_blocks = torch.einsum('tnsk,btnk->btns', R_stack, z_blocks)
         return out_blocks.reshape(B, T, D)
 

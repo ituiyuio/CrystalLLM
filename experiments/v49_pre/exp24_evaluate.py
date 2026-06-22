@@ -99,11 +99,15 @@ def generate_and_score_diversity(model, stoi, itos, device, n_samples=20, gen_le
 
 def evaluate_one(pe_name: str, device):
     print(f"\n=== Evaluating PE={pe_name} ===")
-    # _load_vocab() 返回 (stoi, vocab_size); itos 需要从 VOCAB_PATH 直接读
+    # _load_vocab() 返回 (stoi, vocab_size); itos 需从 VOCAB_PATH 重建为 list[int_id] -> char
     stoi, vocab_size = _load_vocab()
     import json
     vocab = json.loads(VOCAB_PATH.read_text(encoding="utf-8"))
-    itos = vocab["itos"]
+    itos_dict = vocab["itos"]  # {str_id: char}
+    # 转换为 list[idx] = char (idx 是整数 id)
+    itos = [""] * vocab_size
+    for k, v in itos_dict.items():
+        itos[int(k)] = v
 
     # 加载 best ckpt
     ckpt_path = CKPT_DIR / f"exp24_{pe_name}_best.pt"
