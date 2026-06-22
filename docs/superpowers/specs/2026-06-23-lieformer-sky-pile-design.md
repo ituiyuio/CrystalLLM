@@ -118,7 +118,7 @@ Standard next-token cross-entropy with label smoothing 0.1. No symplectic regula
 
 ### 4.2 Optimizer
 
-AdamW, β=(0.9,0.95), weight decay 0.1. Peak learning rates: 50M: 3e-4, 200M: 2e-4, 1.2B: 1.5e-4. Cosine decay to min lr (10× lower). Warmup 2000 steps (linear). Gradient clipping 1.0 (L2). Δt optimizer separate (Adam, lr=1e-3, no weight decay, no warmup — Δt has its own warmup via §3.2).
+AdamW, β=(0.9,0.95), weight decay 0.1. Peak learning rates: 50M: 3e-4, 200M: 2e-4, 1.2B: 1.5e-4. Cosine decay to min lr (10× lower). Warmup 2000 steps (linear). Gradient clipping 1.0 (L2). Δt optimizer separate (Adam, lr=1e-3, no weight decay, no warmup — Δt has its own warmup, see §3.2 schedule).
 
 | Param | 50M POC | 200M | 1.2B |
 |---|---|---|---|
@@ -138,7 +138,7 @@ next_token = refined.argmax(-1)
 ```
 
 - Training: **not** used.
-- **50M POC Round 1: disabled.** First round measures baseline PPL and 8-dim without Soft-Exp. Round 2 enables Soft-Exp and re-evaluates.
+- **50M POC Round 1: disabled.** First round measures baseline PPL and 8-dim without Soft-Exp to validate the LieFormer skeleton alone. **Round 2 of 50M POC: enabled.** Round 2 re-evaluates 8-dim with Soft-Exp at inference; if it helps (PPL ↓ or diversity ↑), Soft-Exp is integrated into all later stages. If it hurts, dropped.
 - Soft-Exp is orthogonal to LieFormer internals (operates only on lm_head / token_embedding weights, both shapes identical to V49).
 
 ### 4.4 8-Dimensional Evaluation (SkyPile held-out)
@@ -152,9 +152,9 @@ All compared against V49 baseline (PPL 2.36, BPC baseline, etc.).
 
 | Stage | Params | Steps | Data | Gate Criteria |
 |-------|--------|-------|------|---------------|
-| 50M POC | ~50M | 30k | SkyPile 5B subset (100M tokens) | 8-dim ≥ 5 pass; PPL < 30; pseudo-energy stable; **Round 1 without Soft-Exp** |
-| 200M | ~200M | 30k | SkyPile 5B subset (500M tokens) | ≥ 6 pass; PPL < 8; diversity > 3.5; Soft-Exp Round 2 evaluated |
-| 1.2B | ~1.2B | 50k | SkyPile 5B full (5B tokens) | All 8 pass; PPL < 4; coherence ≥ 5/6; Soft-Exp integrated |
+| 50M POC | ~50M | 30k | SkyPile 5B random subset (100M tokens) | 8-dim ≥ 5 pass; PPL < 30; pseudo-energy stable; **Round 1 without Soft-Exp** |
+| 200M | ~200M | 30k | SkyPile 5B random subset (500M tokens, disjoint from 50M subset) | ≥ 6 pass; PPL < 8; diversity > 3.5; **Round 2 enables Soft-Exp** |
+| 1.2B | ~1.2B | 50k | SkyPile 5B full (5B tokens; 50M/200M subsets are non-depleting samples) | All 8 pass; PPL < 4; coherence ≥ 5/6; Soft-Exp integrated |
 
 Checkpoints at 8k, 16k, 30k (50M/200M); 10k, 25k, 50k (1.2B).
 
@@ -167,7 +167,7 @@ Checkpoints at 8k, 16k, 30k (50M/200M); 10k, 25k, 50k (1.2B).
 
 - **Corpus:** SkyPile-150B (HuggingFace), random 5B token subset (70% Chinese, 20% code, 10% math formulas).
 - **Tokenizer:** BPE 16k (vocab 16384), trained with rustbpe, different from V49's 4k (5B corpus needs larger vocab).
-- **Sequence length:** 2048, packing enabled with cross-document attention mask.
+- **Sequence length:** 2048, packing enabled. Cross-document attention mask: per-token `doc_id` tensor; `mask[i,j] = -inf` if `doc_id[i] ≠ doc_id[j]` (also at causal positions). Implemented as additive bias on attention scores before softmax.
 
 ```yaml
 data:
@@ -258,7 +258,7 @@ x_out = cat([p_new, q_new], dim=-1)  # (B, L, 512)
 | FFN (SwiGLU 4×d) | 3 × L × d × 4d | 6.0G |
 | **Block total** | | **~8.5G** |
 
-vs V49 baseline: ~6G (no Cayley, no chunk). **~40% slower per step**, but 30k steps × 3h vs 3.1h × 1.2B → still tractable.
+vs V49 baseline block: ~6G (no Cayley, no chunk). LieFormer is **~40% slower per step**. Estimated wall-clock: 50M POC 30k steps ≈ 4h (vs V49 50M ~3h), 1.2B 50k steps ≈ 4.5h (vs V49 1.2B 3.1h). Still tractable.
 
 ## Appendix C: Decision Log (Why this design, not alternatives)
 
