@@ -1,0 +1,55 @@
+
+=== Exp 24 training: PE=cayley, device=cuda, seed=42 ===
+
+Total params: 6,899,328 (PE: 1,920)
+  step   200 | loss 3.3448 | lr 1.21e-04 | 4s
+  step   400 | loss 2.9549 | lr 2.41e-04 | 8s
+  step   600 | loss 2.6759 | lr 3.00e-04 | 11s
+  step   800 | loss 2.4814 | lr 3.00e-04 | 14s
+  step  1000 | loss 2.4148 | lr 3.00e-04 | 18s
+  >>> step 1000: val_ppl=11.6785
+  step  1200 | loss 2.4883 | lr 3.00e-04 | 22s
+  step  1400 | loss 2.2960 | lr 3.00e-04 | 25s
+  step  1600 | loss 2.4719 | lr 3.00e-04 | 29s
+  step  1800 | loss 1.9089 | lr 3.00e-04 | 33s
+  step  2000 | loss 2.4317 | lr 3.00e-04 | 37s
+  >>> step 2000: val_ppl=7.5024
+  step  2200 | loss 2.2905 | lr 3.00e-04 | 40s
+  step  2400 | loss 1.8979 | lr 3.00e-04 | 44s
+  step  2600 | loss 2.1730 | lr 3.00e-04 | 48s
+  step  2800 | loss 1.6498 | lr 3.00e-04 | 51s
+  step  3000 | loss 1.6679 | lr 3.00e-04 | 55s
+  >>> step 3000: val_ppl=5.4193
+  step  3200 | loss 1.7654 | lr 3.00e-04 | 59s
+  step  3400 | loss 1.8796 | lr 3.00e-04 | 63s
+  step  3600 | loss 1.7691 | lr 3.00e-04 | 67s
+  step  3800 | loss 1.4306 | lr 3.00e-04 | 71s
+  step  4000 | loss 1.5511 | lr 3.00e-04 | 74s
+  >>> step 4000: val_ppl=4.1489
+  step  4200 | loss 0.9856 | lr 3.00e-04 | 78s
+  step  4400 | loss 1.4665 | lr 3.00e-04 | 82s
+  step  4600 | loss 1.3732 | lr 3.00e-04 | 86s
+  step  4800 | loss 1.0766 | lr 3.00e-04 | 90s
+  step  5000 | loss 1.4254 | lr 3.00e-04 | 93s
+  >>> step 5000: val_ppl=3.7254
+  step  5200 | loss 1.2341 | lr 3.00e-04 | 97s
+  step  5400 | loss 1.4808 | lr 3.00e-04 | 100s
+  step  5600 | loss 1.5841 | lr 3.00e-04 | 104s
+  step  5800 | loss 1.0937 | lr 3.00e-04 | 108s
+  step  6000 | loss 1.3609 | lr 3.00e-04 | 111s
+  >>> step 6000: val_ppl=3.3110
+  step  6200 | loss 0.8662 | lr 3.00e-04 | 115s
+  step  6400 | loss 1.3281 | lr 3.00e-04 | 118s
+  step  6600 | loss 1.3074 | lr 3.00e-04 | 122s
+  step  6800 | loss 1.1813 | lr 3.00e-04 | 126s
+  step  7000 | loss 1.0476 | lr 3.00e-04 | 129s
+  >>> step 7000: val_ppl=3.1199
+  step  7200 | loss 1.4360 | lr 3.00e-04 | 133s
+  step  7400 | loss 1.1346 | lr 3.00e-04 | 137s
+  step  7600 | loss 0.8925 | lr 3.00e-04 | 140s
+  step  7800 | loss 1.0253 | lr 3.00e-04 | 144s
+  step  8000 | loss 0.8458 | lr 3.00e-04 | 148s
+  >>> step 8000: val_ppl=3.0097
+
+Best val_ppl: 3.0097
+Log saved to D:\CrystaLLM\experiments\v49_pre\exp24_ckpts\exp24_cayley_log.json

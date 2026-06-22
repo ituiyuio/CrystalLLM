@@ -1,0 +1,55 @@
+
+=== Exp 24 training: PE=rope, device=cuda, seed=42 ===
+
+Total params: 6,897,408 (PE: 0)
+  step   200 | loss 3.4320 | lr 1.21e-04 | 4s
+  step   400 | loss 2.9907 | lr 2.41e-04 | 8s
+  step   600 | loss 2.7811 | lr 3.00e-04 | 11s
+  step   800 | loss 2.4682 | lr 3.00e-04 | 14s
+  step  1000 | loss 2.5110 | lr 3.00e-04 | 18s
+  >>> step 1000: val_ppl=10.8272
+  step  1200 | loss 2.1750 | lr 3.00e-04 | 21s
+  step  1400 | loss 2.4714 | lr 3.00e-04 | 25s
+  step  1600 | loss 2.1203 | lr 3.00e-04 | 28s
+  step  1800 | loss 2.2711 | lr 3.00e-04 | 31s
+  step  2000 | loss 2.2994 | lr 3.00e-04 | 35s
+  >>> step 2000: val_ppl=6.4415
+  step  2200 | loss 1.9860 | lr 3.00e-04 | 39s
+  step  2400 | loss 2.0379 | lr 3.00e-04 | 43s
+  step  2600 | loss 1.8439 | lr 3.00e-04 | 46s
+  step  2800 | loss 1.6694 | lr 3.00e-04 | 49s
+  step  3000 | loss 1.3055 | lr 3.00e-04 | 53s
+  >>> step 3000: val_ppl=4.5035
+  step  3200 | loss 1.6010 | lr 3.00e-04 | 56s
+  step  3400 | loss 1.6850 | lr 3.00e-04 | 60s
+  step  3600 | loss 1.4443 | lr 3.00e-04 | 64s
+  step  3800 | loss 0.9956 | lr 3.00e-04 | 67s
+  step  4000 | loss 1.6769 | lr 3.00e-04 | 71s
+  >>> step 4000: val_ppl=3.6514
+  step  4200 | loss 1.0515 | lr 3.00e-04 | 75s
+  step  4400 | loss 1.2800 | lr 3.00e-04 | 78s
+  step  4600 | loss 1.3737 | lr 3.00e-04 | 81s
+  step  4800 | loss 1.0379 | lr 3.00e-04 | 85s
+  step  5000 | loss 1.0122 | lr 3.00e-04 | 89s
+  >>> step 5000: val_ppl=3.2900
+  step  5200 | loss 0.9021 | lr 3.00e-04 | 92s
+  step  5400 | loss 1.1021 | lr 3.00e-04 | 95s
+  step  5600 | loss 1.3619 | lr 3.00e-04 | 99s
+  step  5800 | loss 1.5949 | lr 3.00e-04 | 102s
+  step  6000 | loss 1.1722 | lr 3.00e-04 | 106s
+  >>> step 6000: val_ppl=3.1019
+  step  6200 | loss 1.3149 | lr 3.00e-04 | 110s
+  step  6400 | loss 1.0093 | lr 3.00e-04 | 113s
+  step  6600 | loss 1.2804 | lr 3.00e-04 | 117s
+  step  6800 | loss 1.2295 | lr 3.00e-04 | 120s
+  step  7000 | loss 1.3041 | lr 3.00e-04 | 123s
+  >>> step 7000: val_ppl=2.9645
+  step  7200 | loss 1.2553 | lr 3.00e-04 | 127s
+  step  7400 | loss 1.2077 | lr 3.00e-04 | 131s
+  step  7600 | loss 1.4376 | lr 3.00e-04 | 134s
+  step  7800 | loss 0.9859 | lr 3.00e-04 | 138s
+  step  8000 | loss 1.1117 | lr 3.00e-04 | 141s
+  >>> step 8000: val_ppl=2.8983
+
+Best val_ppl: 2.8983
+Log saved to D:\CrystaLLM\experiments\v49_pre\exp24_ckpts\exp24_rope_log.json

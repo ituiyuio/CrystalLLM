@@ -1,0 +1,39 @@
+
+=== Evaluating PE=cayley ===
+
+=== Evaluating PE=rope ===
+
+=== Evaluating PE=none ===
+
+============================================================
+Exp 24 评估结果汇总 (3 变体)
+============================================================
+
+[cayley]
+  pe: cayley
+  ckpt_step: 8000
+  ckpt_val_ppl: 3.009709909512104
+  val_ppl_final: 2.9959242646134174
+  train_ppl_est: 2.9417904304582456
+  val_train_gap: 0.018401662332805716
+  diversity_4gram_distinct1: 0.3300597779675491
+
+[rope]
+  pe: rope
+  ckpt_step: 8000
+  ckpt_val_ppl: 2.89827468726219
+  val_ppl_final: 2.871117770697443
+  train_ppl_est: 2.8175531962689595
+  val_train_gap: 0.0190110250622471
+  diversity_4gram_distinct1: 0.6146694214876033
+
+[none]
+  pe: none
+  ckpt_step: 8000
+  ckpt_val_ppl: 3.037839691989936
+  val_ppl_final: 3.0203247676588947
+  train_ppl_est: 2.971524156021471
+  val_train_gap: 0.016422754477204784
+  diversity_4gram_distinct1: 0.6458333333333334
+
+Results saved to D:\CrystaLLM\docs\experiments\2026-06-22-cmt-cayley-pe-results.json
