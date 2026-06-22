@@ -1,0 +1,41 @@
+V49 50M calibration: val_ppl=2.419, entropy=1.257 bit, conf=0.7680, gap=0.059
+
+Evaluating A0 step 1000...
+  val_ppl=17.2035, entropy=3.704, conf=0.3835, gap=-0.012 -> underfit
+
+Evaluating A0 step 2000...
+  val_ppl=13.7867, entropy=3.834, conf=0.2806, gap=1.627 -> underfit
+
+Evaluating A0 step 3000...
+  val_ppl=1.0552, entropy=0.068, conf=0.9930, gap=0.039 -> memorizer
+
+Evaluating A0 step 4000...
+  val_ppl=1.0375, entropy=0.050, conf=0.9948, gap=0.021 -> memorizer
+
+Evaluating A1 step 1000...
+  val_ppl=20.8036, entropy=3.928, conf=0.3043, gap=2.646 -> underfit
+
+Evaluating A1 step 2000...
+  val_ppl=17.5890, entropy=3.261, conf=0.3111, gap=8.340 -> underfit
+
+Evaluating A1 step 3000...
+  val_ppl=16.1473, entropy=3.692, conf=0.3921, gap=-3.985 -> underfit
+
+Evaluating A1 step 4000...
+  val_ppl=15.7566, entropy=4.389, conf=0.2620, gap=0.482 -> underfit
+
+Evaluating A2 step 1000...
+  val_ppl=17.7320, entropy=3.493, conf=0.3289, gap=6.896 -> underfit
+
+Evaluating A2 step 2000...
+  val_ppl=13.4822, entropy=3.658, conf=0.3383, gap=1.777 -> underfit
+
+Evaluating A2 step 3000...
+  val_ppl=1.0520, entropy=0.101, conf=0.9889, gap=0.040 -> memorizer
+
+Evaluating A2 step 4000...
+  val_ppl=1.0353, entropy=0.026, conf=0.9978, gap=0.023 -> memorizer
+
+=== Decision: H1_PARTIAL_A1_SUGGESTS_TRAINING ===
+  All 12 CMT checkpoints at 4k step are memorizer (A0/A2) or underfit (A1). No 'real_lm' state observed. However, A1 (lr=3e-5) shows phase transition is lr-driven (still underfit at 4k vs A0 memorizer at 3k). v50 should test A1 with extended training (8k+ step) to see if it can reach a real_lm state at slower convergence. If yes -> CMT architecture is salvageable via training mechanism. If no (A1 also eventually memorizes) -> H1 truly confirmed.
+  Saved to experiments\v49_pre\results\exp17_aggregate.json

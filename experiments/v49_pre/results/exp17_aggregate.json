@@ -1,0 +1,260 @@
+{
+  "calibration": {
+    "model": "V49 50M",
+    "n_params": 51994240,
+    "n_steps": 4000,
+    "val_ppl": 2.419073199459569,
+    "train_ppl": 2.360413641173942,
+    "val_train_ppl_gap": 0.05865955828562708,
+    "n_gram_entropy_bits": 1.2568609714508057,
+    "top_1_confidence_mean": 0.7679593563079834,
+    "top_1_confidence_std": 0.2800914943218231,
+    "calibration_verdict": {
+      "entropy_in_real_lm_range": true,
+      "confidence_in_real_lm_range": false,
+      "gap_positive": true
+    }
+  },
+  "all_checkpoints": [
+    {
+      "step": 1000,
+      "config": "A0",
+      "val_ppl": 17.203458978177544,
+      "train_ppl_estimate": 17.215031259889034,
+      "val_train_ppl_gap": -0.011572281711490717,
+      "diversity": 0.084,
+      "n_coherent": 0,
+      "n_repetition": 9,
+      "n_gram_entropy_bits": 3.7038042545318604,
+      "top_1_confidence_mean": 0.3835078775882721,
+      "top_1_confidence_std": 0.27410927414894104,
+      "state": "underfit"
+    },
+    {
+      "step": 2000,
+      "config": "A0",
+      "val_ppl": 13.786657698938274,
+      "train_ppl_estimate": 12.159690498103453,
+      "val_train_ppl_gap": 1.6269672008348213,
+      "diversity": 0.06133333333333335,
+      "n_coherent": 0,
+      "n_repetition": 12,
+      "n_gram_entropy_bits": 3.8335683345794678,
+      "top_1_confidence_mean": 0.28058961033821106,
+      "top_1_confidence_std": 0.14938493072986603,
+      "state": "underfit"
+    },
+    {
+      "step": 3000,
+      "config": "A0",
+      "val_ppl": 1.055241111964739,
+      "train_ppl_estimate": 1.0160169990874175,
+      "val_train_ppl_gap": 0.039224112877321415,
+      "diversity": 0.05466666666666667,
+      "n_coherent": 0,
+      "n_repetition": 15,
+      "n_gram_entropy_bits": 0.0682104304432869,
+      "top_1_confidence_mean": 0.992957353591919,
+      "top_1_confidence_std": 0.03576415404677391,
+      "state": "memorizer"
+    },
+    {
+      "step": 4000,
+      "config": "A0",
+      "val_ppl": 1.0375026923096025,
+      "train_ppl_estimate": 1.0168271587629207,
+      "val_train_ppl_gap": 0.020675533546681724,
+      "diversity": 0.027784313725490204,
+      "n_coherent": 0,
+      "n_repetition": 15,
+      "n_gram_entropy_bits": 0.05013773590326309,
+      "top_1_confidence_mean": 0.9947510957717896,
+      "top_1_confidence_std": 0.03844340145587921,
+      "state": "memorizer"
+    },
+    {
+      "step": 1000,
+      "config": "A1",
+      "val_ppl": 20.80363764762633,
+      "train_ppl_estimate": 18.157911815434858,
+      "val_train_ppl_gap": 2.6457258321914736,
+      "diversity": 0.08133333333333334,
+      "n_coherent": 0,
+      "n_repetition": 13,
+      "n_gram_entropy_bits": 3.9281156063079834,
+      "top_1_confidence_mean": 0.3042964041233063,
+      "top_1_confidence_std": 0.21537069976329803,
+      "state": "underfit"
+    },
+    {
+      "step": 2000,
+      "config": "A1",
+      "val_ppl": 17.589028983550072,
+      "train_ppl_estimate": 9.248600612301129,
+      "val_train_ppl_gap": 8.340428371248944,
+      "diversity": 0.08066666666666668,
+      "n_coherent": 0,
+      "n_repetition": 11,
+      "n_gram_entropy_bits": 3.261256217956543,
+      "top_1_confidence_mean": 0.31105756759643555,
+      "top_1_confidence_std": 0.18021966516971588,
+      "state": "underfit"
+    },
+    {
+      "step": 3000,
+      "config": "A1",
+      "val_ppl": 16.14729777253688,
+      "train_ppl_estimate": 20.13238770518643,
+      "val_train_ppl_gap": -3.985089932649551,
+      "diversity": 0.04666666666666667,
+      "n_coherent": 0,
+      "n_repetition": 15,
+      "n_gram_entropy_bits": 3.691943883895874,
+      "top_1_confidence_mean": 0.3921302556991577,
+      "top_1_confidence_std": 0.3230215609073639,
+      "state": "underfit"
+    },
+    {
+      "step": 4000,
+      "config": "A1",
+      "val_ppl": 15.75664531915888,
+      "train_ppl_estimate": 15.274723364797943,
+      "val_train_ppl_gap": 0.48192195436093677,
+      "diversity": 0.059666666666666666,
+      "n_coherent": 0,
+      "n_repetition": 15,
+      "n_gram_entropy_bits": 4.388603210449219,
+      "top_1_confidence_mean": 0.261957049369812,
+      "top_1_confidence_std": 0.1983359307050705,
+      "state": "underfit"
+    },
+    {
+      "step": 1000,
+      "config": "A2",
+      "val_ppl": 17.7319707991582,
+      "train_ppl_estimate": 10.836468206298642,
+      "val_train_ppl_gap": 6.895502592859559,
+      "diversity": 0.086,
+      "n_coherent": 0,
+      "n_repetition": 12,
+      "n_gram_entropy_bits": 3.493088960647583,
+      "top_1_confidence_mean": 0.32886847853660583,
+      "top_1_confidence_std": 0.20791368186473846,
+      "state": "underfit"
+    },
+    {
+      "step": 2000,
+      "config": "A2",
+      "val_ppl": 13.482245827899268,
+      "train_ppl_estimate": 11.705657336584329,
+      "val_train_ppl_gap": 1.7765884913149392,
+      "diversity": 0.07066666666666667,
+      "n_coherent": 0,
+      "n_repetition": 13,
+      "n_gram_entropy_bits": 3.6584763526916504,
+      "top_1_confidence_mean": 0.3383348882198334,
+      "top_1_confidence_std": 0.19689573347568512,
+      "state": "underfit"
+    },
+    {
+      "step": 3000,
+      "config": "A2",
+      "val_ppl": 1.0520256197035962,
+      "train_ppl_estimate": 1.0122361931546018,
+      "val_train_ppl_gap": 0.03978942654899442,
+      "diversity": 0.048666666666666664,
+      "n_coherent": 0,
+      "n_repetition": 15,
+      "n_gram_entropy_bits": 0.10062102228403091,
+      "top_1_confidence_mean": 0.9889405369758606,
+      "top_1_confidence_std": 0.046537648886442184,
+      "state": "memorizer"
+    },
+    {
+      "step": 4000,
+      "config": "A2",
+      "val_ppl": 1.035327594071502,
+      "train_ppl_estimate": 1.0122075610132217,
+      "val_train_ppl_gap": 0.023120033058280365,
+      "diversity": 0.042,
+      "n_coherent": 0,
+      "n_repetition": 15,
+      "n_gram_entropy_bits": 0.026269808411598206,
+      "top_1_confidence_mean": 0.9977689385414124,
+      "top_1_confidence_std": 0.009203041903674603,
+      "state": "memorizer"
+    }
+  ],
+  "by_config": {
+    "A0": [
+      {
+        "step": 1000,
+        "state": "underfit",
+        "val_ppl": 17.203458978177544
+      },
+      {
+        "step": 2000,
+        "state": "underfit",
+        "val_ppl": 13.786657698938274
+      },
+      {
+        "step": 3000,
+        "state": "memorizer",
+        "val_ppl": 1.055241111964739
+      },
+      {
+        "step": 4000,
+        "state": "memorizer",
+        "val_ppl": 1.0375026923096025
+      }
+    ],
+    "A1": [
+      {
+        "step": 1000,
+        "state": "underfit",
+        "val_ppl": 20.80363764762633
+      },
+      {
+        "step": 2000,
+        "state": "underfit",
+        "val_ppl": 17.589028983550072
+      },
+      {
+        "step": 3000,
+        "state": "underfit",
+        "val_ppl": 16.14729777253688
+      },
+      {
+        "step": 4000,
+        "state": "underfit",
+        "val_ppl": 15.75664531915888
+      }
+    ],
+    "A2": [
+      {
+        "step": 1000,
+        "state": "underfit",
+        "val_ppl": 17.7319707991582
+      },
+      {
+        "step": 2000,
+        "state": "underfit",
+        "val_ppl": 13.482245827899268
+      },
+      {
+        "step": 3000,
+        "state": "memorizer",
+        "val_ppl": 1.0520256197035962
+      },
+      {
+        "step": 4000,
+        "state": "memorizer",
+        "val_ppl": 1.035327594071502
+      }
+    ]
+  },
+  "decision": "H1_PARTIAL_A1_SUGGESTS_TRAINING",
+  "detail": "All 12 CMT checkpoints at 4k step are memorizer (A0/A2) or underfit (A1). No 'real_lm' state observed. However, A1 (lr=3e-5) shows phase transition is lr-driven (still underfit at 4k vs A0 memorizer at 3k). v50 should test A1 with extended training (8k+ step) to see if it can reach a real_lm state at slower convergence. If yes -> CMT architecture is salvageable via training mechanism. If no (A1 also eventually memorizes) -> H1 truly confirmed.",
+  "a1_4k_val_ppl": 15.75664531915888,
+  "a1_underfit_throughout": true
+}
