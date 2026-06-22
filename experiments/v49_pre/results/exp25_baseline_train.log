@@ -1,0 +1,59 @@
+Device: cuda
+
+BPE vocab size: 4100
+=== Exp 25 baseline: V49 + BPE + 10k + 32k ===
+模型: Transformer50MSwapPE = 2.57M params
+
+ Step | train_loss |   val_ppl
+----------------------------------------
+ 1000 |     5.2262 |    474.40
+ 2000 |     4.9402 |    256.70
+ 3000 |     5.2389 |    192.53
+ 4000 |     4.1007 |    155.34
+  [ckpt @ D:\CrystaLLM\experiments\v49_pre\results\exp25_ckpts\baseline_step_4000.pt]
+
+ 5000 |     4.1168 |    131.56
+ 6000 |     3.6522 |    114.73
+ 7000 |     4.2700 |    102.03
+ 8000 |     3.9140 |     94.00
+  [ckpt @ D:\CrystaLLM\experiments\v49_pre\results\exp25_ckpts\baseline_step_8000.pt]
+
+ 9000 |     4.0540 |     85.47
+10000 |     3.8214 |     79.98
+11000 |     3.8311 |     75.30
+12000 |     3.5280 |     71.32
+  [ckpt @ D:\CrystaLLM\experiments\v49_pre\results\exp25_ckpts\baseline_step_12000.pt]
+
+13000 |     3.4651 |     68.10
+14000 |     3.8838 |     65.58
+15000 |     3.4357 |     62.80
+16000 |     3.1390 |     61.00
+  [ckpt @ D:\CrystaLLM\experiments\v49_pre\results\exp25_ckpts\baseline_step_16000.pt]
+
+17000 |     3.2606 |     59.10
+18000 |     3.1494 |     57.89
+19000 |     3.6466 |     56.95
+20000 |     3.4393 |     56.02
+  [ckpt @ D:\CrystaLLM\experiments\v49_pre\results\exp25_ckpts\baseline_step_20000.pt]
+
+21000 |     3.9196 |     54.93
+22000 |     3.6106 |     54.06
+23000 |     2.3985 |     53.83
+24000 |     3.6031 |     53.12
+  [ckpt @ D:\CrystaLLM\experiments\v49_pre\results\exp25_ckpts\baseline_step_24000.pt]
+
+25000 |     3.0373 |     52.70
+26000 |     3.2505 |     52.31
+27000 |     3.2175 |     51.90
+28000 |     3.4756 |     51.73
+  [ckpt @ D:\CrystaLLM\experiments\v49_pre\results\exp25_ckpts\baseline_step_28000.pt]
+
+29000 |     3.2774 |     51.42
+30000 |     3.3493 |     51.25
+31000 |     3.4848 |     51.00
+32000 |     3.2151 |     50.92
+  [ckpt @ D:\CrystaLLM\experiments\v49_pre\results\exp25_ckpts\baseline_step_32000.pt]
+
+
+Results saved to D:\CrystaLLM\experiments\v49_pre\results\exp25_baseline_results.json
+final val_ppl: 50.92136044794053
