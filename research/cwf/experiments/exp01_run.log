@@ -1,0 +1,49 @@
+Device: cuda
+
+Initializing CWF...
+[ClosedWaveformer] seq_len=64 d=64 hidden_mult=4 out_dim=1
+[ClosedWaveformer] params: 356,960 (0.36M)
+
+Initializing AR Transformer baseline...
+[ARTransformer] d=64 layers=2 heads=4 d_ff=256
+[ARTransformer] params: 104,385 (0.10M)
+
+======================================================================
+Training: CWF
+======================================================================
+  step    1/500  loss=0.521579  elapsed=1s  [closure: 0.5041]
+  step  100/500  loss=0.130943  elapsed=62s  [closure: 0.9990]
+  step  200/500  loss=0.006852  elapsed=121s  [closure: 0.9990]
+  step  300/500  loss=0.006638  elapsed=181s  [closure: 0.9990]
+  step  400/500  loss=0.007312  elapsed=248s  [closure: 0.9990]
+  step  500/500  loss=0.007158  elapsed=322s  [closure: 0.9990]
+
+[CWF] Final 100-step MSE: 0.007158
+[CWF] Closure violations: 0/5
+
+======================================================================
+Training: AR Transformer
+======================================================================
+  step    1/500  loss=0.598309  elapsed=0s
+  step  100/500  loss=0.212255  elapsed=1s
+  step  200/500  loss=0.051842  elapsed=2s
+  step  300/500  loss=0.015354  elapsed=2s
+  step  400/500  loss=0.007289  elapsed=3s
+  step  500/500  loss=0.002879  elapsed=4s
+
+[AR Transformer] Final 100-step MSE: 0.002879
+
+======================================================================
+RESULT COMPARISON
+======================================================================
+  CWF MSE:             0.007158
+  AR Transformer MSE:  0.002879
+  Ratio (CWF/AR):      2.487x
+
+  VERDICT: FAIL - CWF 显著输 AR (>2x)
+
+[saved] -> D:\CrystaLLM\research\cwf\experiments\exp01_results.json
+
+Convergence step (loss < 0.01):
+  CWF: 90
+  AR:  190
