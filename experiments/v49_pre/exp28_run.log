@@ -1,0 +1,202 @@
+D:\CrystaLLM\.venv\lib\site-packages\torch\nn\modules\transformer.py:392: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  warnings.warn(
+data: train=65,269,944, val=26,431
+
+======================================================================
+[M_16M] d_model=384 nhead=6 layers=6  peak_lr=5e-05
+======================================================================
+  params: 13,845,504
+  step   200/16000  lr=1.00e-05  loss=8.0990  elapsed=3s
+  step   400/16000  lr=2.00e-05  loss=7.5380  elapsed=5s
+  step   600/16000  lr=3.00e-05  loss=7.0927  elapsed=8s
+  step   800/16000  lr=4.00e-05  loss=6.8778  elapsed=11s
+  step  1000/16000  lr=5.00e-05  loss=6.5384  elapsed=13s
+  >>> ckpt@1000: TF=494.92  argmax=1367.02  soft=1810.34  soft-adv=-32.43%  time=13s
+  step  1200/16000  lr=5.00e-05  loss=6.1378  elapsed=30s
+  step  1400/16000  lr=5.00e-05  loss=5.8570  elapsed=33s
+  step  1600/16000  lr=5.00e-05  loss=5.6530  elapsed=36s
+  step  1800/16000  lr=5.00e-05  loss=5.4954  elapsed=38s
+  step  2000/16000  lr=5.00e-05  loss=5.3236  elapsed=41s
+  >>> ckpt@2000: TF=111.34  argmax=2610.54  soft=4177.07  soft-adv=-60.01%  time=41s
+  step  2200/16000  lr=5.00e-05  loss=5.2497  elapsed=58s
+  step  2400/16000  lr=5.00e-05  loss=5.1188  elapsed=61s
+  step  2600/16000  lr=5.00e-05  loss=5.0258  elapsed=63s
+  step  2800/16000  lr=5.00e-05  loss=4.9578  elapsed=66s
+  step  3000/16000  lr=5.00e-05  loss=4.8741  elapsed=68s
+  step  3200/16000  lr=5.00e-05  loss=4.8135  elapsed=71s
+  step  3400/16000  lr=5.00e-05  loss=4.7609  elapsed=74s
+  step  3600/16000  lr=5.00e-05  loss=4.6909  elapsed=76s
+  step  3800/16000  lr=5.00e-05  loss=4.6460  elapsed=79s
+  step  4000/16000  lr=5.00e-05  loss=4.5771  elapsed=81s
+  >>> ckpt@4000: TF=50.21  argmax=8099.65  soft=5994.78  soft-adv=+25.99%  time=81s
+  step  4200/16000  lr=5.00e-05  loss=4.5252  elapsed=99s
+  step  4400/16000  lr=5.00e-05  loss=4.4753  elapsed=101s
+  step  4600/16000  lr=5.00e-05  loss=4.4440  elapsed=104s
+  step  4800/16000  lr=5.00e-05  loss=4.3930  elapsed=106s
+  step  5000/16000  lr=5.00e-05  loss=4.3540  elapsed=109s
+  step  5200/16000  lr=5.00e-05  loss=4.3336  elapsed=111s
+  step  5400/16000  lr=5.00e-05  loss=4.2716  elapsed=114s
+  step  5600/16000  lr=5.00e-05  loss=4.2429  elapsed=116s
+  step  5800/16000  lr=5.00e-05  loss=4.1854  elapsed=119s
+  step  6000/16000  lr=5.00e-05  loss=4.1841  elapsed=122s
+  step  6200/16000  lr=5.00e-05  loss=4.1411  elapsed=124s
+  step  6400/16000  lr=5.00e-05  loss=4.1105  elapsed=127s
+  step  6600/16000  lr=5.00e-05  loss=4.0872  elapsed=129s
+  step  6800/16000  lr=5.00e-05  loss=4.0521  elapsed=132s
+  step  7000/16000  lr=5.00e-05  loss=4.0311  elapsed=134s
+  step  7200/16000  lr=5.00e-05  loss=3.9698  elapsed=137s
+  step  7400/16000  lr=5.00e-05  loss=3.9701  elapsed=140s
+  step  7600/16000  lr=5.00e-05  loss=3.9221  elapsed=143s
+  step  7800/16000  lr=5.00e-05  loss=3.8863  elapsed=146s
+  step  8000/16000  lr=5.00e-05  loss=3.8649  elapsed=149s
+  >>> ckpt@8000: TF=23.45  argmax=7907.92  soft=5291.35  soft-adv=+33.09%  time=149s
+  step  8200/16000  lr=5.00e-05  loss=3.8473  elapsed=168s
+  step  8400/16000  lr=5.00e-05  loss=3.8135  elapsed=171s
+  step  8600/16000  lr=5.00e-05  loss=3.7657  elapsed=173s
+  step  8800/16000  lr=5.00e-05  loss=3.7482  elapsed=176s
+  step  9000/16000  lr=5.00e-05  loss=3.7169  elapsed=178s
+  step  9200/16000  lr=5.00e-05  loss=3.6923  elapsed=181s
+  step  9400/16000  lr=5.00e-05  loss=3.6766  elapsed=184s
+  step  9600/16000  lr=5.00e-05  loss=3.6286  elapsed=187s
+  step  9800/16000  lr=5.00e-05  loss=3.5953  elapsed=190s
+  step 10000/16000  lr=5.00e-05  loss=3.5981  elapsed=193s
+  step 10200/16000  lr=5.00e-05  loss=3.5424  elapsed=198s
+  step 10400/16000  lr=5.00e-05  loss=3.5139  elapsed=203s
+  step 10600/16000  lr=5.00e-05  loss=3.4951  elapsed=208s
+  step 10800/16000  lr=5.00e-05  loss=3.4658  elapsed=213s
+  step 11000/16000  lr=5.00e-05  loss=3.4255  elapsed=218s
+  step 11200/16000  lr=5.00e-05  loss=3.4278  elapsed=221s
+  step 11400/16000  lr=5.00e-05  loss=3.3989  elapsed=224s
+  step 11600/16000  lr=5.00e-05  loss=3.3534  elapsed=226s
+  step 11800/16000  lr=5.00e-05  loss=3.3533  elapsed=229s
+  step 12000/16000  lr=5.00e-05  loss=3.3308  elapsed=232s
+  step 12200/16000  lr=5.00e-05  loss=3.3050  elapsed=234s
+  step 12400/16000  lr=5.00e-05  loss=3.2504  elapsed=237s
+  step 12600/16000  lr=5.00e-05  loss=3.2370  elapsed=239s
+  step 12800/16000  lr=5.00e-05  loss=3.2192  elapsed=242s
+  step 13000/16000  lr=5.00e-05  loss=3.2056  elapsed=244s
+  step 13200/16000  lr=5.00e-05  loss=3.1952  elapsed=247s
+  step 13400/16000  lr=5.00e-05  loss=3.1622  elapsed=249s
+  step 13600/16000  lr=5.00e-05  loss=3.1620  elapsed=252s
+  step 13800/16000  lr=5.00e-05  loss=3.1415  elapsed=255s
+  step 14000/16000  lr=5.00e-05  loss=3.1274  elapsed=257s
+  step 14200/16000  lr=5.00e-05  loss=3.1017  elapsed=260s
+  step 14400/16000  lr=5.00e-05  loss=3.0972  elapsed=262s
+  step 14600/16000  lr=5.00e-05  loss=3.0919  elapsed=265s
+  step 14800/16000  lr=5.00e-05  loss=3.0678  elapsed=267s
+  step 15000/16000  lr=5.00e-05  loss=3.0529  elapsed=270s
+  step 15200/16000  lr=5.00e-05  loss=3.0502  elapsed=273s
+  step 15400/16000  lr=5.00e-05  loss=3.0215  elapsed=275s
+  step 15600/16000  lr=5.00e-05  loss=3.0116  elapsed=278s
+  step 15800/16000  lr=5.00e-05  loss=2.9943  elapsed=280s
+  step 16000/16000  lr=5.00e-05  loss=3.0018  elapsed=283s
+  >>> ckpt@16000: TF=13.40  argmax=10105.37  soft=5192.81  soft-adv=+48.61%  time=283s
+D:\CrystaLLM\.venv\lib\site-packages\torch\nn\modules\transformer.py:392: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  warnings.warn(
+[saved] -> D:/CrystaLLM/experiments/v49_pre/exp28_fixed_lr_results.json
+
+======================================================================
+[M_32M] d_model=512 nhead=8 layers=8  peak_lr=3e-05
+======================================================================
+  params: 29,484,032
+  step   200/16000  lr=4.00e-06  loss=8.1205  elapsed=5s
+  step   400/16000  lr=8.00e-06  loss=7.6473  elapsed=9s
+  step   600/16000  lr=1.20e-05  loss=7.2804  elapsed=14s
+  step   800/16000  lr=1.60e-05  loss=7.0208  elapsed=18s
+  step  1000/16000  lr=2.00e-05  loss=6.8411  elapsed=23s
+  >>> ckpt@1000: TF=724.45  argmax=1413.07  soft=1577.25  soft-adv=-11.62%  time=23s
+  step  1200/16000  lr=2.40e-05  loss=6.5847  elapsed=45s
+  step  1400/16000  lr=2.80e-05  loss=6.3106  elapsed=49s
+  step  1600/16000  lr=3.00e-05  loss=6.0662  elapsed=54s
+  step  1800/16000  lr=3.00e-05  loss=5.8287  elapsed=58s
+  step  2000/16000  lr=3.00e-05  loss=5.6683  elapsed=63s
+  >>> ckpt@2000: TF=179.35  argmax=1405.84  soft=2894.77  soft-adv=-105.91%  time=63s
+  step  2200/16000  lr=3.00e-05  loss=5.5161  elapsed=85s
+  step  2400/16000  lr=3.00e-05  loss=5.3930  elapsed=90s
+  step  2600/16000  lr=3.00e-05  loss=5.2794  elapsed=94s
+  step  2800/16000  lr=3.00e-05  loss=5.1683  elapsed=99s
+  step  3000/16000  lr=3.00e-05  loss=5.1029  elapsed=103s
+  step  3200/16000  lr=3.00e-05  loss=5.0445  elapsed=108s
+  step  3400/16000  lr=3.00e-05  loss=4.9356  elapsed=112s
+  step  3600/16000  lr=3.00e-05  loss=4.8803  elapsed=117s
+  step  3800/16000  lr=3.00e-05  loss=4.8290  elapsed=121s
+  step  4000/16000  lr=3.00e-05  loss=4.7716  elapsed=126s
+  >>> ckpt@4000: TF=47.17  argmax=4525.31  soft=5674.76  soft-adv=-25.40%  time=126s
+  step  4200/16000  lr=3.00e-05  loss=4.7265  elapsed=148s
+  step  4400/16000  lr=3.00e-05  loss=4.6830  elapsed=152s
+  step  4600/16000  lr=3.00e-05  loss=4.6232  elapsed=157s
+  step  4800/16000  lr=3.00e-05  loss=4.5771  elapsed=161s
+  step  5000/16000  lr=3.00e-05  loss=4.5308  elapsed=166s
+  step  5200/16000  lr=3.00e-05  loss=4.4781  elapsed=170s
+  step  5400/16000  lr=3.00e-05  loss=4.4436  elapsed=175s
+  step  5600/16000  lr=3.00e-05  loss=4.4180  elapsed=179s
+  step  5800/16000  lr=3.00e-05  loss=4.3592  elapsed=184s
+  step  6000/16000  lr=3.00e-05  loss=4.3601  elapsed=188s
+  step  6200/16000  lr=3.00e-05  loss=4.3013  elapsed=193s
+  step  6400/16000  lr=3.00e-05  loss=4.2636  elapsed=197s
+  step  6600/16000  lr=3.00e-05  loss=4.2193  elapsed=202s
+  step  6800/16000  lr=3.00e-05  loss=4.1996  elapsed=207s
+  step  7000/16000  lr=3.00e-05  loss=4.1611  elapsed=211s
+  step  7200/16000  lr=3.00e-05  loss=4.1347  elapsed=216s
+  step  7400/16000  lr=3.00e-05  loss=4.1239  elapsed=220s
+  step  7600/16000  lr=3.00e-05  loss=4.0825  elapsed=225s
+  step  7800/16000  lr=3.00e-05  loss=4.0598  elapsed=229s
+  step  8000/16000  lr=3.00e-05  loss=4.0330  elapsed=234s
+  >>> ckpt@8000: TF=27.66  argmax=5545.78  soft=5547.03  soft-adv=-0.02%  time=234s
+  step  8200/16000  lr=3.00e-05  loss=4.0070  elapsed=261s
+  step  8400/16000  lr=3.00e-05  loss=3.9699  elapsed=265s
+  step  8600/16000  lr=3.00e-05  loss=3.9561  elapsed=270s
+  step  8800/16000  lr=3.00e-05  loss=3.9208  elapsed=274s
+  step  9000/16000  lr=3.00e-05  loss=3.8985  elapsed=279s
+  step  9200/16000  lr=3.00e-05  loss=3.8824  elapsed=285s
+  step  9400/16000  lr=3.00e-05  loss=3.8513  elapsed=289s
+  step  9600/16000  lr=3.00e-05  loss=3.8308  elapsed=294s
+  step  9800/16000  lr=3.00e-05  loss=3.8034  elapsed=299s
+  step 10000/16000  lr=3.00e-05  loss=3.7974  elapsed=303s
+  step 10200/16000  lr=3.00e-05  loss=3.7693  elapsed=308s
+  step 10400/16000  lr=3.00e-05  loss=3.7413  elapsed=313s
+  step 10600/16000  lr=3.00e-05  loss=3.7260  elapsed=317s
+  step 10800/16000  lr=3.00e-05  loss=3.7208  elapsed=322s
+  step 11000/16000  lr=3.00e-05  loss=3.6737  elapsed=327s
+  step 11200/16000  lr=3.00e-05  loss=3.6464  elapsed=331s
+  step 11400/16000  lr=3.00e-05  loss=3.6088  elapsed=336s
+  step 11600/16000  lr=3.00e-05  loss=3.6124  elapsed=341s
+  step 11800/16000  lr=3.00e-05  loss=3.5907  elapsed=345s
+  step 12000/16000  lr=3.00e-05  loss=3.5560  elapsed=350s
+  step 12200/16000  lr=3.00e-05  loss=3.5352  elapsed=354s
+  step 12400/16000  lr=3.00e-05  loss=3.4927  elapsed=359s
+  step 12600/16000  lr=3.00e-05  loss=3.4761  elapsed=364s
+  step 12800/16000  lr=3.00e-05  loss=3.4532  elapsed=369s
+  step 13000/16000  lr=3.00e-05  loss=3.4378  elapsed=374s
+  step 13200/16000  lr=3.00e-05  loss=3.4222  elapsed=378s
+  step 13400/16000  lr=3.00e-05  loss=3.3820  elapsed=383s
+  step 13600/16000  lr=3.00e-05  loss=3.3541  elapsed=388s
+  step 13800/16000  lr=3.00e-05  loss=3.3634  elapsed=393s
+  step 14000/16000  lr=3.00e-05  loss=3.3145  elapsed=397s
+  step 14200/16000  lr=3.00e-05  loss=3.2879  elapsed=402s
+  step 14400/16000  lr=3.00e-05  loss=3.2678  elapsed=407s
+  step 14600/16000  lr=3.00e-05  loss=3.2479  elapsed=412s
+  step 14800/16000  lr=3.00e-05  loss=3.2366  elapsed=416s
+  step 15000/16000  lr=3.00e-05  loss=3.2181  elapsed=421s
+  step 15200/16000  lr=3.00e-05  loss=3.2109  elapsed=426s
+  step 15400/16000  lr=3.00e-05  loss=3.1839  elapsed=430s
+  step 15600/16000  lr=3.00e-05  loss=3.1638  elapsed=435s
+  step 15800/16000  lr=3.00e-05  loss=3.1378  elapsed=439s
+  step 16000/16000  lr=3.00e-05  loss=3.1185  elapsed=444s
+  >>> ckpt@16000: TF=15.27  argmax=8237.00  soft=7312.42  soft-adv=+11.22%  time=444s
+[saved] -> D:/CrystaLLM/experiments/v49_pre/exp28_fixed_lr_results.json
+
+======================================================================
+EXP 28 SUMMARY: 16M / 32M with proper LR
+======================================================================
+model          params   step       TF     argmax       soft   soft-adv
+M_16M      13,845,504   1000   494.92    1367.02    1810.34    -32.43%
+M_16M      13,845,504   2000   111.34    2610.54    4177.07    -60.01%
+M_16M      13,845,504   4000    50.21    8099.65    5994.78    +25.99%
+M_16M      13,845,504   8000    23.45    7907.92    5291.35    +33.09%
+M_16M      13,845,504  16000    13.40   10105.37    5192.81    +48.61%
+M_32M      29,484,032   1000   724.45    1413.07    1577.25    -11.62%
+M_32M      29,484,032   2000   179.35    1405.84    2894.77   -105.91%
+M_32M      29,484,032   4000    47.17    4525.31    5674.76    -25.40%
+M_32M      29,484,032   8000    27.66    5545.78    5547.03     -0.02%
+M_32M      29,484,032  16000    15.27    8237.00    7312.42    +11.22%

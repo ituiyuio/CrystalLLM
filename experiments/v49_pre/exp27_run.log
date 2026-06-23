@@ -1,0 +1,299 @@
+[init] device=cuda
+[data] loading D:/CrystaLLM/experiments/v49_pre/bpe_train_65M_s42.npy
+[data] train: 65,269,944, val: 26,431
+
+============================================================
+[XS_2M] d_model=256 nhead=4 layers=2
+============================================================
+  params: 2,662,400
+  step   200/16000  loss=7.2156  elapsed=1s
+  step   400/16000  loss=6.3847  elapsed=3s
+  step   600/16000  loss=5.6143  elapsed=4s
+  step   800/16000  loss=5.1820  elapsed=5s
+  step  1000/16000  loss=4.9167  elapsed=6s
+  >>> ckpt@1000: TF=49.98  argmax=5080.24  soft=4291.12  soft-adv=+15.53%  time=6s
+  step  1200/16000  loss=4.7263  elapsed=15s
+  step  1400/16000  loss=4.5296  elapsed=16s
+  step  1600/16000  loss=4.4107  elapsed=17s
+  step  1800/16000  loss=4.2898  elapsed=18s
+  step  2000/16000  loss=4.1694  elapsed=19s
+  >>> ckpt@2000: TF=30.34  argmax=5904.21  soft=7667.08  soft-adv=-29.86%  time=19s
+  step  2200/16000  loss=4.0810  elapsed=28s
+  step  2400/16000  loss=4.0416  elapsed=29s
+  step  2600/16000  loss=3.9515  elapsed=30s
+  step  2800/16000  loss=3.8872  elapsed=31s
+  step  3000/16000  loss=3.8527  elapsed=33s
+  step  3200/16000  loss=3.8083  elapsed=34s
+  step  3400/16000  loss=3.7601  elapsed=35s
+  step  3600/16000  loss=3.7176  elapsed=36s
+  step  3800/16000  loss=3.6722  elapsed=37s
+  step  4000/16000  loss=3.6306  elapsed=38s
+  >>> ckpt@4000: TF=14.54  argmax=10043.87  soft=2435.52  soft-adv=+75.75%  time=38s
+  step  4200/16000  loss=3.6305  elapsed=47s
+  step  4400/16000  loss=3.5683  elapsed=48s
+  step  4600/16000  loss=3.5185  elapsed=49s
+  step  4800/16000  loss=3.4726  elapsed=50s
+  step  5000/16000  loss=3.4473  elapsed=52s
+  step  5200/16000  loss=3.3700  elapsed=53s
+  step  5400/16000  loss=3.3281  elapsed=54s
+  step  5600/16000  loss=3.2725  elapsed=55s
+  step  5800/16000  loss=3.2232  elapsed=57s
+  step  6000/16000  loss=3.1581  elapsed=58s
+  step  6200/16000  loss=3.1406  elapsed=59s
+  step  6400/16000  loss=3.1033  elapsed=60s
+  step  6600/16000  loss=3.0529  elapsed=61s
+  step  6800/16000  loss=3.0443  elapsed=62s
+  step  7000/16000  loss=3.0271  elapsed=63s
+  step  7200/16000  loss=2.9883  elapsed=65s
+  step  7400/16000  loss=2.9849  elapsed=66s
+  step  7600/16000  loss=2.9689  elapsed=67s
+  step  7800/16000  loss=2.9646  elapsed=68s
+  step  8000/16000  loss=2.9528  elapsed=69s
+  >>> ckpt@8000: TF=13.52  argmax=9133.09  soft=2634.36  soft-adv=+71.16%  time=69s
+  step  8200/16000  loss=2.9229  elapsed=78s
+  step  8400/16000  loss=2.9118  elapsed=79s
+  step  8600/16000  loss=2.8901  elapsed=80s
+  step  8800/16000  loss=2.8961  elapsed=81s
+  step  9000/16000  loss=2.8563  elapsed=82s
+  step  9200/16000  loss=2.8638  elapsed=84s
+  step  9400/16000  loss=2.8658  elapsed=85s
+  step  9600/16000  loss=2.8507  elapsed=86s
+  step  9800/16000  loss=2.8204  elapsed=87s
+  step 10000/16000  loss=2.8271  elapsed=88s
+  step 10200/16000  loss=2.8583  elapsed=89s
+  step 10400/16000  loss=2.8340  elapsed=91s
+  step 10600/16000  loss=2.8105  elapsed=92s
+  step 10800/16000  loss=2.8028  elapsed=93s
+  step 11000/16000  loss=2.7843  elapsed=94s
+  step 11200/16000  loss=2.8072  elapsed=95s
+  step 11400/16000  loss=2.7777  elapsed=96s
+  step 11600/16000  loss=2.7807  elapsed=97s
+  step 11800/16000  loss=2.7829  elapsed=98s
+  step 12000/16000  loss=2.7451  elapsed=99s
+  step 12200/16000  loss=2.7569  elapsed=101s
+  step 12400/16000  loss=2.7554  elapsed=102s
+  step 12600/16000  loss=2.7300  elapsed=103s
+  step 12800/16000  loss=2.7464  elapsed=104s
+  step 13000/16000  loss=2.7498  elapsed=105s
+  step 13200/16000  loss=2.7140  elapsed=106s
+  step 13400/16000  loss=2.7310  elapsed=108s
+  step 13600/16000  loss=2.7114  elapsed=109s
+  step 13800/16000  loss=2.7076  elapsed=110s
+  step 14000/16000  loss=2.6992  elapsed=111s
+  step 14200/16000  loss=2.7079  elapsed=112s
+  step 14400/16000  loss=2.7183  elapsed=113s
+  step 14600/16000  loss=2.6825  elapsed=114s
+  step 14800/16000  loss=2.6977  elapsed=115s
+  step 15000/16000  loss=2.6779  elapsed=116s
+  step 15200/16000  loss=2.6739  elapsed=118s
+  step 15400/16000  loss=2.6868  elapsed=119s
+  step 15600/16000  loss=2.6699  elapsed=120s
+  step 15800/16000  loss=2.6664  elapsed=121s
+  step 16000/16000  loss=2.6626  elapsed=123s
+  >>> ckpt@16000: TF=10.16  argmax=12262.30  soft=2312.65  soft-adv=+81.14%  time=123s
+[saved] -> D:/CrystaLLM/experiments/v49_pre/exp27_boundary_results.json
+
+============================================================
+[S_8M] d_model=384 nhead=6 layers=4
+============================================================
+  params: 8,722,176
+  step   200/16000  loss=7.2042  elapsed=2s
+  step   400/16000  loss=6.7063  elapsed=4s
+  step   600/16000  loss=5.5649  elapsed=6s
+  step   800/16000  loss=4.9977  elapsed=8s
+  step  1000/16000  loss=4.6826  elapsed=10s
+  >>> ckpt@1000: TF=46.09  argmax=6395.63  soft=6747.01  soft-adv=-5.49%  time=10s
+  step  1200/16000  loss=4.4030  elapsed=23s
+  step  1400/16000  loss=4.0786  elapsed=25s
+  step  1600/16000  loss=3.6907  elapsed=27s
+  step  1800/16000  loss=3.4909  elapsed=29s
+  step  2000/16000  loss=3.3462  elapsed=31s
+  >>> ckpt@2000: TF=14.50  argmax=4668.85  soft=5090.92  soft-adv=-9.04%  time=31s
+  step  2200/16000  loss=3.2607  elapsed=44s
+  step  2400/16000  loss=3.1737  elapsed=46s
+  step  2600/16000  loss=3.1389  elapsed=48s
+  step  2800/16000  loss=3.0599  elapsed=50s
+  step  3000/16000  loss=3.0298  elapsed=52s
+  step  3200/16000  loss=2.9880  elapsed=54s
+  step  3400/16000  loss=2.9612  elapsed=56s
+  step  3600/16000  loss=2.9353  elapsed=58s
+  step  3800/16000  loss=2.9171  elapsed=60s
+  step  4000/16000  loss=2.8651  elapsed=62s
+  >>> ckpt@4000: TF=12.49  argmax=6280.72  soft=3154.41  soft-adv=+49.78%  time=62s
+  step  4200/16000  loss=2.8435  elapsed=76s
+  step  4400/16000  loss=2.8281  elapsed=78s
+  step  4600/16000  loss=2.7869  elapsed=80s
+  step  4800/16000  loss=2.7753  elapsed=82s
+  step  5000/16000  loss=2.7661  elapsed=84s
+  step  5200/16000  loss=2.7263  elapsed=86s
+  step  5400/16000  loss=2.7201  elapsed=87s
+  step  5600/16000  loss=2.7146  elapsed=89s
+  step  5800/16000  loss=2.6918  elapsed=91s
+  step  6000/16000  loss=2.6794  elapsed=93s
+  step  6200/16000  loss=2.6799  elapsed=95s
+  step  6400/16000  loss=2.6585  elapsed=97s
+  step  6600/16000  loss=2.6356  elapsed=99s
+  step  6800/16000  loss=2.6329  elapsed=101s
+  step  7000/16000  loss=2.6409  elapsed=103s
+  step  7200/16000  loss=2.6042  elapsed=105s
+  step  7400/16000  loss=2.6098  elapsed=107s
+  step  7600/16000  loss=2.5722  elapsed=109s
+  step  7800/16000  loss=2.5716  elapsed=111s
+  step  8000/16000  loss=2.5697  elapsed=113s
+  >>> ckpt@8000: TF=10.89  argmax=7824.77  soft=2400.68  soft-adv=+69.32%  time=113s
+  step  8200/16000  loss=2.5573  elapsed=127s
+  step  8400/16000  loss=2.5289  elapsed=129s
+  step  8600/16000  loss=2.5407  elapsed=131s
+  step  8800/16000  loss=2.5300  elapsed=133s
+  step  9000/16000  loss=2.5386  elapsed=135s
+  step  9200/16000  loss=2.5212  elapsed=137s
+  step  9400/16000  loss=2.5091  elapsed=139s
+  step  9600/16000  loss=2.5028  elapsed=141s
+  step  9800/16000  loss=2.4967  elapsed=143s
+  step 10000/16000  loss=2.5036  elapsed=145s
+  step 10200/16000  loss=2.4718  elapsed=146s
+  step 10400/16000  loss=2.4538  elapsed=148s
+  step 10600/16000  loss=2.4715  elapsed=150s
+  step 10800/16000  loss=2.4595  elapsed=152s
+  step 11000/16000  loss=2.4407  elapsed=154s
+  step 11200/16000  loss=2.4359  elapsed=156s
+  step 11400/16000  loss=2.4383  elapsed=158s
+  step 11600/16000  loss=2.4255  elapsed=160s
+  step 11800/16000  loss=2.4271  elapsed=162s
+  step 12000/16000  loss=2.4090  elapsed=164s
+  step 12200/16000  loss=2.4142  elapsed=166s
+  step 12400/16000  loss=2.3997  elapsed=168s
+  step 12600/16000  loss=2.4092  elapsed=170s
+  step 12800/16000  loss=2.3971  elapsed=172s
+  step 13000/16000  loss=2.3886  elapsed=174s
+  step 13200/16000  loss=2.3950  elapsed=176s
+  step 13400/16000  loss=2.3894  elapsed=178s
+  step 13600/16000  loss=2.3755  elapsed=180s
+  step 13800/16000  loss=2.3729  elapsed=182s
+  step 14000/16000  loss=2.3632  elapsed=184s
+  step 14200/16000  loss=2.3854  elapsed=186s
+  step 14400/16000  loss=2.3710  elapsed=188s
+  step 14600/16000  loss=2.3482  elapsed=190s
+  step 14800/16000  loss=2.3595  elapsed=192s
+  step 15000/16000  loss=2.3629  elapsed=194s
+  step 15200/16000  loss=2.3545  elapsed=195s
+  step 15400/16000  loss=2.3398  elapsed=197s
+  step 15600/16000  loss=2.3387  elapsed=199s
+  step 15800/16000  loss=2.3256  elapsed=201s
+  step 16000/16000  loss=2.3142  elapsed=203s
+  >>> ckpt@16000: TF=9.72  argmax=7773.19  soft=3647.87  soft-adv=+53.07%  time=203s
+[saved] -> D:/CrystaLLM/experiments/v49_pre/exp27_boundary_results.json
+
+============================================================
+[M_32M] d_model=512 nhead=8 layers=8
+============================================================
+  params: 27,384,832
+  step   200/16000  loss=7.1831  elapsed=5s
+  step   400/16000  loss=7.1441  elapsed=9s
+  step   600/16000  loss=7.1279  elapsed=14s
+  step   800/16000  loss=7.1310  elapsed=19s
+  step  1000/16000  loss=7.1230  elapsed=23s
+  >>> ckpt@1000: TF=1360.50  argmax=1312.97  soft=1430.71  soft-adv=-8.97%  time=23s
+  step  1200/16000  loss=7.1376  elapsed=47s
+  step  1400/16000  loss=7.1334  elapsed=52s
+  step  1600/16000  loss=7.1285  elapsed=56s
+  step  1800/16000  loss=7.1258  elapsed=61s
+  step  2000/16000  loss=7.1264  elapsed=65s
+  >>> ckpt@2000: TF=1336.49  argmax=1290.46  soft=1469.78  soft-adv=-13.90%  time=65s
+  step  2200/16000  loss=7.1212  elapsed=88s
+  step  2400/16000  loss=7.1274  elapsed=92s
+  step  2600/16000  loss=7.1269  elapsed=96s
+  step  2800/16000  loss=7.1290  elapsed=101s
+  step  3000/16000  loss=7.1243  elapsed=105s
+  step  3200/16000  loss=7.1246  elapsed=110s
+  step  3400/16000  loss=7.1193  elapsed=114s
+  step  3600/16000  loss=7.1182  elapsed=119s
+  step  3800/16000  loss=7.1234  elapsed=123s
+  step  4000/16000  loss=7.1212  elapsed=128s
+  >>> ckpt@4000: TF=1429.19  argmax=1371.73  soft=1274.12  soft-adv=+7.12%  time=128s
+  step  4200/16000  loss=7.1182  elapsed=150s
+  step  4400/16000  loss=7.1208  elapsed=155s
+  step  4600/16000  loss=7.1252  elapsed=159s
+  step  4800/16000  loss=7.1229  elapsed=164s
+  step  5000/16000  loss=7.1112  elapsed=168s
+  step  5200/16000  loss=7.1182  elapsed=173s
+  step  5400/16000  loss=7.1239  elapsed=177s
+  step  5600/16000  loss=7.1198  elapsed=181s
+  step  5800/16000  loss=7.1201  elapsed=186s
+  step  6000/16000  loss=7.1239  elapsed=190s
+  step  6200/16000  loss=7.1190  elapsed=195s
+  step  6400/16000  loss=7.1242  elapsed=199s
+  step  6600/16000  loss=7.1197  elapsed=204s
+  step  6800/16000  loss=7.1238  elapsed=208s
+  step  7000/16000  loss=7.1188  elapsed=213s
+  step  7200/16000  loss=7.1206  elapsed=217s
+  step  7400/16000  loss=7.1178  elapsed=222s
+  step  7600/16000  loss=7.1196  elapsed=226s
+  step  7800/16000  loss=7.1164  elapsed=230s
+  step  8000/16000  loss=7.1133  elapsed=235s
+  >>> ckpt@8000: TF=1355.23  argmax=1452.59  soft=1263.37  soft-adv=+13.03%  time=235s
+  step  8200/16000  loss=7.1230  elapsed=257s
+  step  8400/16000  loss=7.1224  elapsed=262s
+  step  8600/16000  loss=7.1180  elapsed=266s
+  step  8800/16000  loss=7.1164  elapsed=270s
+  step  9000/16000  loss=7.1208  elapsed=275s
+  step  9200/16000  loss=7.1263  elapsed=279s
+  step  9400/16000  loss=7.1140  elapsed=284s
+  step  9600/16000  loss=7.1193  elapsed=288s
+  step  9800/16000  loss=7.1191  elapsed=293s
+  step 10000/16000  loss=7.1215  elapsed=297s
+  step 10200/16000  loss=7.1154  elapsed=302s
+  step 10400/16000  loss=7.1209  elapsed=306s
+  step 10600/16000  loss=7.1165  elapsed=310s
+  step 10800/16000  loss=7.1159  elapsed=315s
+  step 11000/16000  loss=7.1170  elapsed=319s
+  step 11200/16000  loss=7.1181  elapsed=324s
+  step 11400/16000  loss=7.1255  elapsed=328s
+  step 11600/16000  loss=7.1131  elapsed=333s
+  step 11800/16000  loss=7.1167  elapsed=337s
+  step 12000/16000  loss=7.1109  elapsed=342s
+  step 12200/16000  loss=7.1170  elapsed=346s
+  step 12400/16000  loss=7.1211  elapsed=351s
+  step 12600/16000  loss=7.1197  elapsed=355s
+  step 12800/16000  loss=7.1163  elapsed=359s
+  step 13000/16000  loss=7.1224  elapsed=364s
+  step 13200/16000  loss=7.1167  elapsed=368s
+  step 13400/16000  loss=7.1224  elapsed=373s
+  step 13600/16000  loss=7.1191  elapsed=377s
+  step 13800/16000  loss=7.1108  elapsed=382s
+  step 14000/16000  loss=7.1171  elapsed=386s
+  step 14200/16000  loss=7.1077  elapsed=391s
+  step 14400/16000  loss=7.1132  elapsed=395s
+  step 14600/16000  loss=7.1211  elapsed=400s
+  step 14800/16000  loss=7.1138  elapsed=404s
+  step 15000/16000  loss=7.1194  elapsed=408s
+  step 15200/16000  loss=7.1137  elapsed=413s
+  step 15400/16000  loss=7.1191  elapsed=417s
+  step 15600/16000  loss=7.1288  elapsed=422s
+  step 15800/16000  loss=7.1155  elapsed=426s
+  step 16000/16000  loss=7.1226  elapsed=431s
+  >>> ckpt@16000: TF=1447.58  argmax=1394.17  soft=1420.26  soft-adv=-1.87%  time=431s
+[saved] -> D:/CrystaLLM/experiments/v49_pre/exp27_boundary_results.json
+
+============================================================
+BOUNDARY SCAN SUMMARY
+============================================================
+model          params   step       TF     argmax       soft   soft-adv
+XS_2M       2,662,400   1000    49.98    5080.24    4291.12    +15.53%
+XS_2M       2,662,400   2000    30.34    5904.21    7667.08    -29.86%
+XS_2M       2,662,400   4000    14.54   10043.87    2435.52    +75.75%
+XS_2M       2,662,400   8000    13.52    9133.09    2634.36    +71.16%
+XS_2M       2,662,400  16000    10.16   12262.30    2312.65    +81.14%
+
+S_8M        8,722,176   1000    46.09    6395.63    6747.01     -5.49%
+S_8M        8,722,176   2000    14.50    4668.85    5090.92     -9.04%
+S_8M        8,722,176   4000    12.49    6280.72    3154.41    +49.78%
+S_8M        8,722,176   8000    10.89    7824.77    2400.68    +69.32%
+S_8M        8,722,176  16000     9.72    7773.19    3647.87    +53.07%
+
+M_32M      27,384,832   1000  1360.50    1312.97    1430.71     -8.97%
+M_32M      27,384,832   2000  1336.49    1290.46    1469.78    -13.90%
+M_32M      27,384,832   4000  1429.19    1371.73    1274.12     +7.12%
+M_32M      27,384,832   8000  1355.23    1452.59    1263.37    +13.03%
+M_32M      27,384,832  16000  1447.58    1394.17    1420.26     -1.87%
+

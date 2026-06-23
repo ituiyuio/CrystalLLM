@@ -1,0 +1,31 @@
+[data] loading local BPE tokens ...
+[data] train tokens: 4,054,775, val tokens: 26,431
+[data] vocab range: 9 - 4095
+[model] params: 2,137,088
+
+[TRAIN] 2000 steps teacher forcing + CE
+  step 500  loss=5.1566  elapsed=3.4s
+  step 1000  loss=4.4111  elapsed=6.8s
+  step 1500  loss=4.4144  elapsed=10.2s
+  step 2000  loss=4.1479  elapsed=13.5s
+
+[EVAL] teacher-forcing PPL on val (true model capability)
+
+============================================================
+FULL PICTURE
+============================================================
+  Teacher-forcing PPL      =      33.66     ← 模型的真实能力 (无暴露偏差)
+  Autoregressive argmax    =   13397.84     ← 离散反馈的代价
+  Autoregressive Soft-Exp  =    4167.97     ← 连续反馈 (刀4)
+  Autoregressive Hard-Exp  =   10880.66     ← Gumbel 采样
+
+  Soft-Exp vs Argmax       = -68.89%   (连续反馈显著更稳)
+  Soft-Exp vs Teacher-F    = +12284.20%   (仍有 ~123.8x 暴露偏差)
+
+INTERPRETATION:
+Traceback (most recent call last):
+  File "D:\CrystaLLM\experiments\v49_pre\exp26b_teacher_forcing.py", line 93, in <module>
+    main()
+  File "D:\CrystaLLM\experiments\v49_pre\exp26b_teacher_forcing.py", line 69, in main
+    print(f"  \u2022 模型真实 PPL ~{tf_ppl:.0f}, 但 argmax 自回归飙到 {prior['ppl_argmax']:.0f} ({prior['ppl_argmax']/tf_ppl:.0f}x 膨胀)")
+UnicodeEncodeError: 'gbk' codec can't encode character '\u2022' in position 2: illegal multibyte sequence

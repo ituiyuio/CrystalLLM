@@ -1,0 +1,9 @@
+{
+  "tf_ppl": 33.65553993672689,
+  "ppl_argmax": 13397.840473074584,
+  "ppl_soft": 4167.970491832271,
+  "ppl_hard": 10880.657734335797,
+  "exposure_bias_argmax_factor": 398.0872242211179,
+  "exposure_bias_soft_factor": 123.84203312940878,
+  "soft_vs_argmax_pct": -68.89072906780333
+}

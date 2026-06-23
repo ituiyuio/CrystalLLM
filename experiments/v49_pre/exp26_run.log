@@ -1,0 +1,47 @@
+[data] loading local BPE tokens ...
+[data] train tokens: 4,054,775, val tokens: 26,431
+[data] vocab range: 9 - 4095
+
+============================================================
+PHASE 1: 训练共享模型 (teacher forcing + CE)
+============================================================
+[model] params: 2,137,088
+[train] starting 2000 steps, bs=32, seq=128
+  step    1/2000  loss=8.3741  elapsed=0.3s
+  step  200/2000  loss=7.1567  elapsed=1.5s
+  step  400/2000  loss=6.1884  elapsed=2.8s
+  step  600/2000  loss=5.3211  elapsed=4.1s
+  step  800/2000  loss=4.9309  elapsed=5.3s
+  step 1000/2000  loss=4.6240  elapsed=6.6s
+  step 1200/2000  loss=4.4429  elapsed=7.9s
+  step 1400/2000  loss=4.3033  elapsed=9.1s
+  step 1600/2000  loss=4.1350  elapsed=10.3s
+  step 1800/2000  loss=4.0176  elapsed=11.6s
+  step 2000/2000  loss=3.9080  elapsed=12.9s
+[train] final avg loss: 3.9103
+
+============================================================
+PHASE 2: 自回归评估 (相同模型, 3 种反馈策略)
+============================================================
+
+[1/3] Argmax (baseline)
+  [eval/    argmax]  seqs=80, len=128, loss=9.5028, PPL=13397.84
+
+[2/3] Soft-Exp (continuous expected_embed)
+  [eval/      soft]  seqs=80, len=128, loss=8.3352, PPL=4167.97
+
+[3/3] Hard-Exp (Gumbel-ST argmax)
+  [eval/      hard]  seqs=80, len=128, loss=9.2947, PPL=10880.66
+
+============================================================
+FINAL RESULTS
+============================================================
+  Baseline  (argmax)         PPL = 13397.84
+  Soft-Exp  (continuous)     PPL =  4167.97    Δ = -68.89%
+  Hard-Exp  (Gumbel-ST)      PPL = 10880.66    Δ = -18.79%
+  Final train loss:          3.9103
+
+>>> Knife-4 验证: VERIFIED
+    Soft-Exp 比 baseline 低 ≥1% → 连续反馈有独立价值
+
+[save] -> D:/CrystaLLM/experiments/v49_pre/exp26_knife4_results.json
