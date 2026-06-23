@@ -1,0 +1,51 @@
+Device: cuda
+
+[Load] Loading checkpoints...
+[CWF-Lorenz] d=32, complex_d=96, seq_len=256
+[CWF-Lorenz] params: 978,768 (0.98M)
+  CWF: 0.98M params
+D:\CrystaLLM\.venv\lib\site-packages\torch\nn\modules\transformer.py:392: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  warnings.warn(
+[AR+VQ-Lorenz] codebook=512, d_model=128, layers=3, seq_len=256
+[AR+VQ-Lorenz] params: 762,499 (0.76M)
+  AR+VQ: 0.76M params
+
+[Data] Generating val trajectories...
+  Val: torch.Size([10, 512, 3])
+  Initial states shape: torch.Size([10, 3])
+  True trajectories shape: torch.Size([10, 100, 3])
+
+======================================================================
+100-STEP ROLLOUT EVALUATION
+======================================================================
+
+[MSE @ horizon]
+  h=  1  CWF=   24.543  AR+VQ=  224.096  Oracle=    0.175
+  h=  5  CWF=   24.257  AR+VQ=  246.871  Oracle=    0.222
+  h= 10  CWF=   24.789  AR+VQ=  281.798  Oracle=    0.292
+  h= 25  CWF=   26.308  AR+VQ=  304.635  Oracle=    0.292
+  h= 50  CWF=   57.557  AR+VQ=  256.950  Oracle=    0.192
+  h=100  CWF=   46.179  AR+VQ=  252.572  Oracle=    0.201
+
+[EPT - Effective Prediction Time]
+  CWF: EPT@0.9 = [2, 2, 2, 2, 2, 2, 2, 2, 2, 2]  EPT@0.5 = [2, 4, 2, 2, 2, 2, 2, 2, 2, 3]
+  AR+VQ: EPT@0.9 = [3, 2, 2, 3, 2, 4, 2, 4, 3, 3]  EPT@0.5 = [16, 2, 2, 16, 2, 6, 2, 5, 16, 9]
+  Oracle: EPT@0.9 = [100, 100, 100, 100, 100, 3, 5, 3, 100, 100]  EPT@0.5 = [100, 100, 100, 100, 100, 100, 100, 3, 100, 100]
+
+[Lyapunov / D_2 / PSD on first 100-step rollout]
+       CWF: λ=0.000  D_2=0.00  PSD=delta (slope=-2.45)
+     AR+VQ: λ=40.285  D_2=0.00  PSD=delta (slope=-1.00)
+    Oracle: λ=0.000  D_2=0.00  PSD=delta (slope=-3.71)
+     Truth: λ=0.000  D_2=0.00  PSD=delta (slope=-4.00)
+
+======================================================================
+VERDICT
+======================================================================
+  Oracle EPT@0.9 median: 100.0
+  CWF EPT@0.9 median:    2.0
+  AR+VQ EPT@0.9 median:  3.0
+  CWF efficiency: 0.02x
+  AR+VQ efficiency: 0.03x
+  >>> VERDICT: TOTAL_FAIL
+
+[Saved] -> D:\CrystaLLM\research\cwf\experiments\exp02_lorenz\exp02_eval_results.json

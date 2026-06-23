@@ -1,0 +1,36 @@
+Device: cuda
+
+[Data] Generating trajectories...
+  Train: torch.Size([200, 1024, 3])
+
+======================================================================
+Training CWF (500 steps, save checkpoint)
+======================================================================
+[CWF-Lorenz] d=32, complex_d=96, seq_len=256
+[CWF-Lorenz] params: 978,768 (0.98M)
+  step 1/500  loss=312.7250  closure=0.9990  elapsed=2s
+  step 100/500  loss=12.7340  closure=0.9990  elapsed=144s
+  step 200/500  loss=8.7398  closure=0.9990  elapsed=286s
+  step 300/500  loss=6.8117  closure=0.9990  elapsed=431s
+  step 400/500  loss=9.1103  closure=0.9990  elapsed=579s
+  step 500/500  loss=9.4687  closure=0.9990  elapsed=722s
+
+[CWF] Saved -> D:\CrystaLLM\research\cwf\experiments\exp02_lorenz\results\cwf_lorenz_500.pt
+
+======================================================================
+Training AR+VQ (500 steps, save checkpoint)
+======================================================================
+D:\CrystaLLM\.venv\lib\site-packages\torch\nn\modules\transformer.py:392: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  warnings.warn(
+[AR+VQ-Lorenz] codebook=512, d_model=128, layers=3, seq_len=256
+[AR+VQ-Lorenz] params: 762,499 (0.76M)
+  step 1/500  mse=236.733  ce=6.116  ppl=4.5/512  elapsed=0s
+  step 100/500  mse=241.360  ce=8.994  ppl=202.5/512  elapsed=1s
+  step 200/500  mse=302.742  ce=8.749  ppl=187.4/512  elapsed=3s
+  step 300/500  mse=289.923  ce=9.325  ppl=280.8/512  elapsed=4s
+  step 400/500  mse=268.968  ce=9.290  ppl=275.0/512  elapsed=5s
+  step 500/500  mse=232.572  ce=9.432  ppl=326.6/512  elapsed=6s
+
+[AR+VQ] Saved -> D:\CrystaLLM\research\cwf\experiments\exp02_lorenz\results\ar_vq_lorenz_500.pt
+
+[OK] Quick re-train complete.

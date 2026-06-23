@@ -1,0 +1,62 @@
+Device: cuda
+
+[Data] Generating 200 train + 50 val trajectories on GPU...
+  Train: torch.Size([200, 1024, 3]), Val: torch.Size([50, 1024, 3])
+[CWF-Lorenz] d=32, complex_d=96, seq_len=256
+[CWF-Lorenz] params: 978,768 (0.98M)
+
+======================================================================
+Training CWF (0.98M params)
+======================================================================
+  step     1/2000  loss=319.9854  closure=0.9990  elapsed=2s  (4578 tok/s)
+  step   200/2000  loss=27.7984  closure=0.9990  elapsed=291s  (5638 tok/s)
+  step   400/2000  loss=13.8229  closure=0.9990  elapsed=584s  (5612 tok/s)
+  step   600/2000  loss=11.5299  closure=0.9990  elapsed=872s  (5634 tok/s)
+  step   800/2000  loss=8.3727  closure=0.9990  elapsed=1116s  (5870 tok/s)
+  step  1000/2000  loss=6.8704  closure=0.9990  elapsed=1374s  (5963 tok/s)
+  step  1200/2000  loss=5.5825  closure=0.9990  elapsed=1654s  (5942 tok/s)
+  step  1400/2000  loss=4.1245  closure=0.9990  elapsed=1934s  (5929 tok/s)
+  step  1600/2000  loss=3.8466  closure=0.9990  elapsed=2227s  (5886 tok/s)
+  step  1800/2000  loss=3.6270  closure=0.9990  elapsed=2526s  (5837 tok/s)
+  step  2000/2000  loss=3.0050  closure=0.9990  elapsed=2819s  (5812 tok/s)
+
+[CWF] Final loss: 3.0050, Closure violations: 0/11
+D:\CrystaLLM\.venv\lib\site-packages\torch\nn\modules\transformer.py:392: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  warnings.warn(
+[AR+VQ-Lorenz] codebook=512, d_model=128, layers=3, seq_len=256
+[AR+VQ-Lorenz] params: 762,499 (0.76M)
+
+======================================================================
+Training AR+VQ (0.76M params)
+======================================================================
+  step     1/2000  mse=296.344  ce=5.554  vq=340.994  ppl=3.1/512  elapsed=0s  (78010 tok/s)
+  step   200/2000  mse=264.205  ce=6.223  vq=170.955  ppl=139.0/512  elapsed=2s  (684143 tok/s)
+  step   400/2000  mse=257.612  ce=9.700  vq=0.966  ppl=293.4/512  elapsed=5s  (702379 tok/s)
+  step   600/2000  mse=248.905  ce=9.792  vq=0.828  ppl=290.4/512  elapsed=7s  (708679 tok/s)
+  step   800/2000  mse=241.403  ce=9.879  vq=0.717  ppl=287.7/512  elapsed=9s  (706775 tok/s)
+  step  1000/2000  mse=236.579  ce=9.786  vq=0.653  ppl=300.8/512  elapsed=13s  (639534 tok/s)
+  step  1200/2000  mse=231.691  ce=9.639  vq=0.597  ppl=300.7/512  elapsed=16s  (622875 tok/s)
+  step  1400/2000  mse=229.678  ce=9.557  vq=0.571  ppl=302.7/512  elapsed=19s  (616073 tok/s)
+  step  1600/2000  mse=229.181  ce=9.296  vq=0.554  ppl=302.0/512  elapsed=21s  (614646 tok/s)
+  step  1800/2000  mse=228.810  ce=9.136  vq=0.561  ppl=304.1/512  elapsed=24s  (602488 tok/s)
+  step  2000/2000  mse=225.943  ce=9.038  vq=0.553  ppl=302.0/512  elapsed=28s  (586561 tok/s)
+
+[AR+VQ] Final MSE: 225.943, Final perplexity: 302.0/512
+
+======================================================================
+Oracle (RK4) baseline
+======================================================================
+  Oracle MSE @ horizon 1/10/50/100: 0.433 / 0.278 / 0.274 / 0.225
+
+[Saved] -> D:\CrystaLLM\research\cwf\experiments\exp02_lorenz\exp02_train_results.json
+
+======================================================================
+TRAINING SUMMARY (Day 3, 2000 steps)
+======================================================================
+  CWF params:       0.98M
+  AR+VQ params:     0.76M
+  CWF final MSE:    3.0050
+  AR+VQ final MSE:  225.9427
+  AR+VQ final ppl:  302.0/512
+  Oracle MSE@1/10/50/100: 0.433/0.278/0.274/0.225
+  CWF / AR ratio (MSE): 0.013x
