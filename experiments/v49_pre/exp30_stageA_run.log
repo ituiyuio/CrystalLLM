@@ -1,0 +1,97 @@
+D:\CrystaLLM\.venv\lib\site-packages\torch\nn\modules\transformer.py:392: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  warnings.warn(
+[data] train=65,269,944  val=26,431
+
+======================================================================
+[Exp30 stageA_50M] d_model=640 nhead=8 layers=10
+  steps=8000  lr=5e-05  warmup=1000  ¦Á_max=0.5
+  batch=32  seq_len=128  do_eval=True
+======================================================================
+  params: 54,566,400 (54.6M)
+  step     1/8000  lr=5.00e-08  ¦Á=0.001  loss=8.4329  mem=2.5GB  elapsed=0s
+  step   100/8000  lr=5.00e-06  ¦Á=0.050  loss=8.1319  mem=3.0GB  elapsed=6s
+  step   200/8000  lr=1.00e-05  ¦Á=0.100  loss=7.6741  mem=3.0GB  elapsed=12s
+  step   300/8000  lr=1.50e-05  ¦Á=0.150  loss=7.3467  mem=3.0GB  elapsed=18s
+  step   400/8000  lr=2.00e-05  ¦Á=0.200  loss=7.1016  mem=3.0GB  elapsed=24s
+  step   500/8000  lr=2.50e-05  ¦Á=0.250  loss=6.9331  mem=3.0GB  elapsed=30s
+  step   600/8000  lr=3.00e-05  ¦Á=0.300  loss=6.8074  mem=3.0GB  elapsed=36s
+  step   700/8000  lr=3.50e-05  ¦Á=0.350  loss=6.6197  mem=3.0GB  elapsed=42s
+  step   800/8000  lr=4.00e-05  ¦Á=0.400  loss=6.4015  mem=3.0GB  elapsed=48s
+  step   900/8000  lr=4.50e-05  ¦Á=0.450  loss=6.1734  mem=3.0GB  elapsed=54s
+  step  1000/8000  lr=5.00e-05  ¦Á=0.500  loss=5.9953  mem=3.0GB  elapsed=59s
+  >>> ckpt@1000: TF=295.64  argmax=1653.35  soft=1593.32  soft-adv=+3.63%  ¦¤(infer-train)=1297.68  time=59s
+  step  1100/8000  lr=5.00e-05  ¦Á=0.500  loss=5.8350  mem=3.0GB  elapsed=95s
+  step  1200/8000  lr=5.00e-05  ¦Á=0.500  loss=5.6803  mem=3.0GB  elapsed=101s
+  step  1300/8000  lr=5.00e-05  ¦Á=0.500  loss=5.5643  mem=3.0GB  elapsed=107s
+  step  1400/8000  lr=5.00e-05  ¦Á=0.500  loss=5.4375  mem=3.0GB  elapsed=112s
+  step  1500/8000  lr=5.00e-05  ¦Á=0.500  loss=5.3519  mem=3.0GB  elapsed=118s
+  step  1600/8000  lr=5.00e-05  ¦Á=0.500  loss=5.2693  mem=3.0GB  elapsed=124s
+  step  1700/8000  lr=5.00e-05  ¦Á=0.500  loss=5.2194  mem=3.0GB  elapsed=130s
+  step  1800/8000  lr=5.00e-05  ¦Á=0.500  loss=5.0972  mem=3.0GB  elapsed=136s
+  step  1900/8000  lr=5.00e-05  ¦Á=0.500  loss=5.0433  mem=3.0GB  elapsed=142s
+  step  2000/8000  lr=5.00e-05  ¦Á=0.500  loss=4.9940  mem=3.0GB  elapsed=148s
+  >>> ckpt@2000: TF=94.13  argmax=3841.56  soft=5627.66  soft-adv=-46.49%  ¦¤(infer-train)=5533.53  time=148s
+  step  2100/8000  lr=5.00e-05  ¦Á=0.500  loss=4.9192  mem=3.0GB  elapsed=183s
+  step  2200/8000  lr=5.00e-05  ¦Á=0.500  loss=4.8649  mem=3.0GB  elapsed=189s
+  step  2300/8000  lr=5.00e-05  ¦Á=0.500  loss=4.8347  mem=3.0GB  elapsed=195s
+  step  2400/8000  lr=5.00e-05  ¦Á=0.500  loss=4.7892  mem=3.0GB  elapsed=200s
+  step  2500/8000  lr=5.00e-05  ¦Á=0.500  loss=4.7490  mem=3.0GB  elapsed=206s
+  step  2600/8000  lr=5.00e-05  ¦Á=0.500  loss=4.7225  mem=3.0GB  elapsed=212s
+  step  2700/8000  lr=5.00e-05  ¦Á=0.500  loss=4.6318  mem=3.0GB  elapsed=218s
+  step  2800/8000  lr=5.00e-05  ¦Á=0.500  loss=4.5672  mem=3.0GB  elapsed=224s
+  step  2900/8000  lr=5.00e-05  ¦Á=0.500  loss=4.6039  mem=3.0GB  elapsed=230s
+  step  3000/8000  lr=5.00e-05  ¦Á=0.500  loss=4.5610  mem=3.0GB  elapsed=236s
+  step  3100/8000  lr=5.00e-05  ¦Á=0.500  loss=4.4859  mem=3.0GB  elapsed=242s
+  step  3200/8000  lr=5.00e-05  ¦Á=0.500  loss=4.4579  mem=3.0GB  elapsed=248s
+  step  3300/8000  lr=5.00e-05  ¦Á=0.500  loss=4.4420  mem=3.0GB  elapsed=254s
+  step  3400/8000  lr=5.00e-05  ¦Á=0.500  loss=4.4040  mem=3.0GB  elapsed=260s
+  step  3500/8000  lr=5.00e-05  ¦Á=0.500  loss=4.3604  mem=3.0GB  elapsed=266s
+  step  3600/8000  lr=5.00e-05  ¦Á=0.500  loss=4.3364  mem=3.0GB  elapsed=272s
+  step  3700/8000  lr=5.00e-05  ¦Á=0.500  loss=4.2915  mem=3.0GB  elapsed=278s
+  step  3800/8000  lr=5.00e-05  ¦Á=0.500  loss=4.2830  mem=3.0GB  elapsed=284s
+  step  3900/8000  lr=5.00e-05  ¦Á=0.500  loss=4.2342  mem=3.0GB  elapsed=290s
+  step  4000/8000  lr=5.00e-05  ¦Á=0.500  loss=4.1917  mem=3.0GB  elapsed=296s
+  >>> ckpt@4000: TF=30.84  argmax=8493.10  soft=16638.28  soft-adv=-95.90%  ¦¤(infer-train)=16607.45  time=296s
+  step  4100/8000  lr=5.00e-05  ¦Á=0.500  loss=4.1945  mem=3.0GB  elapsed=331s
+  step  4200/8000  lr=5.00e-05  ¦Á=0.500  loss=4.1301  mem=3.0GB  elapsed=337s
+  step  4300/8000  lr=5.00e-05  ¦Á=0.500  loss=4.1180  mem=3.0GB  elapsed=343s
+  step  4400/8000  lr=5.00e-05  ¦Á=0.500  loss=4.1025  mem=3.0GB  elapsed=349s
+  step  4500/8000  lr=5.00e-05  ¦Á=0.500  loss=4.0615  mem=3.0GB  elapsed=355s
+  step  4600/8000  lr=5.00e-05  ¦Á=0.500  loss=4.0299  mem=3.0GB  elapsed=361s
+  step  4700/8000  lr=5.00e-05  ¦Á=0.500  loss=4.0145  mem=3.0GB  elapsed=367s
+  step  4800/8000  lr=5.00e-05  ¦Á=0.500  loss=3.9684  mem=3.0GB  elapsed=373s
+  step  4900/8000  lr=5.00e-05  ¦Á=0.500  loss=3.9687  mem=3.0GB  elapsed=379s
+  step  5000/8000  lr=5.00e-05  ¦Á=0.500  loss=3.9480  mem=3.0GB  elapsed=385s
+  step  5100/8000  lr=5.00e-05  ¦Á=0.500  loss=3.8999  mem=3.0GB  elapsed=391s
+  step  5200/8000  lr=5.00e-05  ¦Á=0.500  loss=3.8809  mem=3.0GB  elapsed=397s
+  step  5300/8000  lr=5.00e-05  ¦Á=0.500  loss=3.8309  mem=3.0GB  elapsed=403s
+  step  5400/8000  lr=5.00e-05  ¦Á=0.500  loss=3.8298  mem=3.0GB  elapsed=409s
+  step  5500/8000  lr=5.00e-05  ¦Á=0.500  loss=3.7939  mem=3.0GB  elapsed=416s
+  step  5600/8000  lr=5.00e-05  ¦Á=0.500  loss=3.7637  mem=3.0GB  elapsed=422s
+  step  5700/8000  lr=5.00e-05  ¦Á=0.500  loss=3.7344  mem=3.0GB  elapsed=428s
+  step  5800/8000  lr=5.00e-05  ¦Á=0.500  loss=3.7123  mem=3.0GB  elapsed=435s
+  step  5900/8000  lr=5.00e-05  ¦Á=0.500  loss=3.6950  mem=3.0GB  elapsed=441s
+  step  6000/8000  lr=5.00e-05  ¦Á=0.500  loss=3.6398  mem=3.0GB  elapsed=447s
+  step  6100/8000  lr=5.00e-05  ¦Á=0.500  loss=3.6214  mem=3.0GB  elapsed=454s
+  step  6200/8000  lr=5.00e-05  ¦Á=0.500  loss=3.5959  mem=3.0GB  elapsed=460s
+  step  6300/8000  lr=5.00e-05  ¦Á=0.500  loss=3.5807  mem=3.0GB  elapsed=467s
+  step  6400/8000  lr=5.00e-05  ¦Á=0.500  loss=3.5423  mem=3.0GB  elapsed=474s
+  step  6500/8000  lr=5.00e-05  ¦Á=0.500  loss=3.4868  mem=3.0GB  elapsed=480s
+  step  6600/8000  lr=5.00e-05  ¦Á=0.500  loss=3.5184  mem=3.0GB  elapsed=486s
+  step  6700/8000  lr=5.00e-05  ¦Á=0.500  loss=3.5029  mem=3.0GB  elapsed=492s
+  step  6800/8000  lr=5.00e-05  ¦Á=0.500  loss=3.4188  mem=3.0GB  elapsed=498s
+  step  6900/8000  lr=5.00e-05  ¦Á=0.500  loss=3.4368  mem=3.0GB  elapsed=505s
+  step  7000/8000  lr=5.00e-05  ¦Á=0.500  loss=3.3763  mem=3.0GB  elapsed=511s
+  step  7100/8000  lr=5.00e-05  ¦Á=0.500  loss=3.3869  mem=3.0GB  elapsed=516s
+  step  7200/8000  lr=5.00e-05  ¦Á=0.500  loss=3.3840  mem=3.0GB  elapsed=522s
+  step  7300/8000  lr=5.00e-05  ¦Á=0.500  loss=3.3556  mem=3.0GB  elapsed=528s
+  step  7400/8000  lr=5.00e-05  ¦Á=0.500  loss=3.3576  mem=3.0GB  elapsed=534s
+  step  7500/8000  lr=5.00e-05  ¦Á=0.500  loss=3.3406  mem=3.0GB  elapsed=540s
+  step  7600/8000  lr=5.00e-05  ¦Á=0.500  loss=3.3131  mem=3.0GB  elapsed=546s
+  step  7700/8000  lr=5.00e-05  ¦Á=0.500  loss=3.2894  mem=3.0GB  elapsed=552s
+  step  7800/8000  lr=5.00e-05  ¦Á=0.500  loss=3.2616  mem=3.0GB  elapsed=558s
+  step  7900/8000  lr=5.00e-05  ¦Á=0.500  loss=3.2491  mem=3.0GB  elapsed=564s
+  step  8000/8000  lr=5.00e-05  ¦Á=0.500  loss=3.2188  mem=3.0GB  elapsed=569s
+  >>> ckpt@8000: TF=17.41  argmax=10662.55  soft=6352.15  soft-adv=+40.43%  ¦¤(infer-train)=6334.73  time=569s
+[saved] -> experiments/v49_pre/results/exp30_50m.final.pt
+[saved] -> experiments/v49_pre/exp30_stageA_results.json

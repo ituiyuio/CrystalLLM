@@ -1,0 +1,42 @@
+[init] device=cuda
+[load] D:\CrystaLLM\experiments\v49_pre\results\v49_scale_1.2b.final.pt
+[load] args: d_model=2048, n_layers=24, n_heads=16, d_ff=8192
+[load] val_ppl: 2.4168
+[load] params: 1,214,281,728 (1.21B)
+
+[init] loading val data ...
+[init] val text len: 3,882,033 chars
+[init] val tokens: 3,882,033
+
+======================================================================
+V49 1.2B baseline + Soft-Exp 反馈对比
+======================================================================
+
+[1/3] Teacher-forcing PPL (模型真实能力)
+  TF PPL: 3.2559  (time=1s)
+
+[2/3] Autoregressive ARGMAX feedback (baseline inference)
+    [argmax] seq 5/20  elapsed=3s
+    [argmax] seq 10/20  elapsed=7s
+    [argmax] seq 15/20  elapsed=10s
+    [argmax] seq 20/20  elapsed=13s
+  Argmax PPL: 64.7354  (time=13s)
+
+[3/3] Autoregressive SOFT-EXP feedback (continuous expected_embed)
+    [soft] seq 5/20  elapsed=3s
+    [soft] seq 10/20  elapsed=7s
+    [soft] seq 15/20  elapsed=10s
+    [soft] seq 20/20  elapsed=14s
+  Soft-Exp PPL: 33.2706  (time=14s)
+
+======================================================================
+V49 1.2B + Soft-Exp RESULT
+======================================================================
+  Teacher-forcing PPL:     3.2559
+  Autoregressive argmax:  64.7354   (20x exposure bias)
+  Autoregressive soft:    33.2706   (10x exposure bias)
+  Soft-Exp vs Argmax:     +48.61%
+
+  >>> Soft-Exp 优势 48.6% 在 1.2B 规模仍维持, 这是工程级可用的 LM 改进
+
+[save] -> D:\CrystaLLM\experiments\v49_pre\exp29_v49_soft_exp_results.json

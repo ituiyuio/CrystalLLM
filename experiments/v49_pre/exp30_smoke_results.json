@@ -1,0 +1,11 @@
+{
+  "name": "smoke_50M",
+  "params": 54566400,
+  "peak_lr": 5e-05,
+  "alpha_max": 0.5,
+  "batch_size": 32,
+  "seq_len": 128,
+  "checkpoints": [],
+  "total_time_s": 6.706186532974243,
+  "peak_memory_gb": 3.02263296
+}

@@ -1,0 +1,12 @@
+{
+  "ckpt": "experiments/v49_pre/results/exp30_50m.final.pt",
+  "n_params": 54566400,
+  "alpha_max": 0.5,
+  "tf_ppl": 19.608349665154506,
+  "argmax_ppl": 8554.214801296783,
+  "soft_ppl": 5591.87511008918,
+  "soft_advantage_pct": 34.63017658568177,
+  "exposure_bias_argmax_x": 436.25368515833117,
+  "exposure_bias_soft_x": 285.17826362645695,
+  "delta_train_infer": 5572.266760424026
+}

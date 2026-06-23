@@ -1,0 +1,11 @@
+{
+  "model": "v49_1.2B_baseline",
+  "n_params": 1214281728,
+  "val_ppl_from_train": 2.42,
+  "tf_ppl_now": 3.2559351067393654,
+  "argmax_ppl": 64.73543328505677,
+  "soft_ppl": 33.27055755751001,
+  "soft_advantage_pct": 48.605337341288745,
+  "exposure_bias_argmax_x": 19.882286090734052,
+  "exposure_bias_soft_x": 10.218433865172635
+}
