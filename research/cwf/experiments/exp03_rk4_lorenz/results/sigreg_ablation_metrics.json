@@ -1,0 +1,98 @@
+{
+  "l05_final": {
+    "checkpoint": "ckpt_ablation_l05_final.pt",
+    "stage": "?",
+    "n_val_trajectories": 5,
+    "mse_1step": 33.53849594593048,
+    "mse_at_K": {
+      "1": 36.57060921192169,
+      "10": 40.06576633453369,
+      "25": 53.81657028198242,
+      "50": 97.7511978149414,
+      "100": 128.96372833251954
+    },
+    "ept_at_0.9_mean": 2.0,
+    "ept_at_0.9_max": 2,
+    "closure_violations": 0,
+    "closure_rate": 1.0,
+    "history_summary": {
+      "loss_first": 422.53424072265625,
+      "loss_last": 61.46941375732422,
+      "sigreg_first": 0.37916433811187744,
+      "sigreg_last": 0.3787567615509033,
+      "sigreg_mean": 0.37946820616722104
+    }
+  },
+  "l20_final": {
+    "checkpoint": "ckpt_ablation_l20_final.pt",
+    "stage": "?",
+    "n_val_trajectories": 5,
+    "mse_1step": 33.49674311876297,
+    "mse_at_K": {
+      "1": 36.52888309955597,
+      "10": 40.23173379898071,
+      "25": 55.112535667419436,
+      "50": 100.83089752197266,
+      "100": 136.92099304199218
+    },
+    "ept_at_0.9_mean": 2.0,
+    "ept_at_0.9_max": 2,
+    "closure_violations": 0,
+    "closure_rate": 1.0,
+    "history_summary": {
+      "loss_first": 422.53424072265625,
+      "loss_last": 61.370033264160156,
+      "sigreg_first": 0.37916433811187744,
+      "sigreg_last": 0.37875738739967346,
+      "sigreg_mean": 0.3794682215154171
+    }
+  },
+  "l50_final": {
+    "checkpoint": "ckpt_ablation_l50_final.pt",
+    "stage": "?",
+    "n_val_trajectories": 5,
+    "mse_1step": 33.57965705394745,
+    "mse_at_K": {
+      "1": 36.60835874080658,
+      "10": 40.17714052200317,
+      "25": 54.50920715332031,
+      "50": 102.26808090209961,
+      "100": 127.42091827392578
+    },
+    "ept_at_0.9_mean": 5.2,
+    "ept_at_0.9_max": 18,
+    "closure_violations": 0,
+    "closure_rate": 1.0,
+    "history_summary": {
+      "loss_first": 422.53424072265625,
+      "loss_last": 61.449310302734375,
+      "sigreg_first": 0.37916433811187744,
+      "sigreg_last": 0.3787561058998108,
+      "sigreg_mean": 0.37946844786405565
+    }
+  },
+  "l10_rollavg": {
+    "checkpoint": "ckpt_ablation_l10_rollavg.pt",
+    "stage": "?",
+    "n_val_trajectories": 5,
+    "mse_1step": 33.62900202274322,
+    "mse_at_K": {
+      "1": 36.68520655632019,
+      "10": 41.42695999145508,
+      "25": 58.2448486328125,
+      "50": 103.09773712158203,
+      "100": 109.9395263671875
+    },
+    "ept_at_0.9_mean": 2.0,
+    "ept_at_0.9_max": 2,
+    "closure_violations": 0,
+    "closure_rate": 1.0,
+    "history_summary": {
+      "loss_first": 422.53424072265625,
+      "loss_last": 61.54176330566406,
+      "sigreg_first": 0.379115492105484,
+      "sigreg_last": 0.3787037134170532,
+      "sigreg_mean": 0.3794681392610073
+    }
+  }
+}
