@@ -27,11 +27,18 @@ from research.cwf.experiments.exp03_rk4_lorenz.cwf_rk4 import MultiChannelCWFRK4
 from research.cwf.experiments.exp03_rk4_lorenz.lorenz_data import generate_lorenz_trajectories
 
 
+# Adjusted from plan §5.1 due to GPU bench on RTX 5090 (commit bmqgw8wr4):
+#   k=1 batch=32:  5.5s/step   → 500 steps = 46 min   (Stage A)
+#   k=4 batch=32: 20.6s/step   → 1000 steps = 5.7h    (Stage B)
+#   k=16 batch=32: 95.4s/step  → 2000 steps = 53h     (Stage C — INFEASIBLE)
+#   Total plan §5.1 verbatim: ~60h. Reduced to batch=8, k_max=8 for ~3h ETA.
+# Spec deviation documented in results/exp03_rk4_lorenz.md (Task 8).
 STAGE_CONFIG = {
-    "A": {"steps": 500,  "rollout_steps": 1},
-    "B": {"steps": 1000, "rollout_steps": 4},
-    "C": {"steps": 2000, "rollout_steps": 16},
+    "A": {"steps": 200,  "rollout_steps": 1},
+    "B": {"steps": 400,  "rollout_steps": 4},
+    "C": {"steps": 800,  "rollout_steps": 8},
 }
+DEFAULT_BATCH_SIZE = 8
 
 
 def train_stage(model: MultiChannelCWFRK4Lorenz, train_data: torch.Tensor,
@@ -132,7 +139,7 @@ def main():
     for stage in ["A", "B", "C"]:
         print(f"\n[Stage {stage}] rollout_steps={STAGE_CONFIG[stage]['rollout_steps']}, "
               f"steps={STAGE_CONFIG[stage]['steps']}")
-        h = train_stage(model, train_data, stage, lr=1e-3, batch_size=32,
+        h = train_stage(model, train_data, stage, lr=1e-3, batch_size=DEFAULT_BATCH_SIZE,
                         device=device, results_dir=results_dir)
         all_history[stage] = h
 
