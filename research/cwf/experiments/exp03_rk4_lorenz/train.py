@@ -25,6 +25,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 from research.cwf.experiments.exp03_rk4_lorenz.cwf_rk4 import MultiChannelCWFRK4Lorenz
 from research.cwf.experiments.exp03_rk4_lorenz.lorenz_data import generate_lorenz_trajectories
+from research.cwf.experiments.exp03_rk4_lorenz.sigreg import make_sigreg_loss
 
 
 # Adjusted from plan §5.1 due to GPU bench on RTX 5090 (commit bmqgw8wr4):
@@ -43,7 +44,8 @@ DEFAULT_BATCH_SIZE = 8
 
 def train_stage(model: MultiChannelCWFRK4Lorenz, train_data: torch.Tensor,
                 stage: str, lr: float, batch_size: int, device: str,
-                results_dir: Path) -> dict:
+                results_dir: Path, sigreg_weight: float = 0.0,
+                sigreg_fn=None) -> dict:
     """Train one curriculum stage.
 
     Args:
@@ -54,9 +56,11 @@ def train_stage(model: MultiChannelCWFRK4Lorenz, train_data: torch.Tensor,
         batch_size: number of trajectories stacked per gradient step (spec §5.2 patch).
         device: "cuda" or "cpu".
         results_dir: where to save the per-stage checkpoint.
+        sigreg_weight: λ for SIGReg loss term (0 = disabled, original exp03).
+        sigreg_fn: SIGReg callable (None = no-op).
 
     Returns:
-        history dict with per-step loss, closure_max, lr.
+        history dict with per-step loss, closure_max, lr, sigreg.
     """
     cfg = STAGE_CONFIG[stage]
     n_steps = cfg["steps"]
@@ -65,7 +69,7 @@ def train_stage(model: MultiChannelCWFRK4Lorenz, train_data: torch.Tensor,
     optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=1e-4)
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=n_steps)
 
-    history = {"loss": [], "closure_max": [], "lr": []}
+    history = {"loss": [], "closure_max": [], "lr": [], "sigreg": []}
     model.train()
     results_dir.mkdir(parents=True, exist_ok=True)
     N_traj, T_traj, _ = train_data.shape
@@ -87,7 +91,10 @@ def train_stage(model: MultiChannelCWFRK4Lorenz, train_data: torch.Tensor,
         # Closure auxiliary: only when norm drifts into boundary region
         over = max(info["psi_norm_max"] - 0.95, 0.0)
         loss_aux = 1e-3 * (over ** 2)
-        loss = loss_main + loss_aux
+        # SIGReg: constrain ψ distribution toward isotropic Gaussian (LeJEPA Theorem 1)
+        # Operates on final rollout state ψ_T (only the terminal state, not intermediate)
+        loss_sigreg = sigreg_fn(info["psi_final"]) if (sigreg_fn is not None and sigreg_weight > 0) else torch.tensor(0.0)
+        loss = loss_main + loss_aux + sigreg_weight * loss_sigreg
 
         optimizer.zero_grad()
         loss.backward()
@@ -98,6 +105,7 @@ def train_stage(model: MultiChannelCWFRK4Lorenz, train_data: torch.Tensor,
         history["loss"].append(float(loss_main.item()))
         history["closure_max"].append(float(info["psi_norm_max"]))
         history["lr"].append(float(optimizer.param_groups[0]["lr"]))
+        history["sigreg"].append(float(loss_sigreg.item()) if sigreg_weight > 0 else 0.0)
 
         if step % 50 == 0 or step == n_steps - 1:
             print(f"  [Stage {stage}] step {step:4d}/{n_steps}  loss={loss_main.item():.4f}  "
@@ -134,13 +142,19 @@ def main():
     print("\n[Model] Building MultiChannelCWFRK4Lorenz(d=32)...")
     model = MultiChannelCWFRK4Lorenz(d=32, seq_len=256, out_dim=3, dt=0.01).to(device)
 
+    # SIGReg (LeJEPA Theorem 1): constraint ψ distribution toward isotropic Gaussian
+    # Single hyperparameter λ. Default 0.05 (LeJEPA-style "small but not negligible").
+    sigreg_fn = make_sigreg_loss(num_slices=256, num_points=17)
+    SIGREG_WEIGHT = 0.05
+
     # 3-stage curriculum
     all_history = {}
     for stage in ["A", "B", "C"]:
         print(f"\n[Stage {stage}] rollout_steps={STAGE_CONFIG[stage]['rollout_steps']}, "
               f"steps={STAGE_CONFIG[stage]['steps']}")
         h = train_stage(model, train_data, stage, lr=1e-3, batch_size=DEFAULT_BATCH_SIZE,
-                        device=device, results_dir=results_dir)
+                        device=device, results_dir=results_dir,
+                        sigreg_weight=SIGREG_WEIGHT, sigreg_fn=sigreg_fn)
         all_history[stage] = h
 
     log_path = results_dir / "train_history.json"

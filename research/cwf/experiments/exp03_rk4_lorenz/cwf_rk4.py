@@ -239,7 +239,7 @@ class MultiChannelCWFRK4Lorenz(nn.Module):
 
         preds = torch.stack(predictions, dim=1)  # (B, rollout_steps, 3)
 
-        info = {"psi_norm_max": max_norm_seen}
+        info = {"psi_norm_max": max_norm_seen, "psi_final": psi.detach()}
         if return_info:
             return preds, info
         return preds, info
