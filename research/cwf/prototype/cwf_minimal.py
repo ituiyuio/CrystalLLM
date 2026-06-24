@@ -344,12 +344,24 @@ class CWFSingleBlock(nn.Module):
         # Apply Δt conditioning: ψ_conditional = ψ + small(dt_embed)
         # Magnitude kept small (< 0.1) so the closure invariant is preserved.
         if dt_embed is not None:
-            if dt_embed.dim() == 2:
-                # (d, 2) -> broadcast over (B, S)
-                psi = psi + dt_embed.unsqueeze(0).unsqueeze(0)
-            else:
-                # already (B, S, d, 2)
-                psi = psi + dt_embed
+            # Validate shape compatibility with psi (B, S, d, 2)
+            if dt_embed.shape != psi.shape:
+                if dt_embed.dim() == 2 and dt_embed.shape == (psi.shape[-2], psi.shape[-1]):
+                    dt_embed = dt_embed.view(1, 1, psi.shape[-2], psi.shape[-1])
+                else:
+                    raise ValueError(
+                        f"dt_embed must have shape (d, 2) = ({psi.shape[-2]}, {psi.shape[-1]}) "
+                        f"or match (B, S, d, 2) = {tuple(psi.shape)}, got {tuple(dt_embed.shape)}"
+                    )
+            # Magnitude ceiling: dt_embed is meant to be a small perturbation (< 0.1).
+            # Gross violations (> 1.0) likely indicate a bug in the caller.
+            embed_norm = torch.sqrt((dt_embed ** 2).sum(dim=-1)).max().item()
+            if embed_norm >= 1.0:
+                raise ValueError(
+                    f"dt_embed magnitude {embed_norm:.4f} >= 1.0 violates closure contract. "
+                    f"TimeStepEmbedding output should have ‖dt_embed‖ < 0.1."
+                )
+            psi = psi + dt_embed
 
         # Component 2: Lie rotation (isometry)
         psi = self.lie(psi)
