@@ -71,3 +71,28 @@ def test_cwf_block_invalid_dt_embed_raises():
     huge_dt = torch.randn(2, 8, 64, 2) * 5.0  # way > 1.0
     with pytest.raises(ValueError, match="dt_embed magnitude"):
         block(psi, dt_embed=huge_dt)
+
+
+from research.cwf.experiments.exp03_rk4_lorenz.cwf_rk4 import TimeStepEmbedding
+
+
+def test_time_step_embedding_shape_and_magnitude():
+    """TimeStepEmbedding: scalar Δt → (d, 2) complex modulation, magnitude < 0.1."""
+    torch.manual_seed(1)
+    embed = TimeStepEmbedding(d=64, embed_dim=32)
+    for dt_val in [0.001, 0.01, 0.05, 0.1]:
+        dt = torch.tensor(dt_val)
+        out = embed(dt)
+        assert out.shape == (64, 2), f"shape mismatch for dt={dt_val}: got {out.shape}"
+        mag = torch.sqrt((out ** 2).sum(dim=-1))
+        assert (mag < 0.1).all(), f"magnitude too large for dt={dt_val}: max={mag.max()}"
+
+
+def test_time_step_embedding_different_dt_gives_different_output():
+    """Larger Δt should produce a meaningfully different modulation."""
+    torch.manual_seed(2)
+    embed = TimeStepEmbedding(d=64, embed_dim=32)
+    out_small = embed(torch.tensor(0.001))
+    out_large = embed(torch.tensor(0.1))
+    diff = (out_small - out_large).abs().mean().item()
+    assert diff > 1e-4, f"Δt sensitivity too low: {diff}"
