@@ -1,0 +1,19 @@
+{
+  "ckpt_stage_A": {
+    "checkpoint": "ckpt_stage_A.pt",
+    "stage": "A",
+    "n_val_trajectories": 5,
+    "mse_1step": 33.92195386886597,
+    "mse_at_K": {
+      "1": 36.97095530033111,
+      "10": 41.55079250335693,
+      "25": 57.81276016235351,
+      "50": 109.24130249023438,
+      "100": 134.48953247070312
+    },
+    "ept_at_0.9_mean": 4.6,
+    "ept_at_0.9_max": 15,
+    "closure_violations": 0,
+    "closure_rate": 1.0
+  }
+}
