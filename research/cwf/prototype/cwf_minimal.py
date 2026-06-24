@@ -329,15 +329,27 @@ class CWFSingleBlock(nn.Module):
         self.ffn = ComplexSirenFFN(d, hidden_mult=hidden_mult)
         self.norm = BornStableNorm(eps=1e-3)
 
-    def forward(self, psi: torch.Tensor) -> Tuple[torch.Tensor, List[float]]:
+    def forward(self, psi: torch.Tensor, dt_embed: torch.Tensor | None = None) -> Tuple[torch.Tensor, List[float]]:
         """
         Args:
             psi: (B, S, d, 2) 输入状态, ‖ψ‖ < 1
+            dt_embed: optional (d, 2) or (B, S, d, 2) complex modulation from TimeStepEmbedding.
+                     Broadcast-added to ψ before Lie rotation. None means no Δt conditioning.
         Returns:
             psi_out: (B, S, d, 2), ‖.‖ < 1
             norm_history: [float, ...] 每组件后的 ‖ψ‖ (应该都 < 1)
         """
         norms = []
+
+        # Apply Δt conditioning: ψ_conditional = ψ + small(dt_embed)
+        # Magnitude kept small (< 0.1) so the closure invariant is preserved.
+        if dt_embed is not None:
+            if dt_embed.dim() == 2:
+                # (d, 2) -> broadcast over (B, S)
+                psi = psi + dt_embed.unsqueeze(0).unsqueeze(0)
+            else:
+                # already (B, S, d, 2)
+                psi = psi + dt_embed
 
         # Component 2: Lie rotation (isometry)
         psi = self.lie(psi)
