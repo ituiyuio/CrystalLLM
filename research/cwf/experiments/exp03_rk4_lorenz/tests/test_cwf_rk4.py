@@ -96,3 +96,42 @@ def test_time_step_embedding_different_dt_gives_different_output():
     out_large = embed(torch.tensor(0.1))
     diff = (out_small - out_large).abs().mean().item()
     assert diff > 1e-4, f"Δt sensitivity too low: {diff}"
+
+
+from research.cwf.experiments.exp03_rk4_lorenz.cwf_rk4 import CWFRK4Cell
+
+
+def test_cwf_rk4_cell_single_step_preserves_closure():
+    """CWFRK4Cell.forward: ψ, x, Δt → ψ_next, must satisfy ‖ψ_next‖ < 1."""
+    torch.manual_seed(3)
+    d = 96  # 3 channels × 32, matching cwf_lorenz
+    cell = CWFRK4Cell(d=d, hidden_mult=1)
+    # State in disk
+    psi = torch.randn(4, 1, d, 2) * 0.1
+    norm = torch.sqrt((psi ** 2).sum(dim=(-1, -2), keepdim=True))
+    psi = psi / torch.maximum(norm, torch.ones_like(norm))
+    x_t = torch.randn(4, 3)  # Lorenz 3D
+    dt = 0.01
+
+    psi_next, norms = cell(psi, x_t, dt)
+    assert psi_next.shape == psi.shape
+    max_norm = torch.sqrt((psi_next ** 2).sum(dim=(-1, -2))).max().item()
+    assert max_norm < 1.0, f"closure violated: max ‖ψ_next‖ = {max_norm}"
+    # 4 stages → 4 norm snapshots per stage (lie, attn, ffn, born)
+    assert len(norms) == 16, f"expected 16 norm snapshots (4 stages × 4 components), got {len(norms)}"
+
+
+def test_cwf_rk4_cell_dt_sensitivity():
+    """Larger Δt should produce a measurably different ψ_next (not degenerate)."""
+    torch.manual_seed(4)
+    d = 96
+    cell = CWFRK4Cell(d=d, hidden_mult=1)
+    psi = torch.randn(4, 1, d, 2) * 0.1
+    norm = torch.sqrt((psi ** 2).sum(dim=(-1, -2), keepdim=True))
+    psi = psi / torch.maximum(norm, torch.ones_like(norm))
+    x_t = torch.randn(4, 3)
+
+    psi_a, _ = cell(psi, x_t, 0.001)
+    psi_b, _ = cell(psi, x_t, 0.05)
+    diff = (psi_a - psi_b).abs().mean().item()
+    assert diff > 1e-4, f"RK4 cell ignores Δt: diff={diff}"
