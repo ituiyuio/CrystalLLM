@@ -197,12 +197,15 @@ class MultiChannelCWFRK4Lorenz(nn.Module):
         n_params = sum(p.numel() for p in self.parameters())
         print(f"[CWF-RK4-Lorenz] d={d}, complex_d={self.complex_d}, dt={dt}, params: {n_params:,} ({n_params/1e6:.2f}M)")
 
-    def forward(self, x: torch.Tensor, rollout_steps: int = 1, return_info: bool = False):
+    def forward(self, x: torch.Tensor, rollout_steps: int = 1, return_info: bool = False,
+                collect_psi_history: bool = False):
         """
         Args:
             x: (B, T, 3) input trajectory with T ≥ 1.
             rollout_steps: number of RK4 steps to run AFTER encoding the input.
             return_info: if True, returns (predictions, info_dict).
+            collect_psi_history: if True, also collect ψ at each RK4 stage inside the cell
+                (needed for rollout-averaged SIGReg — slice_strategy='rollout_averaged').
         Returns:
             preds: (B, rollout_steps, 3) sequence of next-state predictions.
             info: dict with closure statistics (only if return_info=True).
@@ -219,6 +222,7 @@ class MultiChannelCWFRK4Lorenz(nn.Module):
                                   torch.ones(1, 1, 1, 1, device=psi.device, dtype=psi.dtype)) * 0.999
 
         max_norm_seen = complex_norm(psi).max().item()
+        psi_history = [psi.detach().clone()] if collect_psi_history else None
 
         predictions = []
         cur_x = x[:, -1, :]  # (B, 3) — last observed state, used as f_θ input context
@@ -226,6 +230,9 @@ class MultiChannelCWFRK4Lorenz(nn.Module):
             psi, _ = self.cell(psi, cur_x, self.dt)
             step_max_norm = complex_norm(psi).max().item()
             max_norm_seen = max(max_norm_seen, step_max_norm)
+
+            if collect_psi_history:
+                psi_history.append(psi.detach().clone())
 
             # Decode per channel
             outs = []
@@ -239,7 +246,11 @@ class MultiChannelCWFRK4Lorenz(nn.Module):
 
         preds = torch.stack(predictions, dim=1)  # (B, rollout_steps, 3)
 
-        info = {"psi_norm_max": max_norm_seen, "psi_final": psi.detach()}
+        info = {
+            "psi_norm_max": max_norm_seen,
+            "psi_final": psi.detach(),
+            "psi_history": psi_history,
+        }
         if return_info:
             return preds, info
         return preds, info
