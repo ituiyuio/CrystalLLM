@@ -222,7 +222,10 @@ class MultiChannelCWFRK4Lorenz(nn.Module):
                                   torch.ones(1, 1, 1, 1, device=psi.device, dtype=psi.dtype)) * 0.999
 
         max_norm_seen = complex_norm(psi).max().item()
-        psi_history = [psi.detach().clone()] if collect_psi_history else None
+        # Note: psi must remain in autograd graph here so SIGReg can flow gradients
+        # back to model parameters. Earlier `psi.detach()` was a bug — it produced
+        # constant SIGReg losses that did not affect training.
+        psi_history = [psi] if collect_psi_history else None
 
         predictions = []
         cur_x = x[:, -1, :]  # (B, 3) — last observed state, used as f_θ input context
@@ -232,7 +235,7 @@ class MultiChannelCWFRK4Lorenz(nn.Module):
             max_norm_seen = max(max_norm_seen, step_max_norm)
 
             if collect_psi_history:
-                psi_history.append(psi.detach().clone())
+                psi_history.append(psi)
 
             # Decode per channel
             outs = []
@@ -248,7 +251,7 @@ class MultiChannelCWFRK4Lorenz(nn.Module):
 
         info = {
             "psi_norm_max": max_norm_seen,
-            "psi_final": psi.detach(),
+            "psi_final": psi,
             "psi_history": psi_history,
         }
         if return_info:
