@@ -135,3 +135,34 @@ def test_cwf_rk4_cell_dt_sensitivity():
     psi_b, _ = cell(psi, x_t, 0.05)
     diff = (psi_a - psi_b).abs().mean().item()
     assert diff > 1e-4, f"RK4 cell ignores Δt: diff={diff}"
+
+
+from research.cwf.experiments.exp03_rk4_lorenz.cwf_rk4 import MultiChannelCWFRK4Lorenz
+
+
+def test_100_step_rollout_closure():
+    """100-step free rollout must never violate ‖ψ‖ < 1 across 10 random batches."""
+    torch.manual_seed(5)
+    model = MultiChannelCWFRK4Lorenz(d=32, seq_len=256, out_dim=3, dt=0.01)
+    model.eval()  # ensure no autograd graph; rollout should be deterministic closure-wise
+    for batch_idx in range(10):
+        x = torch.randn(2, 100, 3) * 10.0  # Lorenz-like magnitude
+        with torch.no_grad():
+            preds, info = model(x, rollout_steps=100)
+        max_norm = info["psi_norm_max"]
+        assert max_norm < 1.0, f"batch {batch_idx}: closure violated, max ‖ψ‖ = {max_norm}"
+    assert preds.shape == (2, 100, 3)
+
+
+def test_rollout_pred_changes_with_input():
+    """Different inputs must produce different rollouts (sanity: not degenerate)."""
+    torch.manual_seed(6)
+    model = MultiChannelCWFRK4Lorenz(d=32, seq_len=256, out_dim=3, dt=0.01)
+    model.eval()
+    x_a = torch.randn(2, 50, 3) * 10.0
+    x_b = torch.randn(2, 50, 3) * 10.0
+    with torch.no_grad():
+        preds_a, _ = model(x_a, rollout_steps=50)
+        preds_b, _ = model(x_b, rollout_steps=50)
+    diff = (preds_a - preds_b).abs().mean().item()
+    assert diff > 1e-3, f"rollout ignores input: diff={diff}"
