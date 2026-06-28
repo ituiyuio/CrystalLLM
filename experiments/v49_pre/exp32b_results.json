@@ -1,0 +1,63 @@
+{
+  "name": "v50_byte_sanity_500",
+  "params": 49605120,
+  "peak_lr": 5e-05,
+  "alpha_max": 0.1,
+  "batch_size": 32,
+  "seq_len": 64,
+  "vocab_size": 256,
+  "checkpoints": [
+    {
+      "step": 200,
+      "alpha": 0.1,
+      "train_loss": 2.860940628051758,
+      "tf_ppl": 16.990441542623675,
+      "argmax_ppl": 41.179037004350896,
+      "soft_ppl": 39.416699797261764,
+      "soft_advantage_pct": 4.279695047028242,
+      "delta_train_infer": 22.42625825463809
+    },
+    {
+      "step": 500,
+      "alpha": 0.1,
+      "train_loss": 2.5097911977767944,
+      "tf_ppl": 12.258892429165963,
+      "argmax_ppl": 47.394517518447834,
+      "soft_ppl": 34.20504851889211,
+      "soft_advantage_pct": 27.82910279532196,
+      "delta_train_infer": 21.946156089726152
+    },
+    {
+      "step": 1000,
+      "alpha": 0.1,
+      "train_loss": 2.1423720598220823,
+      "tf_ppl": 8.32113139520367,
+      "argmax_ppl": 48.57479872059461,
+      "soft_ppl": 39.61510499398081,
+      "soft_advantage_pct": 18.445148436230358,
+      "delta_train_infer": 31.293973598777136
+    },
+    {
+      "step": 1500,
+      "alpha": 0.1,
+      "train_loss": 1.878772599697113,
+      "tf_ppl": 6.452678068756787,
+      "argmax_ppl": 49.716607599422275,
+      "soft_ppl": 37.34841533919872,
+      "soft_advantage_pct": 24.877385761870194,
+      "delta_train_infer": 30.895737270441938
+    },
+    {
+      "step": 2000,
+      "alpha": 0.1,
+      "train_loss": 1.708432319164276,
+      "tf_ppl": 6.2983111028721295,
+      "argmax_ppl": 52.36339258746889,
+      "soft_ppl": 35.4715823336884,
+      "soft_advantage_pct": 32.258815594432804,
+      "delta_train_infer": 29.173271230816272
+    }
+  ],
+  "total_time_s": 227.359224319458,
+  "peak_memory_gb": 1.774089728
+}
