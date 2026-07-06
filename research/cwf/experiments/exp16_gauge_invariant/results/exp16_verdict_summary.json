@@ -1,0 +1,16 @@
+{
+  "seeds_won": 0,
+  "windows_won": 0,
+  "per_seed_wins": {
+    "42": 1,
+    "123": 1,
+    "2024": 1
+  },
+  "theta_zero_structural": true,
+  "means": {
+    "complex_ginv": 2.5197,
+    "complex": 2.1477333333333335,
+    "real": 2.4775
+  },
+  "verdict": "FAIL"
+}
