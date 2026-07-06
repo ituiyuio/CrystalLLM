@@ -142,11 +142,29 @@
 
 ## V. 确认实验 — Gauge-Fixing
 
-### 设计
+### Stage A 侧确认 (exp12, 已执行 2026-07-06)
 
-在 encoder 输出处增加一个**相位对齐层** (gauge-fixing layer), 强制将所有输入波场的全局相位固定到一个基准上. 然后测:
-1. FNO 的 θ 敏感性是否降到可忽略.
-2. val 是否改善.
+在 encoder 输出处加主成分对齐 gauge-fixing 层, 测 Stage A reconstruction 优势是否保持.
+
+**结果**: **GAUGE_INVARIANT**. gauge-fix 后 complex 优势从 2.71× 降到 2.58× (损失仅 0.026 nat, 在 seed 噪声内).
+
+| condition | s42 | s123 | s2024 | mean |
+|---|---|---|---|---|
+| complex (baseline) | 0.4895 | 0.5306 | 0.5604 | 0.5268 |
+| complex_gauge (fixed) | 0.5190 | 0.5479 | 0.5900 | 0.5523 |
+| real (control) | 1.4769 | 1.3595 | 1.4405 | 1.4256 |
+
+**含义**:
+1. Stage A 的 2.7× 优势是**复数表示的真实容量优势**, 不是规范自由度的假象. 消除全局 U(1) 规范自由度后优势保持.
+2. postmortem 假说的第一个核心主张 (Stage A Born 规则规范不变 → 相位自由无害 → 复数正交性是纯收益) **被直接证实**.
+3. 这排除了"Stage A 优势是假象"这个替代解释, 让规范不一致性成为 Stage B 失败的**唯一剩余解释**.
+4. **编解码器设计有数学基础** — 复数表示的容量优势真实, 值得投入设计工作. 且编解码器必须包含 gauge-fixing (保持 reconstruction 优势 + 产出规范固定的表示).
+
+详见 `research/cwf/experiments/exp12_gauge_fix_stageA/results/exp12_verdict.md`.
+
+### Stage B 侧确认 (未执行, postmortem 硬停止下不追加)
+
+postmortem 第五节原指定的确认实验是 Stage B 侧: 在 Stage B 的 FNO 前加 gauge-fix, 测 θ 敏感性是否降到可忽略 + val 是否改善. exp12 只确认了 Stage A 侧 (gauge-fix 无害), 没有测 Stage B 侧 (gauge-fix 是否有救). Stage B 仍按 exp11 硬停止关闭. 如果未来重开 CWF, 这是第一个该做的 Stage B 实验.
 
 **相位对齐层的具体形式** (待定, 以下是候选):
 - **方案 A (固定参考)**: 选第一个非零元素, 旋转整个场使其相位为 0. 简单但依赖"第一个非零"的定义.
