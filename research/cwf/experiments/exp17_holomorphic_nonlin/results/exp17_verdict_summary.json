@@ -1,0 +1,15 @@
+{
+  "seeds_won": 0,
+  "windows_won": 0,
+  "per_seed_wins": {
+    "42": 0,
+    "123": 0,
+    "2024": 0
+  },
+  "means": {
+    "complex_tanh": 2.3344333333333336,
+    "complex": 2.1477333333333335,
+    "real": 2.4775
+  },
+  "verdict": "FAIL"
+}
