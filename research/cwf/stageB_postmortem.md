@@ -162,9 +162,27 @@
 
 详见 `research/cwf/experiments/exp12_gauge_fix_stageA/results/exp12_verdict.md`.
 
-### Stage B 侧确认 (未执行, postmortem 硬停止下不追加)
+### Stage B 侧确认 (exp13, 已执行 2026-07-06) — REFUTED_BINDING
 
-postmortem 第五节原指定的确认实验是 Stage B 侧: 在 Stage B 的 FNO 前加 gauge-fix, 测 θ 敏感性是否降到可忽略 + val 是否改善. exp12 只确认了 Stage A 侧 (gauge-fix 无害), 没有测 Stage B 侧 (gauge-fix 是否有救). Stage B 仍按 exp11 硬停止关闭. 如果未来重开 CWF, 这是第一个该做的 Stage B 实验.
+在 Stage B 的 FNO 前加 gauge-fix, 测 θ 敏感性是否降到可忽略 + val 是否改善.
+
+**结果**: **REFUTED_BINDING**.
+
+| 指标 | 结果 |
+|---|---|
+| θ-sensitivity (π/2, 无 gauge-fix, postmortem 测量1) | 100% pred changed |
+| θ-sensitivity (π/2, 有 gauge-fix, exp13) | **0.0000** (3/3 seeds, 完美消除) |
+| val 改善 (complex_gauge − complex) | **−0.010 nat** (噪声内, 方向 mixed, 未改善) |
+
+**含义**:
+1. 规范不一致性是**真实的结构缺陷** — θ-sensitivity 实测, gauge-fix 完美修复 (3/3 seeds 全部 0.0000). postmortem 测量1 被直接验证.
+2. 但它**不是 Stage B 性能的 binding 约束** — 修复后 val 不变. postmortem 假说的因果链 ("消除规范不一致性 → FNO 容量释放 → val 改善") 在这里**断裂**: FNO 的容量并没有被"补偿相位"占用.
+3. **postmortem 的 8/8 覆盖需要降级** — "覆盖"不等于"因果". 至少"Stage B FAIL ← 相位漂移是纯成本"这一环是事后叙事而非真实因果. 规范不一致性与 Stage B 失败**相关** (都存在), 但不是**因果** (修复一个不改善另一个).
+4. **gauge-fix 仍应作为 future CWF 架构的默认组件** — 它无害 (Stage A val 不变, Stage B val 不变), 但消除 θ-sensitivity, 让表示更规范、更可复现. 工程最佳实践, 不是性能优化.
+
+**Stage B 根因仍未确定.** 候选: 任务-表示匹配 (压缩 vs 判别) / modReLU 表达力地板 / 因果泄漏. 规范不一致性被 exp13 排除作为根因.
+
+详见 `research/cwf/experiments/exp13_gauge_fix_stageB/results/exp13_verdict.md`.
 
 **相位对齐层的具体形式** (待定, 以下是候选):
 - **方案 A (固定参考)**: 选第一个非零元素, 旋转整个场使其相位为 0. 简单但依赖"第一个非零"的定义.
