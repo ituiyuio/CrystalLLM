@@ -1,0 +1,18 @@
+{
+  "means_mse10": {
+    "a_cwf_full": 0.01571880138362758,
+    "b_cwf_encode": 0.19664566247956827,
+    "c_real_encode": 0.0551648263935931,
+    "d_real_full": 0.10760094528086483
+  },
+  "ept_means": {
+    "a_cwf_full": 27.665,
+    "b_cwf_encode": 16.0,
+    "c_real_encode": 2.165,
+    "d_real_full": 2.0
+  },
+  "a_vs_d_wins": 2,
+  "b_vs_d_wins": 1,
+  "c_vs_d_wins": 2,
+  "verdict": "PASS_WAVE_DYNAMICS_REAL"
+}
