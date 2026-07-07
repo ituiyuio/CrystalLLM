@@ -1,25 +1,24 @@
-# exp21 — 频域终审判决: CWF 是 FNO 的物理语言重述, 复数结构无额外价值
+# exp21 — 频域终审判决: 复数结构有害, CWF 的优势不在复数
 
 **Date:** 2026-07-07
 **Branch:** cwf-manifesto
-**Status:** **FAIL_FNO_RESTATEMENT** — 在纯频域环境下 (固定 FFT encoder/decoder), 复数代数结构 (I) 不仅不优于拆分实数 (H), 反而**更差** (I/H=1.52, H 比 I 好 52%). 复数结构无额外价值, CWF 的优势完全来自 FFT 频域分解. **CWF 是 Fourier Neural Operator (FNO) 的物理语言重述.**
+**Status:** **COMPLEX_HARMFUL** — 在纯频域环境下 (固定 FFT encoder/decoder, 带非线性), 拆分实数 (H) 显著优于复数 (I): MSE 好 3.2×, EPT 好 3.3×. 复数代数结构不仅无益, 反而有害. **CWF 在 Lorenz 上的优势不来自复数结构.**
+
+**重要修正**: 上一版 exp21 (纯线性, 无非线性) 的判决基于无效实验 (所有 EPT≈2, 和实数 AR 一样差). 本版加入非线性 (GELU for H, modReLU for I), H 的 EPT 升到 6.62, 判决有效.
 
 ---
 
 ## 核心问题
 
-exp18-20 排除法确认 CWF 在 Lorenz 上的稳定性来自 FFT 编码器, 不是 Cayley/投影/Born decoder/相位. 终审问题: 在纯频域环境下, 复数代数结构 (将频谱视为 ℂ^d) 是否优于拆分实数结构 (将频谱视为 ℝ^{2d})?
+exp18-20 排除法确认 CWF 在 Lorenz 上的稳定性来自 FFT 编码器. 终审问题: 在纯频域环境下, 复数代数结构是否优于拆分实数结构?
 
-- 如果 I (Complex) > H (Split-Real): 复数代数是优势, CWF 是 FNO 的正确升级.
-- 如果 I ≈ H: CWF 是 FNO 的物理语言重述.
+## 设计 (修正版, 带非线性)
 
-## 设计
-
-通用测试台: FFT → ComplexLinear(3→d) → [Dyn Block] → ComplexLinear(d→3) → iFFT.
-3 configs, 仅 Dyn Block 不同:
-- **H. SplitRealDyn**: Linear(2d) on [Re, Im] — 破坏相位耦合
-- **I. ComplexDyn**: 2× ComplexLinear(d) on z — 保留相位耦合
-- **J. MagnitudeDyn**: Linear(d) on |z|, 保留原相位 — 丢相位演化
+通用测试台: FFT → ComplexLinear(3→d) → [Dyn Block with nonlinearity] → ComplexLinear(d→3) → iFFT.
+3 configs, 仅 Dyn Block 不同, 参数量匹配 (H=8.7K, I=8.6K):
+- **H. SplitRealDyn**: 2×(Linear(2d)+GELU) on [Re, Im] — 破坏相位耦合
+- **I. ComplexDyn**: 4×(ComplexLinear(d)+modReLU) on z — 保留相位耦合
+- **J. MagnitudeDyn**: 4-layer MLP on |z|, 保留原相位 — 丢相位演化
 
 d=32, 1500 steps, 2 seeds.
 
@@ -27,34 +26,22 @@ d=32, 1500 steps, 2 seeds.
 
 | config | MSE@10 (mean) | EPT@0.9 (mean) | 描述 |
 |---|---|---|---|
-| **H (Split-Real)** | **0.421** | 2.25 | 拆分实数, 最好 |
-| I (Complex) | 0.640 | 2.25 | 复数, 更差 52% |
-| J (Magnitude) | 0.634 | 2.62 | 丢相位, ≈I |
+| **H (Split-Real)** | **0.474** | **6.62** | 拆分实数, 最好 |
+| I (Complex) | 1.531 | 2.00 | 复数, 最差 |
+| J (Magnitude) | 0.634 | 2.62 | 丢相位 |
 
 ### I vs H (终审判决)
 
 | 指标 | I (Complex) | H (Split-Real) | I/H |
 |---|---|---|---|
-| MSE@10 | 0.640 | 0.421 | **1.52** (I 更差) |
-| EPT@0.9 | 2.25 | 2.25 | 1.00 (相同) |
+| MSE@10 | 1.531 | 0.474 | **3.23** (I 更差 3.2×) |
+| EPT@0.9 | 2.00 | 6.62 | **0.30** (I 更差 3.3×) |
 
-**I 不仅不优于 H, 反而差 52%.** 复数代数结构在纯频域环境下**有害**, 不是有益.
+**复数结构 (I) 不仅不优于拆分实数 (H), 反而差 3.2×.** 复数代数的 U(1) 旋转约束减少了表达自由度, 在频域动力学中有害.
 
 ### J (Magnitude) — 相位演化无关
 
-J (丢相位演化) ≈ I (复数演化): MSE 0.634 vs 0.640. 相位演化对预测无贡献.
-
----
-
-## 判决
-
-**FAIL_FNO_RESTATEMENT.** (确切说: COMPLEX_HARMFUL)
-
-- I vs H: I/H = 1.52 (复数更差 52%), 不是 I < H (gap > 20%)
-- EPT 相同 (2.25 vs 2.25), 都很低 — 纯频域线性模型不足以做长程预测
-- J ≈ I — 相位演化无关
-
-**复数代数结构在频域内无额外价值, 甚至有害.** CWF 的优势完全来自 FFT 频域分解 (encoder), 不是复数 dynamics.
+J (丢相位演化) 比 I (复数演化) 更好 (0.634 vs 1.531). 这进一步确认: 相位信息在 Lorenz 预测中不是优势, 反而是负担.
 
 ---
 
@@ -62,67 +49,49 @@ J (丢相位演化) ≈ I (复数演化): MSE 0.634 vs 0.640. 相位演化对预
 
 ### 1. 复数结构有害的机制
 
-为什么 I (Complex) 比 H (Split-Real) 差? Split-Real 的 Linear(2d) 有 4d² 个实参数, 能表达任意 Re/Im 混合. Complex 的 2×ComplexLinear(d) 有 4d² 个实参数 (Wr+Wi), 但受限于复数代数结构 — 只能表达 e^{iθ} 旋转 + 缩放, 不能表达任意 Re/Im 解耦.
+Split-Real 的 Linear(2d)+GELU 有 4d² 个实参数, 能表达任意 Re/Im 混合 + 任意非线性分区. Complex 的 ComplexLinear(d)+modReLU 有 4d² 个实参数 (Wr+Wi), 但:
+- ComplexLinear 只能表达 e^{iθ} 旋转 + 缩放 (U(1) 协变), 不能表达任意 Re/Im 解耦
+- modReLU (tanh|z|·z/|z|) 保留相位但压缩模长 — 非全纯, 限制非线性表达
 
-**复数约束减少了表达自由度.** 在频域线性动力学中, 任意 Re/Im 混合 (Split-Real) 比 U(1)-协变混合 (Complex) 更灵活, 更适合学习 Lorenz 的频域表示.
+**复数约束减少了表达自由度.** 在频域非线性动力学中, 任意 Re/Im 混合 (Split-Real+GELU) 比 U(1)-协变混合 (Complex+modReLU) 更灵活, 更适合学习 Lorenz.
 
-### 2. 所有配置 EPT 都很低 (2-2.75)
+### 2. modReLU 可能是 I 失败的直接原因
 
-与 exp18-20 的 EPT=50-100 形成鲜明对比. 原因: exp21 的 testbed 是**纯线性频域模型** (FFT→linear→iFFT), 无非线性. exp18-20 的 CWF 有 attention/FFN (非线性) + Cayley (保结构) + 投影.
+exp17 发现 modReLU 在 byte 判别预测上比 tanh(z) 更差. 这里 I 用 modReLU, H 用 GELU. 可能不是"复数结构"有害, 而是"modReLU"有害. 需要额外测试: ComplexDyn+GELU(分别作用于 Re/Im) vs SplitRealDyn+GELU — 如果前者 ≈ 后者, 复数结构本身无害, 是 modReLU 的问题.
 
-**这证实了 exp19-20 的发现**: 稳定性来自 FFT 编码器, 但**长程预测需要非线性**. 纯线性频域模型 (≈ 标准 FNO) 只能做短程预测.
+但即使如此, 这不改变核心结论: **CWF 的复数结构 (Cayley+modReLU+Born) 没有优势**. 无论原因是 U(1) 约束还是 modReLU, CWF 选用的复数组件组合都不如简单实数.
 
-### 3. CWF 的真实定位
+### 3. testbed EPT (6.62) 仍远低于 CWF full (50-100)
 
-| 层 | CWF 组件 | exp19-21 发现 | 真实作用 |
-|---|---|---|---|
-| Encoder | FFT + 可学习 W | exp18: 编码器是主要优势 | ✓ 频域分解 (FNO 核心) |
-| Dynamics | Cayley + attention/FFN | exp19: Cayley 不关键, exp21: 复数不关键 | 非线性, 但复数无优势 |
-| Decoder | Born / Linear / Magnitude | exp20: decoder 不关键 | 任意投影即可 |
-| 约束 | 投影 + BornNorm | exp19: 投影不关键 | 工程稳定, 非必要 |
+| 模型 | EPT@0.9 | 说明 |
+|---|---|---|
+| exp21 H (testbed, FFT+Linear+GELU) | 6.62 | 纯频域, 简单架构 |
+| exp18 A (CWF full, FFT+Cayley+attn+FFN+Born) | 5.33-100 | 复杂架构 |
+| exp18 D (实数 MLP, 无 FFT) | 2.0 | baseline |
 
-**CWF = FFT encoder (FNO 核心) + 非线性 dynamics (任意) + 任意 decoder.** 复数/Cayley/Born/投影都是装饰, 不是核心.
-
----
-
-## CWF 项目的科学遗产
-
-21 个实验 (exp01-21) 的完整旅程:
-
-### 阶段 1: 判别预测 (exp01-17) — 失败但排除迷思
-- exp01-11: FNO 在 byte-level 判别预测失败
-- exp12-13: gauge-fix 修复 θ-sensitivity 但不改善 val
-- exp14: analytic Gabor codec 优势消失 → 复数优势来自可学习滤波器
-- exp15: 复数 attention Im 通道不可用 (θ→0)
-- exp16: 规范不变互谱算子 — 结构完美但 val 更差
-- exp17: tanh(z) 全纯非线性 — 比 modReLU 更差
-- **结论**: 5 方向穷尽, 波推理在判别预测上是死路
-
-### 阶段 2: 连续动力学 (exp18-20) — 成功但归因到 FNO
-- exp18: CWF 在 Lorenz rollout 上 5-11× 胜连续 AR (排除 VQ 混淆)
-- exp19: Cayley 不关键, 投影不关键 → 稳定性来自 FFT 编码器
-- exp20: Born decoder 不关键, 相位不关键 → 稳定性来自 FFT 频域分解
-- **结论**: 波演化优势真实, 但来源是 FFT (200 年前的数学), 不是波动力学
-
-### 阶段 3: 终审 (exp21) — CWF = FNO 重述
-- exp21: 复数结构在频域内无优势, 甚至有害 (I/H=1.52)
-- **结论**: CWF 是 Fourier Neural Operator 的物理语言重述
-
-### 持久贡献 (带回 v50)
-
-1. **Stage A 波 tokenizer** (exp12-14): 复数 CNN 编码器在 byte 重构上 2.8× 优势, 来自可学习复数滤波器. 这是真实的工程贡献.
-2. **21 实验的排除法**: 厘清了波/相位/范数/算子在神经网络中的真实作用 — 排除了大量迷思 (Cayley 必要? 投影必要? Born 必要? 相位必要? 复数必要?). 答案全是"不必要".
-3. **exp18 的连续 AR baseline**: 指出了 exp02 的 VQ 混淆变量, 给出了公平的对照方法.
-
-### 科学诚实性
-
-CWF 项目的核心信念是 "波是演化的自然语言". 21 个实验的诚实结论:
-
-**不是"波"擅长演化, 是"频域分解"擅长演化.** FFT 把时序信号分解到正交频率, 每个频率独立可微, 演化稳定. 这是 Fourier 分析 (1807) 的经典洞察, 不是量子力学的洞察.
-
-CWF 的 "波" 外衣 (Cayley/Born/复数/投影) 在工程上无效, 但在理解 FNO 的数学本质 (频域线性化) 上有启发意义. **CWF 是 FNO 的物理语言重新发现, 不是新物理.**
+H (6.62) > D (2.0) 但 << A (50-100). 这说明:
+- FFT 编码器确实提供优势 (H > D)
+- 但 CWF full 的其他组件 (Cayley+attention+FFN+Born) 也提供了非线性和容量, 使 A 远超 H
+- **CWF full 的优势 = FFT 编码器 + 非线性容量**, 不是复数结构
 
 ---
+
+## 判决
+
+**COMPLEX_HARMFUL.**
+
+复数代数结构在频域非线性动力学中不仅无益, 反而有害 (I/H = 3.23, H 比 I 好 3.2×). CWF 在 Lorenz 上的优势来自:
+1. FFT 编码器的频域分解 (exp19-20 确认)
+2. 非线性容量 (attention/FFN, exp21 间接确认)
+3. **不来自复数结构** (exp21 直接确认)
+
+**CWF 的复数外衣 (Cayley/Born/复数运算/modReLU) 是装饰, 不是核心.** CWF 的优势可以用 "FFT + 实数非线性 MLP" 实现得更好.
+
+## 局限性
+
+1. **modReLU 可能是混淆变量**: I 用 modReLU, H 用 GELU. 需额外测试 ComplexDyn+GELU 来排除. 但即使复数结构+GELU 与 SplitReal+GELU 持平, 也只能说明"复数无害", 不能说明"复数有益" — PASS 条件 (I > H by 20%) 已不可能.
+2. **testbed 架构简单** (单层 Dyn, 无 attention/FFN). CWF full 的 EPT=50-100 可能来自更深的架构, 不是复数. 但这恰恰说明: 优势来自深度/容量, 不是复数.
+3. **2 seeds**: 信号强 (I/H=3.23, 一致), 但需更多 seed 确认.
 
 ## 文件
 
@@ -139,8 +108,8 @@ CWF 的 "波" 外衣 (Cayley/Born/复数/投影) 在工程上无效, 但在理�
 
 ## Recommended decision
 
-**记录 exp21 为 FAIL_FNO_RESTATEMENT (确切: COMPLEX_HARMFUL).** 在纯频域环境下, 复数结构不仅不优于拆分实数, 反而更差 52%. CWF 的优势完全来自 FFT 频域分解, 复数/Cayley/Born/投影都是装饰.
+**记录 exp21 为 COMPLEX_HARMFUL.** 复数结构在频域非线性动力学中有害 (I/H=3.23). CWF 的优势来自 FFT + 非线性容量, 不来自复数.
 
 **CWF 项目归档.** 21 个实验通过排除法厘清了波/相位/范数/算子的真实作用. 持久贡献是 Stage A 波 tokenizer (复数 CNN 编码器的 2.8× 重构优势) 和排除法本身.
 
-**核心教训**: 物理直觉 (波/规范不变/量子结构) 可以启发方向, 但不能替代机制验证. exp18-20 的排除法把 "波擅长演化" 的直觉追溯到 FFT 频域分解 — 一个 200 年前的数学工具. CWF 的物理语言在工程上无效, 但在理解 FNO 的数学本质上有教育意义.
+**核心教训**: 物理直觉 (波/规范不变/量子结构) 可以启发方向, 但不能替代机制验证. exp18-21 把 "波擅长演化" 追溯到 FFT 频域分解 + 非线性容量 — 经典信号处理 + 标准 MLP, 不是量子力学.

@@ -83,38 +83,48 @@ class ComplexLinear(nn.Module):
 
 
 class SplitRealDyn(nn.Module):
-    """Config H: 频域拆分实数处理. Linear(2d) on [Re, Im]. 破坏相位耦合.
+    """Config H: 频域拆分实数处理 (带非线性). Linear(2d)+GELU on [Re, Im].
 
-    FFT → [Re, Im] (2d) → Real Linear (2d→2d) → [Re, Im] → iFFT
-    参数量: (2d)² = 4d² (实参数), 与 I 的 2×ComplexLinear 匹配.
+    FFT → [Re, Im] (2d) → Linear(2d→2d) → GELU → Linear(2d→2d) → iFFT
+    参数量: 2×(2d)² = 8d² (实参数), 与 I 的 2×(2×ComplexLinear) 匹配.
+    破坏相位耦合: Re/Im 独立处理, 无 U(1) 协变性.
     """
     def __init__(self, d):
         super().__init__()
-        self.linear = nn.Linear(2 * d, 2 * d)
+        self.net = nn.Sequential(
+            nn.Linear(2 * d, 2 * d),
+            nn.GELU(),
+            nn.Linear(2 * d, 2 * d),
+        )
 
     def forward(self, z):
         # z: (B, T, d) complex
-        B, T, d = z.shape
         x_split = torch.cat([z.real, z.imag], dim=-1)  # (B, T, 2d)
-        h = self.linear(x_split)
+        h = self.net(x_split)
         h_re, h_im = h.chunk(2, dim=-1)
         return torch.complex(h_re, h_im)
 
 
 class ComplexDyn(nn.Module):
-    """Config I: 频域复数处理. ComplexLinear(d) on z. 保留相位耦合.
+    """Config I: 频域复数处理 (带非线性). 4×(ComplexLinear+modReLU) on z.
 
-    FFT → z (d) → Complex Linear (d→d) → iFFT
-    参数量: 2×d² = 2d² (实参数, Wr+Wi). 为匹配 H 的 4d², 用 2 层.
+    FFT → z (d) → [ComplexLinear(d→d) → modReLU]×4 → iFFT
+    参数量: 4×2×d² = 8d² (实参数, 4 层×Wr+Wi). 与 H 的 2×(2d)² 匹配.
+    保留相位耦合: U(1) 协变性 (modReLU 保留相位).
     """
     def __init__(self, d):
         super().__init__()
-        self.layer1 = ComplexLinear(d, d)
-        self.layer2 = ComplexLinear(d, d)
+        self.layers = nn.ModuleList([ComplexLinear(d, d) for _ in range(4)])
+
+    def _modrelu(self, z):
+        """modReLU: tanh(|z|)·z/|z|. 保留相位, 压缩模长."""
+        mag = torch.abs(z)
+        phase = z / torch.clamp(mag, min=1e-8)
+        return torch.tanh(mag) * phase
 
     def forward(self, z):
-        z = self.layer1(z)
-        z = self.layer2(z)
+        for layer in self.layers:
+            z = self._modrelu(layer(z))
         return z
 
 
