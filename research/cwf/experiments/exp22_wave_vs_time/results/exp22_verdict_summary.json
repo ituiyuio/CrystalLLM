@@ -1,0 +1,11 @@
+{
+  "means": {
+    "k_wave": 0.04476626234827563,
+    "l_time": 0.008868638793501304
+  },
+  "ept_means": {
+    "k_wave": 4.625,
+    "l_time": 64.375
+  },
+  "verdict": "TIME_ADVANTAGE"
+}
