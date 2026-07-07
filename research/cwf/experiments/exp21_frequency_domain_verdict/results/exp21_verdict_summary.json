@@ -1,0 +1,13 @@
+{
+  "means": {
+    "h_split_real": 0.421064049936831,
+    "i_complex": 0.6404221272096038,
+    "j_magnitude": 0.6342815732350573
+  },
+  "ept_means": {
+    "h_split_real": 2.25,
+    "i_complex": 2.25,
+    "j_magnitude": 2.625
+  },
+  "verdict": "COMPLEX_HARMFUL"
+}
