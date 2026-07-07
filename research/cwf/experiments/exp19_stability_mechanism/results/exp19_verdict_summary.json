@@ -1,0 +1,27 @@
+{
+  "means": {
+    "a_cwf_full": {
+      "mse10": 0.05830118170706555,
+      "ept": 66.5,
+      "drift": 7.748603803037213e-08
+    },
+    "b_cwf_linear": {
+      "mse10": 0.04915929399430752,
+      "ept": 33.0,
+      "drift": 3.5762786843029915e-08
+    },
+    "c_cwf_no_proj": {
+      "mse10": 0.020136002684012055,
+      "ept": 58.25,
+      "drift": 2.3841857821338408e-08
+    },
+    "d_cayley_only": {
+      "mse10": 0.017763078794814646,
+      "ept": 9.75,
+      "drift": 7.748603825241673e-08
+    }
+  },
+  "h1_confirmed": false,
+  "h2_confirmed": false,
+  "verdict": "INCONCLUSIVE"
+}
