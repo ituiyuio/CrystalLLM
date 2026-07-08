@@ -1,0 +1,20 @@
+{
+  "means_single_step": {
+    "baseline": 0.4478786666666667,
+    "r_evolve": 0.7336546666666667,
+    "r_evolve_re": 0.429241,
+    "c_evolve": 3.3941843333333335
+  },
+  "means_multi_step": {
+    "baseline": 0.4505236666666667,
+    "r_evolve": 1503.0871886666666,
+    "r_evolve_re": 62.729249,
+    "c_evolve": 17.619607666666667
+  },
+  "per_condition": {
+    "r_vs_base": "R_NO_LEARN",
+    "re_vs_r": "IM_HARMFUL",
+    "c_vs_r": "COMPLEX_WORSE"
+  },
+  "overall_verdict": "PHASE_HARMFUL"
+}
