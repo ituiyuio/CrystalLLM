@@ -1,0 +1,30 @@
+{
+  "means_phase_std": {
+    "a_recon": 1.7981333333333334,
+    "a_pred_l2": 1.8050333333333333,
+    "a_pred_cos": 1.8160999999999998,
+    "a_both": 1.8014,
+    "a_pred_l2_anchor": 1.8194333333333332
+  },
+  "means_probe_ppl": {
+    "a_recon": 15.839999999999998,
+    "a_pred_l2": 15.94,
+    "a_pred_cos": 15.833333333333334,
+    "a_both": 15.770000000000001,
+    "a_pred_l2_anchor": 15.950000000000001
+  },
+  "means_pred_sim": {
+    "a_recon": 3.3333333333333335e-05,
+    "a_pred_l2": 0.008066666666666666,
+    "a_pred_cos": 0.0109,
+    "a_both": 0.0082,
+    "a_pred_l2_anchor": 0.007899999999999999
+  },
+  "per_condition": {
+    "a_pred_cos": "BORN_TRAP_REFUTED",
+    "a_pred_l2": "PRED_NO_EFFECT",
+    "a_pred_l2_anchor": "ANCHOR_NO_HELP"
+  },
+  "overall_verdict": "JEPA_DEAD",
+  "pi_half": 1.5707963267948966
+}

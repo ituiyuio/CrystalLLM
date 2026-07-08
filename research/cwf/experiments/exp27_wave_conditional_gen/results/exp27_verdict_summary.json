@@ -1,0 +1,15 @@
+{
+  "means": {
+    "r_gen": 1.5633,
+    "r_pool_gen": 1.4722333333333333,
+    "r_wave_gen": 1.4723,
+    "r_wave_real_gen": 1.5079666666666667
+  },
+  "per_condition": {
+    "pool_vs_base": "POOL_HELPFUL",
+    "wave_vs_base": "WAVE_HELPFUL",
+    "complex_vs_real": "NEUTRAL",
+    "wave_vs_pool": "NEUTRAL"
+  },
+  "overall_verdict": "GEN_GLOBAL_HELPFUL"
+}

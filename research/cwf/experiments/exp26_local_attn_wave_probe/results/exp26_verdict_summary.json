@@ -1,0 +1,14 @@
+{
+  "means": {
+    "r_local": 1.6018666666666668,
+    "r_local_pool": 1.6291,
+    "r_local_wave": 1.5972,
+    "r_local_wave_real": 1.6055
+  },
+  "per_condition": {
+    "pool_vs_base": "POOL_NEUTRAL",
+    "wave_vs_base": "WAVE_NEUTRAL",
+    "complex_vs_real": "NEUTRAL"
+  },
+  "overall_verdict": "GLOBAL_DEAD"
+}

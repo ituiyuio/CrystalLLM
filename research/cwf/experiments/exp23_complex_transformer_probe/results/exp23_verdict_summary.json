@@ -1,0 +1,18 @@
+{
+  "means": {
+    "r_real": 1.4807,
+    "r_paramatch": 1.4831666666666665,
+    "c_mod": 1.4202666666666666,
+    "c_siren": 1.6866666666666668,
+    "c_zrelu": 1.5084,
+    "c_mod_anchor": 1.4308333333333334
+  },
+  "per_condition_verdict": {
+    "c_mod": "NEUTRAL",
+    "c_siren": "NEUTRAL",
+    "c_zrelu": "NEUTRAL",
+    "c_mod_anchor": "NEUTRAL"
+  },
+  "overall_verdict": "COMPLEX_OPERATOR_DEAD",
+  "baseline": "r_paramatch"
+}

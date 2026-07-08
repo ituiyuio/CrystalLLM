@@ -1,0 +1,12 @@
+{
+  "means": {
+    "r_real": 1.4857666666666667,
+    "r_wave": 1.4935,
+    "r_wave_real": 1.4794666666666665
+  },
+  "per_condition": {
+    "r_wave": "NEUTRAL",
+    "complex_vs_real": "NEUTRAL"
+  },
+  "overall_verdict": "WAVE_INJECTION_NEUTRAL"
+}
