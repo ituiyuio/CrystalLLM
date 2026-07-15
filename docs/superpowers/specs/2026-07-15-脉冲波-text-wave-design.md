@@ -41,19 +41,26 @@
 
 ## 2. 目标
 
-**Primary (GO)**: 证明 CWF 在 "FSK 调制文本波 + 短时 shift-by-1 预测" 任务上, 字符重建准确率 > 90% (来自 v51_phase4 §2 映射 B 阈值)。
+**Primary (GO)**: 证明 CWF 在 "FSK 调制文本波 + 短时 shift-by-1 预测" 任务上, 字符重建准确率 > 80% (Nyquist-aware 阈值, 详见下方推导)。
 
 **Secondary (PASS)**: CWF + MSE 字符重建 > Transformer + MSE 字符重建, 且比值 < 0.5x (CWF 至少 2x 优势)。
 
 **Non-goals**:
-- 长序列依赖 (smoke 用 32 char 短段, 不测 1k+ 字符)
-- 完整 v28 (256) 词汇表 (smoke 用 top-32 ASCII 子集)
+- 长序列依赖 (smoke 用 8 char 短段, 不测 1k+ 字符)
+- 完整 v28 (256) 词汇表 (smoke 用 top-8 ASCII 子集)
 - 真实 LM 部署 (PPL < 2.36 之类, v50 范畴)
 - 替换 v50 Soft-Exp 推理
 
-**Falsifiable 阈值**:
-- char accuracy > 90% → **GO**, 写 Phase 4.2 完整版, 扩 vocab 到 64/128/256
-- char accuracy 50%-90% → **PARTIAL**, 看 CWF/Trans ratio; 优势 ≥ 2x → 进 4.3, 否则归档
+**Falsifiable 阈值 (Nyquist-aware 推导)**:
+8-char shift-by-1 + Uniform Random 数据, 理论 Accuracy 天花板:
+- 位置 0-6: 输入含 c_1..c_7, 模型可完美学会 "slot_i 输出 = slot_{i+1} 输入" 的波平移机制 → 100%
+- 位置 7: 目标 c_8 不在输入中, 与输入独立, 理论准确率 = 1/8 = 12.5%
+- **理论上限 = (7 × 100% + 1 × 12.5%) / 8 = 88.4%**
+- 因此 90% 阈值数学上不可达; smoke 用 > 80% (留 8.4% 安全边量给训练噪声)
+
+判决:
+- char accuracy > 80% → **GO**, 写 Phase 4.2 完整版, 扩 vocab 到 16/32
+- char accuracy 50%-80% → **PARTIAL**, 看 CWF/Trans ratio; 优势 ≥ 2x → 进 4.3, 否则归档
 - char accuracy < 50% → **DEAD**, 归档 "CWF + 文本脉冲波" 路线, 写失败 postmortem
 
 ---
@@ -178,15 +185,17 @@ class CWFFSKPredictor(nn.Module):
 **Primary metric**: char reconstruction accuracy
 - per-slot IFFT (size T_CHAR=8): `char_id_pred[c] = argmax_{k ∈ [0, 8)} |IFFT(ψ_pred[c*8:(c+1)*8])|[k]`
 - accuracy = mean(predicted == target) over all 8 chars and 1000 test samples
+- **Nyquist-aware 期望**: 完美 shift learner 在 Uniform Random 8-char 数据上 accuracy ≤ 88.4% (7 个位置 100% + 1 个位置 12.5%)
 
 **Secondary metrics**:
 - waveform MSE (与 exp31 一致, real+imag 各算)
 - CWF/Trans accuracy ratio (CWF 优势量化)
+- **位置级别 accuracy** (per-slot): 验证位置 0-6 学到 shift, 位置 7 = 1/8 (sanity check)
 
-**判决逻辑** (`verdict`):
+**判决逻辑** (`verdict`, 阈值已修正):
 ```python
-if cwf_acc >= 0.90:
-    verdict = "GO - CWF 文本脉冲波可行, 进 Phase 4.3"
+if cwf_acc >= 0.80:
+    verdict = "GO - CWF 文本脉冲波可行 (达 88.4% 天花板的 90.5%)"
 elif cwf_acc >= 0.50 and cwf_acc / trans_acc < 0.5:
     verdict = "PARTIAL - CWF 优势够, 进 Phase 4.3 (扩展 vocab)"
 elif cwf_acc >= 0.50:
@@ -242,6 +251,7 @@ research/cwf/experiments/exp33_fsk_text_smoke/
 | 2026-07-15 | 损失 = 纯波形 MSE | 用户从 3 选项中选推荐 (与 v51 "CWF 配硬损失" 规则一致) |
 | 2026-07-15 | 实操参数 (初版) = vocab=32, T_char=2, S=64 | 用户全照推荐 |
 | 2026-07-15 | **实操参数修正** = vocab=8, T_char=8, S=64 (Nyquist 约束) | spec 自审发现 T_char<VOCAB 物理上不可能, ponytail 选最简工作配置 |
+| 2026-07-15 | **判决阈值修正** = 90% → 80% (Nyquist-aware) | 用户发现 8-char shift-by-1 + Random 数据理论天花板 = 88.4%, 90% 数学上不可达; 80% 留 8.4% 安全边量 |
 | 2026-07-15 | Phase 4.2 优先于 Phase 1 PDE 全参数扫描 | 用户意图 (本次 spec 偏离 v51_roadmap 顺序) |
 
 ---
@@ -250,7 +260,8 @@ research/cwf/experiments/exp33_fsk_text_smoke/
 
 - [ ] `exp33_fsk_text_smoke.py` 跑通 5 seeds × 2 模型 (CWF + Trans) < 10 min CPU
 - [ ] `exp33_results.json` 包含 per-seed accuracy, ratio, verdict
-- [ ] CWF median char accuracy > 0.50 (起码不像纯噪音)
+- [ ] CWF median char accuracy > 0.50 (起码不像纯噪音); 期望 > 0.80 (达 88.4% 天花板的 90.5%)
+- [ ] 位置级别 accuracy: 位置 0-6 应 > 0.95 (shift 学会), 位置 7 应 ~ 0.125 (随机猜测)
 - [ ] verdict 三种之一 (GO / PARTIAL / NEUTRAL / DEAD) 自动打印
 - [ ] 不修改 v50 任何文件
 - [ ] 不读 v28 原始数据 (内存生成)
@@ -261,17 +272,17 @@ research/cwf/experiments/exp33_fsk_text_smoke/
 
 ## 8. 后续路径 (post-smoke)
 
-**如果 GO** (>90% char accuracy):
+**如果 GO** (>80% char accuracy, 达到 88.4% 天花板的 90.5%):
 1. 扩 vocab: 8 → 16 (S=64, T_CHAR=16, N_CHARS=4) → 32 (S=128, T_CHAR=32, N_CHARS=4)
 2. 扩长度: 8 char → 16 char → 64 char (long-range dependency)
 3. 进 Phase 4.3: 真实 LM 评估 (PPL on v28)
 
-**如果 PARTIAL** (50-90% + CWF 优势 ≥ 2x):
+**如果 PARTIAL** (50-80% + CWF 优势 ≥ 2x):
 1. 调查失败字符 (哪些 char_id 重建失败)
 2. 调 amp rescale (×1, ×10, ×100)
 3. 调 char freq spacing (Δω)
 
-**如果 NEUTRAL** (50-90% + 无优势):
+**如果 NEUTRAL** (50-80% + 无优势):
 1. 检查 Transformer baseline 是不是也失败 (是的话任务本身难, 不是 CWF 问题)
 2. 考虑加 learned channel coding (char_id → freq 不是 1:1 映射)
 
