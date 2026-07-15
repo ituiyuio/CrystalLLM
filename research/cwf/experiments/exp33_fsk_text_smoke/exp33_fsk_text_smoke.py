@@ -118,3 +118,62 @@ def sample_batch(batch_size: int, seed: int | None = None) -> tuple[torch.Tensor
     new_chars = torch.randint(0, VOCAB_SIZE, (batch_size, 1), generator=gen)
     tgt = torch.cat([inp[:, 1:], new_chars], dim=1)
     return inp, tgt
+
+
+# ===========================================================================
+# 模型: CWF 包装 (复用 CWFSingleBlock, d=S=64 skip projection)
+# ===========================================================================
+class CWFFSKPredictor(nn.Module):
+    """CWF 单 block 包装: complex 波形 → complex 波形.
+
+    复用 CWFSingleBlock(d=64, hidden_mult=2), 输入 (B, 1, 64, 2) 单 token 维度.
+    """
+    def __init__(self, d: int = S, hidden_mult: int = 2):
+        super().__init__()
+        self.block = CWFSingleBlock(d=d, hidden_mult=hidden_mult)
+
+    def forward(self, psi: torch.Tensor) -> torch.Tensor:
+        """
+        Args:
+            psi: (B, S=64) complex
+        Returns:
+            psi_out: (B, S=64) complex
+        """
+        # (B, S) complex → (B, 1, S, 2) for CWFSingleBlock API
+        psi_ri = torch.stack([psi.real, psi.imag], dim=-1)  # (B, S, 2)
+        psi_ri = psi_ri.unsqueeze(1)  # (B, 1, S, 2)
+        psi_out_ri, _ = self.block(psi_ri)
+        psi_out_ri = psi_out_ri.squeeze(1)  # (B, S, 2)
+        return torch.complex(psi_out_ri[..., 0], psi_out_ri[..., 1])
+
+
+class TransformerFSKPredictor(nn.Module):
+    """1D Transformer encoder baseline (实数, 处理 real/imag 2 通道).
+
+    复用 exp31 TransformerPredictor 的结构, 改输入通道 1→2 (real+imag).
+    """
+    def __init__(self, d: int = 64, nhead: int = 4, num_layers: int = 2):
+        super().__init__()
+        self.input_proj = nn.Linear(2, d)  # 输入 2 通道 (real, imag)
+        self.pos_embed = nn.Parameter(torch.randn(S, d) * 0.02)
+        encoder_layer = nn.TransformerEncoderLayer(
+            d_model=d, nhead=nhead, dim_feedforward=d * 4,
+            dropout=0.0, batch_first=True, activation="gelu",
+        )
+        self.encoder = nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
+        self.output_proj = nn.Linear(d, 2)  # 输出 2 通道 (real, imag)
+
+    def forward(self, psi: torch.Tensor) -> torch.Tensor:
+        """
+        Args:
+            psi: (B, S=64) complex
+        Returns:
+            psi_out: (B, S=64) complex
+        """
+        # (B, S) complex → (B, S, 2) real
+        x = torch.stack([psi.real, psi.imag], dim=-1)  # (B, S, 2)
+        # Transformer
+        h = self.input_proj(x) + self.pos_embed.unsqueeze(0)  # (B, S, d)
+        h = self.encoder(h)  # (B, S, d)
+        out = self.output_proj(h)  # (B, S, 2)
+        return torch.complex(out[..., 0], out[..., 1])

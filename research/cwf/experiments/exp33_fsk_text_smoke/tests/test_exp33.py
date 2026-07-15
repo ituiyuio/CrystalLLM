@@ -102,3 +102,51 @@ def test_sample_batch_seeded_reproducible():
     inp2, tgt2 = sample_batch(4, seed=42)
     assert torch.equal(inp1, inp2)
     assert torch.equal(tgt1, tgt2)
+
+
+# ===========================================================================
+# Task 3: model wrapper tests
+# ===========================================================================
+def test_cwf_predictor_shape():
+    """CWFFSKPredictor 应把 (B, S) complex → (B, S) complex."""
+    from exp33_fsk_text_smoke import CWFFSKPredictor, S
+    model = CWFFSKPredictor()
+    x = torch.randn(4, S, dtype=torch.complex64) * 0.3  # 闭包约束 ‖ψ‖ < 1
+    y = model(x)
+    assert y.shape == (4, S)
+    assert y.dtype == torch.complex64
+
+
+def test_transformer_predictor_shape():
+    """TransformerFSKPredictor 应把 (B, S) complex → (B, S) complex."""
+    from exp33_fsk_text_smoke import TransformerFSKPredictor, S
+    model = TransformerFSKPredictor()
+    x = torch.randn(4, S, dtype=torch.complex64) * 0.3
+    y = model(x)
+    assert y.shape == (4, S)
+    assert y.dtype == torch.complex64
+
+
+def test_cwf_closure_invariant():
+    """CWFFSKPredictor 任意输入经过后, 闭包 ‖ψ‖ < 1 应保持."""
+    from exp33_fsk_text_smoke import CWFFSKPredictor, S
+    model = CWFFSKPredictor()
+    model.eval()
+    x = torch.randn(8, S, dtype=torch.complex64) * 0.5
+    with torch.no_grad():
+        y = model(x)
+    norm = torch.sqrt((y.abs() ** 2).sum(dim=-1))  # (B,)
+    assert (norm < 1.0).all(), f"closure violated: max norm = {norm.max().item()}"
+
+
+def test_model_param_count():
+    """CWF 和 Trans 模型应都可训练 (有 > 10k 参数)."""
+    from exp33_fsk_text_smoke import CWFFSKPredictor, TransformerFSKPredictor
+    cwf = CWFFSKPredictor()
+    trans = TransformerFSKPredictor()
+    cwf_params = sum(p.numel() for p in cwf.parameters())
+    trans_params = sum(p.numel() for p in trans.parameters())
+    assert cwf_params > 10_000, f"CWF too small: {cwf_params}"
+    assert trans_params > 10_000, f"Trans too small: {trans_params}"
+    print(f"  CWF params:   {cwf_params:,}")
+    print(f"  Trans params: {trans_params:,}")
