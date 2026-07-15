@@ -266,6 +266,28 @@ def evaluate_model(model: nn.Module, n_samples: int = N_EVAL, seed: int = 0) -> 
 
 
 # ===========================================================================
+# 判决 (必须在 run_main 之前定义, 否则脚本运行时 NameError)
+# ===========================================================================
+def compute_verdict(cwf_acc: float, trans_acc: float) -> str:
+    """
+    Nyquist-aware 判决 (spec §2):
+      > 0.80          → GO
+      0.50-0.80 + 优势 ≥ 2x → PARTIAL
+      0.50-0.80 + 无优势 → NEUTRAL
+      < 0.50          → DEAD
+    """
+    if cwf_acc >= 0.80:
+        return "GO"
+    if cwf_acc >= 0.50:
+        # 优势 = trans_acc / cwf_acc (trans 是 cwf 的几倍) ; CWF 优势要求 ratio < 0.5
+        ratio = cwf_acc / max(trans_acc, 1e-6)
+        if ratio < 0.5:
+            return "PARTIAL"
+        return "NEUTRAL"
+    return "DEAD"
+
+
+# ===========================================================================
 # 主程序: multi-seed 跑 CWF + Trans baseline, 输出 results.json
 # ===========================================================================
 def run_main(seeds: list[int] = None, steps: int = TRAIN_STEPS) -> dict:
@@ -413,22 +435,3 @@ if __name__ == "__main__":
                         help=f"随机种子列表 (default {SEEDS})")
     args = parser.parse_args()
     run_main(seeds=args.seeds, steps=args.steps)
-
-
-def compute_verdict(cwf_acc: float, trans_acc: float) -> str:
-    """
-    Nyquist-aware 判决 (spec §2):
-      > 0.80          → GO
-      0.50-0.80 + 优势 ≥ 2x → PARTIAL
-      0.50-0.80 + 无优势 → NEUTRAL
-      < 0.50          → DEAD
-    """
-    if cwf_acc >= 0.80:
-        return "GO"
-    if cwf_acc >= 0.50:
-        # 优势 = trans_acc / cwf_acc (trans 是 cwf 的几倍) ; CWF 优势要求 ratio < 0.5
-        ratio = cwf_acc / max(trans_acc, 1e-6)
-        if ratio < 0.5:
-            return "PARTIAL"
-        return "NEUTRAL"
-    return "DEAD"
