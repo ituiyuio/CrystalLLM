@@ -12,3 +12,12 @@ Started: 2026-07-15
 - Task 4: complete (commits ca2e6db..f3ad7dc, review approved; 13/13 tests; 100-step loss decrease ~35s verified; train_one matches brief exactly)
 - Task 5: complete (commits f3ad7dc..e77be7a, review approved; 18/18 tests; implementer caught spec bug — identity oracle is 12.5% random baseline, not 88.4% perfect shift learner; 88.4% ceiling is for shift learners; spec §3.6 corrected; decision log updated)
 - Task 6: complete (commits e77be7a..58cb2f4, review approved; 19/19 tests; CWF CPU 18x slower than Trans due to complex ops — full 5-seed run = ~24 min vs 5 min estimate; e2e test steps=200→100 to fit 65s budget)
+- Task 7: complete (5 seeds × 1000 steps, VERDICT=DEAD; CWF 0.137 random baseline, ratio 0.760; FSK 物理结构不匹配 CWF 归纳偏置; NameError bug fixed at e0eb5cc; postmortem at docs/experiments/2026-07-15-exp33-fsk-text-wave-postmortem.md; memory updated)
+
+## Final State
+- 7 tasks complete, 8 atomic commits
+- 19/19 pytest tests pass
+- Verdict: DEAD — FSK text-wave route archived
+- v50 (V49 + Soft-Exp) UNCHANGED
+- v51 PDE route (exp31/32 163x) still open
+- v51 Phase 4.1 (频域表示) potential alternative but needs new spec
