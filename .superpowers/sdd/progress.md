@@ -10,3 +10,4 @@ Started: 2026-07-15
 - Task 2: complete (commits 911a27b..ae2b011, review approved; 8/8 tests pass independent run; implementer added __init__.py re-export which was necessary for testability)
 - Task 3: complete (commits ae2b011..ca2e6db, review approved; 12/12 tests; CWF 317k params / Trans 104k params; closure preserved by BornStableNorm; positional encoding asymmetry noted but acceptable for smoke)
 - Task 4: complete (commits ca2e6db..f3ad7dc, review approved; 13/13 tests; 100-step loss decrease ~35s verified; train_one matches brief exactly)
+- Task 5: complete (commits f3ad7dc..e77be7a, review approved; 18/18 tests; implementer caught spec bug — identity oracle is 12.5% random baseline, not 88.4% perfect shift learner; 88.4% ceiling is for shift learners; spec §3.6 corrected; decision log updated)
