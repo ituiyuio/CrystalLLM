@@ -118,10 +118,15 @@ RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
 - [ ] **Step 2: Write failing test for FSK encode/decode roundtrip**
 
-Create `tests/test_exp33.py`:
+Create `tests/test_exp33.py` (lazy imports so each test fails for its own missing function):
 
 ```python
-"""Tests for exp33 FSK text-wave smoke. Run with: pytest tests/"""
+"""Tests for exp33 FSK text-wave smoke. Run with: pytest tests/
+
+ponytail: 用 lazy imports (每个 test 内 import 所需函数), 这样
+T1 完成后 fsk_encode/fsk_decode 已存在但 sample_batch 等还没, 各 test
+能独立报"自己缺的函数", 不因整个文件 import 失败而全 0 跑.
+"""
 import sys
 from pathlib import Path
 
@@ -132,15 +137,10 @@ HERE = Path(__file__).resolve().parent
 EXP_DIR = HERE.parent
 sys.path.insert(0, str(EXP_DIR))
 
-from exp33_fsk_text_smoke import (
-    fsk_encode, fsk_decode, VOCAB_SIZE, S, N_CHARS, T_CHAR,
-    sample_batch, CWFFSKPredictor, TransformerFSKPredictor,
-    train_one, evaluate_model, run_main, compute_verdict,
-)
-
 
 def test_fsk_roundtrip_single_char():
     """char_id=3 → encode → decode 应该回到 3."""
+    from exp33_fsk_text_smoke import fsk_encode, fsk_decode, S
     char_ids = torch.tensor([[3]], dtype=torch.long)  # (1, 1)
     wave = fsk_encode(char_ids)  # (1, 64)
     assert wave.shape == (1, S), f"expected (1, {S}), got {wave.shape}"
@@ -152,6 +152,7 @@ def test_fsk_roundtrip_single_char():
 
 def test_fsk_roundtrip_full_sequence():
     """[0, 1, 2, 3, 4, 5, 6, 7] → encode → decode 应该完全恢复."""
+    from exp33_fsk_text_smoke import fsk_encode, fsk_decode, S, N_CHARS
     char_ids = torch.arange(N_CHARS, dtype=torch.long).unsqueeze(0)  # (1, 8)
     wave = fsk_encode(char_ids)
     assert wave.shape == (1, S)
@@ -161,6 +162,7 @@ def test_fsk_roundtrip_full_sequence():
 
 def test_fsk_batch_roundtrip():
     """B=4 随机 char_ids 应全部 roundtrip 正确."""
+    from exp33_fsk_text_smoke import fsk_encode, fsk_decode, VOCAB_SIZE, S, N_CHARS
     torch.manual_seed(42)
     char_ids = torch.randint(0, VOCAB_SIZE, (4, N_CHARS))
     wave = fsk_encode(char_ids)
@@ -171,6 +173,7 @@ def test_fsk_batch_roundtrip():
 
 def test_fsk_energy_per_slot():
     """每个 slot (8 点) 的 IFFT 在对应 freq bin 应有峰值, 其他 bin 接近 0."""
+    from exp33_fsk_text_smoke import fsk_encode, T_CHAR, N_CHARS
     char_ids = torch.tensor([[0, 1, 2, 3, 4, 5, 6, 7]], dtype=torch.long)
     wave = fsk_encode(char_ids)  # (1, 64) complex
     for c in range(N_CHARS):
@@ -271,6 +274,7 @@ Add to `tests/test_exp33.py`:
 ```python
 def test_sample_batch_shapes():
     """sample_batch(B=4) 应返回 (4, N_CHARS) 两个 int64 tensor."""
+    from exp33_fsk_text_smoke import sample_batch, N_CHARS
     inp, tgt = sample_batch(4, seed=42)
     assert inp.shape == (4, N_CHARS)
     assert tgt.shape == (4, N_CHARS)
@@ -280,6 +284,7 @@ def test_sample_batch_shapes():
 
 def test_sample_batch_shift_structure():
     """target[:, :-1] 应等于 input[:, 1:] (shift-by-1 前 7 位)."""
+    from exp33_fsk_text_smoke import sample_batch
     inp, tgt = sample_batch(8, seed=42)
     # target 前 7 位 = input 后 7 位 (shift-by-1)
     assert torch.equal(tgt[:, :-1], inp[:, 1:]), (
@@ -289,6 +294,7 @@ def test_sample_batch_shift_structure():
 
 def test_sample_batch_vocab_range():
     """所有 char_ids 应在 [0, VOCAB_SIZE)."""
+    from exp33_fsk_text_smoke import sample_batch, VOCAB_SIZE
     inp, tgt = sample_batch(32, seed=42)
     assert inp.min() >= 0 and inp.max() < VOCAB_SIZE
     assert tgt.min() >= 0 and tgt.max() < VOCAB_SIZE
@@ -296,6 +302,7 @@ def test_sample_batch_vocab_range():
 
 def test_sample_batch_seeded_reproducible():
     """同 seed 应产生相同 batch."""
+    from exp33_fsk_text_smoke import sample_batch
     inp1, tgt1 = sample_batch(4, seed=42)
     inp2, tgt2 = sample_batch(4, seed=42)
     assert torch.equal(inp1, inp2)
@@ -368,6 +375,7 @@ Add to `tests/test_exp33.py`:
 ```python
 def test_cwf_predictor_shape():
     """CWFFSKPredictor 应把 (B, S) complex → (B, S) complex."""
+    from exp33_fsk_text_smoke import CWFFSKPredictor, S
     model = CWFFSKPredictor()
     x = torch.randn(4, S, dtype=torch.complex64) * 0.3  # 闭包约束 ‖ψ‖ < 1
     y = model(x)
@@ -377,6 +385,7 @@ def test_cwf_predictor_shape():
 
 def test_transformer_predictor_shape():
     """TransformerFSKPredictor 应把 (B, S) complex → (B, S) complex."""
+    from exp33_fsk_text_smoke import TransformerFSKPredictor, S
     model = TransformerFSKPredictor()
     x = torch.randn(4, S, dtype=torch.complex64) * 0.3
     y = model(x)
@@ -386,6 +395,7 @@ def test_transformer_predictor_shape():
 
 def test_cwf_closure_invariant():
     """CWFFSKPredictor 任意输入经过后, 闭包 ‖ψ‖ < 1 应保持."""
+    from exp33_fsk_text_smoke import CWFFSKPredictor, S
     model = CWFFSKPredictor()
     model.eval()
     x = torch.randn(8, S, dtype=torch.complex64) * 0.5
@@ -397,6 +407,7 @@ def test_cwf_closure_invariant():
 
 def test_model_param_count():
     """CWF 和 Trans 模型应都可训练 (有 > 10k 参数)."""
+    from exp33_fsk_text_smoke import CWFFSKPredictor, TransformerFSKPredictor
     cwf = CWFFSKPredictor()
     trans = TransformerFSKPredictor()
     cwf_params = sum(p.numel() for p in cwf.parameters())
@@ -508,11 +519,8 @@ Add to `tests/test_exp33.py`:
 ```python
 def test_train_one_loss_decreases():
     """train_one 100 步后 final loss 应 < initial loss (起码学会点东西)."""
-    torch.manual_seed(0)
-    initial_loss = F.mse_loss(
-        CWFFSKPredictor()(torch.randn(2, S, dtype=torch.complex64) * 0.3),
-        torch.randn(2, S, dtype=torch.complex64) * 0.3,
-    ).item()
+    from exp33_fsk_text_smoke import train_one, CWFFSKPredictor, S
+    import torch.nn.functional as F
     result = train_one(CWFFSKPredictor(), seed=42, steps=100)
     final_loss = result["losses"][-1]
     initial = result["losses"][0]
@@ -580,11 +588,7 @@ def train_one(model: nn.Module, seed: int, steps: int = TRAIN_STEPS) -> dict:
     return {"losses": losses, "elapsed_s": elapsed, "final_mse": final_mse}
 ```
 
-Note: the test imports `F` from torch.nn.functional — need to update the test imports. Add at top of test file:
-
-```python
-import torch.nn.functional as F  # noqa: E402
-```
+Note: the test imports `F` from torch.nn.functional inside the test function (already done in Step 1).
 
 - [ ] **Step 4: Run test, verify it passes**
 
@@ -620,6 +624,8 @@ Add to `tests/test_exp33.py`:
 ```python
 def test_evaluate_model_perfect_oracle():
     """identity model (psi → psi) 评估应给出高 char_acc (理论上接近 88.4%)."""
+    import torch.nn as nn
+    from exp33_fsk_text_smoke import evaluate_model, N_CHARS
     # identity: 把输入直接当输出 (无法预测位置 7 的新 char)
     class IdentityModel(nn.Module):
         def forward(self, psi):
@@ -646,21 +652,25 @@ def test_evaluate_model_perfect_oracle():
 
 def test_compute_verdict_go():
     """cwf_acc=0.85 > 0.80 → GO."""
+    from exp33_fsk_text_smoke import compute_verdict
     assert compute_verdict(0.85, 0.5) == "GO"
 
 
 def test_compute_verdict_partial_with_advantage():
     """cwf_acc=0.65, cwf_acc/trans_acc = 0.65/1.5 = 0.43 < 0.5 → PARTIAL."""
+    from exp33_fsk_text_smoke import compute_verdict
     assert compute_verdict(0.65, 1.5) == "PARTIAL"
 
 
 def test_compute_verdict_neutral():
     """cwf_acc=0.65, ratio = 0.65/0.8 = 0.81 → NEUTRAL."""
+    from exp33_fsk_text_smoke import compute_verdict
     assert compute_verdict(0.65, 0.8) == "NEUTRAL"
 
 
 def test_compute_verdict_dead():
     """cwf_acc=0.30 < 0.50 → DEAD."""
+    from exp33_fsk_text_smoke import compute_verdict
     assert compute_verdict(0.30, 0.5) == "DEAD"
 ```
 
@@ -765,6 +775,8 @@ Add to `tests/test_exp33.py`:
 ```python
 def test_run_main_smoke():
     """run_main 跑 2 seeds × 2 models, 应在 60s 内完成, 返回 results dict."""
+    import time
+    from exp33_fsk_text_smoke import run_main
     t0 = time.time()
     results = run_main(seeds=[42, 123], steps=200)  # 短步数 for test
     elapsed = time.time() - t0
@@ -780,12 +792,6 @@ def test_run_main_smoke():
         assert "trans_char_acc" in row
         assert "cwf_per_pos" in row
         assert "trans_per_pos" in row
-```
-
-Add to `test_exp33.py` imports:
-
-```python
-import time  # noqa: E402
 ```
 
 - [ ] **Step 2: Run test, verify it fails**
