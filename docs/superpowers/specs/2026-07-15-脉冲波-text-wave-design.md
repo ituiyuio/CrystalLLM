@@ -111,7 +111,6 @@ def fsk_encode(char_ids: LongTensor[B, N_CHARS]) -> ComplexTensor[B, S]:
     output: (B, 64) complex waveform
     """
     B, N = char_ids.shape
-    assert N == N_CHARS == 8
     waveform = torch.zeros(B, S, dtype=torch.complex64)
     for c in range(N_CHARS):
         freq_bin = char_ids[:, c].float()  # (B,) in [0, 8)
@@ -119,8 +118,10 @@ def fsk_encode(char_ids: LongTensor[B, N_CHARS]) -> ComplexTensor[B, S]:
         # 周期长度 T_CHAR = 8, 故相位 = 2π · freq_bin · n/8 for n in [0, 8)
         n = torch.arange(T_CHAR, dtype=torch.float32)  # (8,)
         phase = 2 * pi * freq_bin.unsqueeze(-1) * n.unsqueeze(0) / T_CHAR  # (B, 8)
+        # 共轭符号 (-sin) 是必要的: 与 IFFT 约定对齐, 让 per-slot argmax
+        # 直接落在 char_id bin 上 (用 +sin 会出 8-k 反射峰, 测试会失败)
         waveform[:, c*T_CHAR:(c+1)*T_CHAR] = torch.complex(
-            torch.cos(phase), torch.sin(phase)
+            torch.cos(phase), -torch.sin(phase)
         )
     return waveform
 ```
@@ -185,12 +186,17 @@ class CWFFSKPredictor(nn.Module):
 **Primary metric**: char reconstruction accuracy
 - per-slot IFFT (size T_CHAR=8): `char_id_pred[c] = argmax_{k ∈ [0, 8)} |IFFT(ψ_pred[c*8:(c+1)*8])|[k]`
 - accuracy = mean(predicted == target) over all 8 chars and 1000 test samples
-- **Nyquist-aware 期望**: 完美 shift learner 在 Uniform Random 8-char 数据上 accuracy ≤ 88.4% (7 个位置 100% + 1 个位置 12.5%)
+- **Nyquist-aware 期望**:
+  - **Identity oracle** (model 输出 = model 输入): char_acc ≈ 12.5% (random baseline, 因为 pred=c_i, tgt=c_{i+1}, 仅 1/8 概率匹配)
+  - **完美 shift learner** (model 解码 input → shift+1 → 重编码): char_acc ≤ 88.4% (位置 0-6 完美 + 位置 7 随机 1/8)
+  - **88.4% 是理论天花板**, 用于设定 GO 阈值为 80% (留 8.4% 边量给训练噪声)
 
 **Secondary metrics**:
 - waveform MSE (与 exp31 一致, real+imag 各算)
 - CWF/Trans accuracy ratio (CWF 优势量化)
-- **位置级别 accuracy** (per-slot): 验证位置 0-6 学到 shift, 位置 7 = 1/8 (sanity check)
+- **位置级别 accuracy** (per-slot): sanity check
+  - shift learner: 位置 0-6 高 (>0.9), 位置 7 ~ 0.125
+  - identity: 所有位置 ~ 0.125
 
 **判决逻辑** (`verdict`, 阈值已修正):
 ```python
@@ -252,6 +258,8 @@ research/cwf/experiments/exp33_fsk_text_smoke/
 | 2026-07-15 | 实操参数 (初版) = vocab=32, T_char=2, S=64 | 用户全照推荐 |
 | 2026-07-15 | **实操参数修正** = vocab=8, T_char=8, S=64 (Nyquist 约束) | spec 自审发现 T_char<VOCAB 物理上不可能, ponytail 选最简工作配置 |
 | 2026-07-15 | **判决阈值修正** = 90% → 80% (Nyquist-aware) | 用户发现 8-char shift-by-1 + Random 数据理论天花板 = 88.4%, 90% 数学上不可达; 80% 留 8.4% 安全边量 |
+| 2026-07-15 | **fsk_encode 共轭符号修正** (T1 实现) | 实际代码用 -sin 而非 +sin, 与 IFFT 约定对齐; +sin 会出 8-k 反射峰, test_fsk_energy_per_slot 会 FAIL |
+| 2026-07-15 | **Identity oracle 期望修正** (T5 实现发现) | Spec/plan 误以为 identity 模型 (psi→psi) 是 88.4% "完美 shift learner"; 实际 identity 只是 12.5% random baseline (pred=c_i, tgt=c_{i+1}, 1/8 匹配). 88.4% 仍是"完美 shift learner"的理论天花板, 但需要专门构造 (decode→shift→re-encode). 阈值 (>80% GO) 不变, 仍指 shift learner 的天花板 |
 | 2026-07-15 | Phase 4.2 优先于 Phase 1 PDE 全参数扫描 | 用户意图 (本次 spec 偏离 v51_roadmap 顺序) |
 
 ---
