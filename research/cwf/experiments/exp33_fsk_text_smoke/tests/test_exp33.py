@@ -230,3 +230,27 @@ def test_compute_verdict_dead():
     """cwf_acc=0.30 < 0.50 → DEAD."""
     from exp33_fsk_text_smoke import compute_verdict
     assert compute_verdict(0.30, 0.5) == "DEAD"
+
+
+# ===========================================================================
+# Task 6: run_main e2e test
+# ===========================================================================
+def test_run_main_smoke():
+    """run_main 跑 2 seeds × 2 models, 应在 60s 内完成, 返回 results dict."""
+    import time
+    from exp33_fsk_text_smoke import run_main
+    t0 = time.time()
+    results = run_main(seeds=[42, 123], steps=100)  # CWF 100步 ~28s/run, 2 seeds ~60s (CPU variance)
+    elapsed = time.time() - t0
+    assert elapsed < 65, f"too slow: {elapsed:.1f}s for 2 seeds x 100 steps"
+    assert "config" in results
+    assert "per_seed" in results
+    assert "summary" in results
+    assert "verdict" in results
+    assert len(results["per_seed"]) == 2
+    for row in results["per_seed"]:
+        assert "seed" in row
+        assert "cwf_char_acc" in row
+        assert "trans_char_acc" in row
+        assert "cwf_per_pos" in row
+        assert "trans_per_pos" in row

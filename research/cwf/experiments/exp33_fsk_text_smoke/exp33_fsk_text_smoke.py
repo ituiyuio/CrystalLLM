@@ -265,6 +265,156 @@ def evaluate_model(model: nn.Module, n_samples: int = N_EVAL, seed: int = 0) -> 
     }
 
 
+# ===========================================================================
+# 主程序: multi-seed 跑 CWF + Trans baseline, 输出 results.json
+# ===========================================================================
+def run_main(seeds: list[int] = None, steps: int = TRAIN_STEPS) -> dict:
+    """
+    跑 5 seeds × 2 模型 (CWF + Trans), 收集 char accuracy + per-position breakdown,
+    计算 verdict, 写入 results/exp33_results.json.
+
+    Args:
+        seeds: 随机种子列表 (默认 SEEDS = [42, 123, 2024, 7, 11])
+        steps: 训练步数 (默认 1000, 测试时可调小)
+    Returns:
+        results dict
+    """
+    if seeds is None:
+        seeds = SEEDS
+    print("=" * 70)
+    print(f"Exp 33: CWF × FSK Text-Wave Smoke ({len(seeds)} seeds × {steps} steps)")
+    print("=" * 70)
+    print(f"Config: VOCAB={VOCAB_SIZE}, S={S}, N_CHARS={N_CHARS}, T_CHAR={T_CHAR}")
+    print(f"        BATCH={BATCH_SIZE}, LR={LR}, DEVICE={DEVICE}")
+    print()
+
+    # 参数量统计
+    cwf = CWFFSKPredictor()
+    trans = TransformerFSKPredictor()
+    cwf_params = sum(p.numel() for p in cwf.parameters())
+    trans_params = sum(p.numel() for p in trans.parameters())
+    print(f"  CWF   params: {cwf_params:,}")
+    print(f"  Trans params: {trans_params:,}\n")
+
+    per_seed = []
+    cwf_accs, trans_accs, ratios = [], [], []
+
+    for seed in seeds:
+        print(f"[seed {seed}] CWF training ({steps} steps)...")
+        t0 = time.time()
+        cwf = CWFFSKPredictor()
+        train_one(cwf, seed, steps=steps)
+        cwf_eval = evaluate_model(cwf, n_samples=N_EVAL, seed=seed + 999)
+        cwf_t = time.time() - t0
+        print(f"  char_acc={cwf_eval['char_acc']:.3f}  ({cwf_t:.0f}s)")
+        print(f"  per_pos={[f'{x:.2f}' for x in cwf_eval['per_pos_acc']]}")
+
+        print(f"[seed {seed}] Trans training ({steps} steps)...")
+        t0 = time.time()
+        trans = TransformerFSKPredictor()
+        train_one(trans, seed, steps=steps)
+        trans_eval = evaluate_model(trans, n_samples=N_EVAL, seed=seed + 999)
+        trans_t = time.time() - t0
+        print(f"  char_acc={trans_eval['char_acc']:.3f}  ({trans_t:.0f}s)")
+        print(f"  per_pos={[f'{x:.2f}' for x in trans_eval['per_pos_acc']]}\n")
+
+        cwf_accs.append(cwf_eval['char_acc'])
+        trans_accs.append(trans_eval['char_acc'])
+        # ratio < 1 = CWF 更好
+        ratio = cwf_eval['char_acc'] / max(trans_eval['char_acc'], 1e-6)
+        ratios.append(ratio)
+
+        per_seed.append({
+            "seed": seed,
+            "cwf_char_acc": cwf_eval['char_acc'],
+            "trans_char_acc": trans_eval['char_acc'],
+            "cwf_per_pos": cwf_eval['per_pos_acc'],
+            "trans_per_pos": trans_eval['per_pos_acc'],
+            "cwf_waveform_mse": cwf_eval['waveform_mse'],
+            "trans_waveform_mse": trans_eval['waveform_mse'],
+            "ratio": ratio,
+        })
+
+    # 总结
+    cwf_arr = np.array(cwf_accs)
+    trans_arr = np.array(trans_accs)
+    ratios_arr = np.array(ratios)
+    median_cwf = float(np.median(cwf_arr))
+    median_trans = float(np.median(trans_arr))
+    median_ratio = float(np.median(ratios_arr))
+
+    # verdict: 用中位数对比
+    verdict = compute_verdict(median_cwf, median_trans)
+    verdict_messages = {
+        "GO": f"CWF 达 80% GO 阈值 (median={median_cwf:.3f}), 88.4% 天花板的 {median_cwf/0.884*100:.1f}%",
+        "PARTIAL": f"CWF 重建 {median_cwf:.3f}, 优势 {median_trans/max(median_cwf,1e-6):.1f}x ≥ 2x → PARTIAL",
+        "NEUTRAL": f"CWF 重建 {median_cwf:.3f}, 但优势不足 2x → NEUTRAL",
+        "DEAD": f"CWF 重建 {median_cwf:.3f} < 50% → DEAD, 归档",
+    }
+    verdict_msg = verdict_messages[verdict]
+
+    print("=" * 70)
+    print(f"Summary ({len(seeds)} seeds, {steps} steps):")
+    print("=" * 70)
+    print(f"  CWF  median acc: {median_cwf:.3f}  "
+          f"min={cwf_arr.min():.3f}  max={cwf_arr.max():.3f}  std={cwf_arr.std():.3f}")
+    print(f"  Trans median acc: {median_trans:.3f}  "
+          f"min={trans_arr.min():.3f}  max={trans_arr.max():.3f}  std={trans_arr.std():.3f}")
+    print(f"  Ratio (CWF/Trans): median={median_ratio:.3f}  "
+          f"min={ratios_arr.min():.3f}  max={ratios_arr.max():.3f}")
+    print(f"\nVerdict: {verdict_msg}")
+
+    results = {
+        "config": {
+            "vocab_size": VOCAB_SIZE,
+            "s": S,
+            "n_chars": N_CHARS,
+            "t_char": T_CHAR,
+            "train_steps": steps,
+            "batch_size": BATCH_SIZE,
+            "lr": LR,
+            "n_seeds": len(seeds),
+            "seeds": seeds,
+            "cwf_params": cwf_params,
+            "trans_params": trans_params,
+            "device": DEVICE,
+        },
+        "per_seed": per_seed,
+        "summary": {
+            "cwf_median": median_cwf,
+            "cwf_min": float(cwf_arr.min()),
+            "cwf_max": float(cwf_arr.max()),
+            "cwf_std": float(cwf_arr.std()),
+            "trans_median": median_trans,
+            "trans_min": float(trans_arr.min()),
+            "trans_max": float(trans_arr.max()),
+            "trans_std": float(trans_arr.std()),
+            "ratio_median": median_ratio,
+            "ratio_min": float(ratios_arr.min()),
+            "ratio_max": float(ratios_arr.max()),
+            "ratio_std": float(ratios_arr.std()),
+        },
+        "verdict": verdict,
+        "verdict_message": verdict_msg,
+    }
+    out_path = RESULTS_DIR / "exp33_results.json"
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump(results, f, indent=2, ensure_ascii=False)
+    print(f"\nSaved: {out_path}")
+    return results
+
+
+if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser(description="Exp 33: CWF × FSK Text-Wave Smoke")
+    parser.add_argument("--steps", type=int, default=TRAIN_STEPS,
+                        help=f"训练步数 (default {TRAIN_STEPS})")
+    parser.add_argument("--seeds", type=int, nargs="+", default=SEEDS,
+                        help=f"随机种子列表 (default {SEEDS})")
+    args = parser.parse_args()
+    run_main(seeds=args.seeds, steps=args.steps)
+
+
 def compute_verdict(cwf_acc: float, trans_acc: float) -> str:
     """
     Nyquist-aware 判决 (spec §2):

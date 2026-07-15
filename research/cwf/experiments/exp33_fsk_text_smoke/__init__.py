@@ -8,6 +8,7 @@ from exp33_fsk_text_smoke.exp33_fsk_text_smoke import (
     train_one,
     evaluate_model,
     compute_verdict,
+    run_main,
     S,
     N_CHARS,
     T_CHAR,
