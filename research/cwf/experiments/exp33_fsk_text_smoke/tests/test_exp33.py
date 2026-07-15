@@ -170,3 +170,63 @@ def test_model_param_count():
     assert trans_params > 10_000, f"Trans too small: {trans_params}"
     print(f"  CWF params:   {cwf_params:,}")
     print(f"  Trans params: {trans_params:,}")
+
+
+# ===========================================================================
+# Task 5: evaluate_model + compute_verdict
+# ===========================================================================
+def test_evaluate_model_perfect_oracle():
+    """identity model (psi → psi) 评估: 位置 0-6 ~12.5% (tgt 是 shifted), 位置 7 ~12.5% (random).
+
+    evaluate_model 比较 pred_ids vs tgt_ids (shifted target).
+    对于 identity 模型: pred = inp, 但 tgt 是 shift-by-1, 所以:
+      - 位置 0-6: inp[c] vs inp[c+1] → 只有 1/8 概率相等 → ~12.5%
+      - 位置 7: inp[7] vs random → 1/8 概率相等 → ~12.5%
+    因此 identity 整体 ~12.5% (正确 baseline 行为, 不是 88.4%).
+    """
+    import torch.nn as nn
+    from exp33_fsk_text_smoke import evaluate_model, N_CHARS
+    # identity: 把输入直接当输出
+    class IdentityModel(nn.Module):
+        def forward(self, psi):
+            return psi
+    model = IdentityModel()
+    result = evaluate_model(model, n_samples=500, seed=42)
+    # identity 在 shift-by-1 任务上得到 ~12.5% (random baseline)
+    assert 0.05 < result["char_acc"] < 0.20, (
+        f"identity oracle expected ~12.5%, got {result['char_acc']:.3f}"
+    )
+    assert len(result["per_pos_acc"]) == N_CHARS
+    # 所有位置约 12.5% (因为 tgt 是 shifted, inp 和 tgt 在每个位置只有 1/8 概率匹配)
+    for c in range(N_CHARS):
+        assert 0.05 < result["per_pos_acc"][c] < 0.25, (
+            f"position {c}: expected ~0.125, got {result['per_pos_acc'][c]:.3f}"
+        )
+    # waveform MSE 应为 0 (identity = 完美重构)
+    assert result["waveform_mse"] < 1e-6, (
+        f"identity waveform_mse expected ~0, got {result['waveform_mse']:.6f}"
+    )
+
+
+def test_compute_verdict_go():
+    """cwf_acc=0.85 > 0.80 → GO."""
+    from exp33_fsk_text_smoke import compute_verdict
+    assert compute_verdict(0.85, 0.5) == "GO"
+
+
+def test_compute_verdict_partial_with_advantage():
+    """cwf_acc=0.65, cwf_acc/trans_acc = 0.65/1.5 = 0.43 < 0.5 → PARTIAL."""
+    from exp33_fsk_text_smoke import compute_verdict
+    assert compute_verdict(0.65, 1.5) == "PARTIAL"
+
+
+def test_compute_verdict_neutral():
+    """cwf_acc=0.65, ratio = 0.65/0.8 = 0.81 → NEUTRAL."""
+    from exp33_fsk_text_smoke import compute_verdict
+    assert compute_verdict(0.65, 0.8) == "NEUTRAL"
+
+
+def test_compute_verdict_dead():
+    """cwf_acc=0.30 < 0.50 → DEAD."""
+    from exp33_fsk_text_smoke import compute_verdict
+    assert compute_verdict(0.30, 0.5) == "DEAD"

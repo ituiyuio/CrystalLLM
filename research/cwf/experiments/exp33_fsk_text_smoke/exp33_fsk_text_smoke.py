@@ -224,3 +224,61 @@ class TransformerFSKPredictor(nn.Module):
         h = self.encoder(h)  # (B, S, d)
         out = self.output_proj(h)  # (B, S, 2)
         return torch.complex(out[..., 0], out[..., 1])
+
+
+# ===========================================================================
+# 评估: char accuracy + per-position accuracy (sanity check shift learned)
+# ===========================================================================
+def evaluate_model(model: nn.Module, n_samples: int = N_EVAL, seed: int = 0) -> dict:
+    """
+    评估 model 在 shift-by-1 任务上.
+
+    Returns:
+        {
+            "char_acc": float,            # 全 8 位平均
+            "per_pos_acc": list[float],   # 长度 8, 每个位置的 accuracy
+            "waveform_mse": float,
+        }
+    """
+    model.eval()
+    inp_ids, tgt_ids = sample_batch(n_samples, seed=seed)
+    psi_in = fsk_encode(inp_ids)
+    with torch.no_grad():
+        psi_pred = model(psi_in)
+    pred_ids = fsk_decode(psi_pred)  # (B, N_CHARS) int64
+    tgt_ids = tgt_ids.long()
+    # 全局 accuracy
+    char_acc = (pred_ids == tgt_ids).float().mean().item()
+    # 位置级别 accuracy
+    per_pos_acc = []
+    for c in range(N_CHARS):
+        pos_acc = (pred_ids[:, c] == tgt_ids[:, c]).float().mean().item()
+        per_pos_acc.append(pos_acc)
+    # waveform MSE
+    waveform_mse = (
+        F.mse_loss(psi_pred.real, psi_in.real) + F.mse_loss(psi_pred.imag, psi_in.imag)
+    ).item() / 2.0
+    return {
+        "char_acc": char_acc,
+        "per_pos_acc": per_pos_acc,
+        "waveform_mse": waveform_mse,
+    }
+
+
+def compute_verdict(cwf_acc: float, trans_acc: float) -> str:
+    """
+    Nyquist-aware 判决 (spec §2):
+      > 0.80          → GO
+      0.50-0.80 + 优势 ≥ 2x → PARTIAL
+      0.50-0.80 + 无优势 → NEUTRAL
+      < 0.50          → DEAD
+    """
+    if cwf_acc >= 0.80:
+        return "GO"
+    if cwf_acc >= 0.50:
+        # 优势 = trans_acc / cwf_acc (trans 是 cwf 的几倍) ; CWF 优势要求 ratio < 0.5
+        ratio = cwf_acc / max(trans_acc, 1e-6)
+        if ratio < 0.5:
+            return "PARTIAL"
+        return "NEUTRAL"
+    return "DEAD"
