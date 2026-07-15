@@ -147,6 +147,53 @@ class CWFFSKPredictor(nn.Module):
         return torch.complex(psi_out_ri[..., 0], psi_out_ri[..., 1])
 
 
+# ===========================================================================
+# 训练一个 (model, seed) 配置, 复用 exp31 风格
+# ===========================================================================
+def train_one(model: nn.Module, seed: int, steps: int = TRAIN_STEPS) -> dict:
+    """
+    训练 model 在 FSK shift-by-1 任务上.
+
+    Args:
+        model: nn.Module, 输入输出 (B, S) complex
+        seed: 随机种子
+        steps: 训练步数 (默认 1000)
+    Returns:
+        {"losses": [...], "elapsed_s": float, "final_mse": float}
+    """
+    torch.manual_seed(seed)
+    np.random.seed(seed)
+    model = model.to(DEVICE)
+    opt = torch.optim.Adam(model.parameters(), lr=LR)
+
+    losses = []
+    t0 = time.time()
+    for step in range(steps):
+        inp_ids, tgt_ids = sample_batch(BATCH_SIZE)
+        psi_in = fsk_encode(inp_ids).to(DEVICE)  # (B, S) complex
+        psi_tgt = fsk_encode(tgt_ids).to(DEVICE)  # (B, S) complex
+        psi_pred = model(psi_in)
+        # MSE on real + imag
+        loss = F.mse_loss(psi_pred.real, psi_tgt.real) + F.mse_loss(psi_pred.imag, psi_tgt.imag)
+        opt.zero_grad()
+        loss.backward()
+        opt.step()
+        losses.append(loss.item())
+    elapsed = time.time() - t0
+
+    # 评估: 重新生成 N_EVAL 个测试样本, 算 final MSE
+    model.eval()
+    with torch.no_grad():
+        inp_ids, tgt_ids = sample_batch(N_EVAL, seed=seed + 999)
+        psi_in = fsk_encode(inp_ids).to(DEVICE)
+        psi_tgt = fsk_encode(tgt_ids).to(DEVICE)
+        psi_pred = model(psi_in)
+        final_mse = (
+            F.mse_loss(psi_pred.real, psi_tgt.real) + F.mse_loss(psi_pred.imag, psi_tgt.imag)
+        ).item()
+    return {"losses": losses, "elapsed_s": elapsed, "final_mse": final_mse}
+
+
 class TransformerFSKPredictor(nn.Module):
     """1D Transformer encoder baseline (实数, 处理 real/imag 2 通道).
 

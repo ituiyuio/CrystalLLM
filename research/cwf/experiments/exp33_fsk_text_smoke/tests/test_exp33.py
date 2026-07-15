@@ -139,6 +139,26 @@ def test_cwf_closure_invariant():
     assert (norm < 1.0).all(), f"closure violated: max norm = {norm.max().item()}"
 
 
+# ===========================================================================
+# Task 4: train_one smoke test
+# ===========================================================================
+def test_train_one_loss_decreases():
+    """train_one 100 步后 final loss 应 < initial loss (起码学会点东西)."""
+    from exp33_fsk_text_smoke import train_one, CWFFSKPredictor, S
+    import torch.nn.functional as F
+    result = train_one(CWFFSKPredictor(), seed=42, steps=100)
+    final_loss = result["losses"][-1]
+    initial = result["losses"][0]
+    assert final_loss < initial, f"loss did not decrease: {initial} → {final_loss}"
+    assert "losses" in result
+    assert "elapsed_s" in result
+    assert "final_mse" in result
+    assert len(result["losses"]) == 100
+
+
+# ===========================================================================
+# Task 3 continued: model param count
+# ===========================================================================
 def test_model_param_count():
     """CWF 和 Trans 模型应都可训练 (有 > 10k 参数)."""
     from exp33_fsk_text_smoke import CWFFSKPredictor, TransformerFSKPredictor

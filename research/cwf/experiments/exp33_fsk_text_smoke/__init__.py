@@ -5,6 +5,7 @@ from exp33_fsk_text_smoke.exp33_fsk_text_smoke import (
     sample_batch,
     CWFFSKPredictor,
     TransformerFSKPredictor,
+    train_one,
     S,
     N_CHARS,
     T_CHAR,
