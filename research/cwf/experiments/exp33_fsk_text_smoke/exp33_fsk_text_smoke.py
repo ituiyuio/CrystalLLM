@@ -94,3 +94,27 @@ def fsk_decode(waveform: torch.Tensor) -> torch.Tensor:
         # argmax 可能返回 [0, 7], 但 freq=7 是 Nyquist; 取 [0, 7) 范围取 [0, 7]
         char_ids[:, c] = spec.argmax(dim=-1)
     return char_ids
+
+
+# ===========================================================================
+# 数据生成: 内存随机, shift-by-1
+# ===========================================================================
+def sample_batch(batch_size: int, seed: int | None = None) -> tuple[torch.Tensor, torch.Tensor]:
+    """
+    随机 8-char 序列, 目标 = input shift-by-1 (最后 1 位是新的随机).
+
+    Args:
+        batch_size: B
+        seed: 随机种子 (None = 全随机)
+    Returns:
+        (input_char_ids, target_char_ids): 都是 (B, N_CHARS) int64
+        target[:, :-1] == input[:, 1:], target[:, -1] 是新随机
+    """
+    gen = torch.Generator()
+    if seed is not None:
+        gen.manual_seed(seed)
+    inp = torch.randint(0, VOCAB_SIZE, (batch_size, N_CHARS), generator=gen)
+    # target[:, :-1] = inp[:, 1:], target[:, -1] = 新随机
+    new_chars = torch.randint(0, VOCAB_SIZE, (batch_size, 1), generator=gen)
+    tgt = torch.cat([inp[:, 1:], new_chars], dim=1)
+    return inp, tgt

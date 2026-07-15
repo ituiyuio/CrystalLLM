@@ -62,3 +62,43 @@ def test_fsk_energy_per_slot():
         assert actual_peak == expected_peak, (
             f"slot {c}: expected peak at freq {expected_peak}, got {actual_peak}"
         )
+
+
+# ===========================================================================
+# Task 2: sample_batch tests
+# ===========================================================================
+def test_sample_batch_shapes():
+    """sample_batch(B=4) 应返回 (4, N_CHARS) 两个 int64 tensor."""
+    from exp33_fsk_text_smoke import sample_batch, N_CHARS
+    inp, tgt = sample_batch(4, seed=42)
+    assert inp.shape == (4, N_CHARS)
+    assert tgt.shape == (4, N_CHARS)
+    assert inp.dtype == torch.long
+    assert tgt.dtype == torch.long
+
+
+def test_sample_batch_shift_structure():
+    """target[:, :-1] 应等于 input[:, 1:] (shift-by-1 前 7 位)."""
+    from exp33_fsk_text_smoke import sample_batch
+    inp, tgt = sample_batch(8, seed=42)
+    # target 前 7 位 = input 后 7 位 (shift-by-1)
+    assert torch.equal(tgt[:, :-1], inp[:, 1:]), (
+        f"shift mismatch: tgt[:,:-1]={tgt[:,:-1]} vs inp[:,1:]={inp[:,1:]}"
+    )
+
+
+def test_sample_batch_vocab_range():
+    """所有 char_ids 应在 [0, VOCAB_SIZE)."""
+    from exp33_fsk_text_smoke import sample_batch, VOCAB_SIZE
+    inp, tgt = sample_batch(32, seed=42)
+    assert inp.min() >= 0 and inp.max() < VOCAB_SIZE
+    assert tgt.min() >= 0 and tgt.max() < VOCAB_SIZE
+
+
+def test_sample_batch_seeded_reproducible():
+    """同 seed 应产生相同 batch."""
+    from exp33_fsk_text_smoke import sample_batch
+    inp1, tgt1 = sample_batch(4, seed=42)
+    inp2, tgt2 = sample_batch(4, seed=42)
+    assert torch.equal(inp1, inp2)
+    assert torch.equal(tgt1, tgt2)
