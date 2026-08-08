@@ -231,13 +231,16 @@ class RTX5090InferenceEngine:
         以便后续CPU计算和快速H2D拷贝。
         """
         # === v3-fix: F5 — 去掉 astype ===
+        # === v3-fix: F16 — torch ↔ numpy 类型转换 ===
+        # scale_cpu 是 torch.FloatTensor, scale_np 是 numpy.float32
+        # 直接赋值 TypeError,必须 torch.from_numpy 包装
         for idx in self.warm_indices:
             data_tensor = torch.from_numpy(self.W_nvme[idx])
             # pinned memory：直接 .pin_memory()（已在 pinned pool 里则 no-op）
             if not data_tensor.is_pinned():
                 data_tensor = data_tensor.pin_memory()
             self.W_cpu[idx] = data_tensor
-            self.scale_cpu[idx] = self.scale_np[idx]
+            self.scale_cpu[idx] = torch.from_numpy(np.array([self.scale_np[idx]])).squeeze(0)
             self.cpu_resident[idx] = True
         print(f"   Loaded {len(self.warm_indices)} warm blocks to CPU pinned memory.")
 
