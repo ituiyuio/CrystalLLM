@@ -402,6 +402,18 @@ class RTX5090SpikePool:
             grad_norms = grads_batch.view(K, -1).norm(dim=1)
             self.grad_norm_ema[active_idx] = 0.9 * self.grad_norm_ema[active_idx] + 0.1 * grad_norms
 
+            # === v3-fix: F11 — 显式显存管理（v3-final 训练循环的工程缺陷）===
+            # 现象: 100 步之后 OOM,PyTorch caching allocator reserved ~100GB 虚拟
+            # 根因: v3-final 每步不 del 中间 tensor,autograd graph 累积,
+            #       PyTorch caching allocator 默认贪心 pre-allocate
+            # 修法: del 关键中间 tensor + 每 50 步 empty_cache 强制释放
+            del W_active, deltas, losses, total_loss, grads_batch
+            del delta_update, update_norms
+            if 'rounded' in locals():
+                del rounded
+            if step % 50 == 0:
+                torch.cuda.empty_cache()
+
         # ===== 7. 微睡眠（周期性执行） =====
         if step % self.cfg['MicroSleep_Interval'] == 0 and not self.lock_phase:
             self._microsleep(target_S)
