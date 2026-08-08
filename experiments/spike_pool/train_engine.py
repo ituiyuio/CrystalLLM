@@ -184,6 +184,23 @@ class RTX5090SpikePool:
         self.k_embed_initialized = False
         self.warmup_steps = config['Warmup_Steps']
 
+        # === v3-fix: F13 — 预分配 fixed-size FP32 缓存 buffer（momo fail-fast 根因修）===
+        # 根因: W_active = W_pool[active_idx].float() * scale 每步新建 FP32 tensor
+        #       K 变化导致 caching allocator fragmentation,allocated 持续增长
+        # 修法: 预分配 max_k 大小的 FP32 buffer (不带 grad),
+        #       每步 view + detach().requires_grad_() + copy_ + mul_ 复用同一段内存
+        # 注意: PyTorch 禁止 in-place 改 leaf+grad tensor,所以 buffer 不带 grad,
+        #       每步给 W_active 临时建 detached leaf view
+        max_k = config['Top_K_Active'] + 4   # +4 余量
+        self._W_fp32_cache = torch.zeros(
+            max_k, self.d_inner, self.d_model,
+            dtype=torch.float32, device='cuda'
+        )   # 不带 grad,纯数据 buffer
+        self._S_fp32_cache = torch.zeros(
+            max_k, self.d_model, 1,
+            dtype=torch.float32, device='cuda'
+        )
+
         # === v3-fix: F2 — 预算缩放因子张量，避免每步 .item() 同步 ===
         # 预分配 inv_scale_ratio = cap / S_Norm_Cap = 128/512 = 0.25
         # 实际缩放时用 (S_norm / 128) 作为分母，全 GPU 计算
@@ -270,8 +287,10 @@ class RTX5090SpikePool:
                 (self.burst_counter - 0.5).clamp(min=0)
             )
 
-        # 返回活跃块索引（转为CPU以便后续索引）
-        return G.nonzero(as_tuple=True)[0].cpu()
+        # === v3-fix: F13 — 移除 .cpu() 让 active_idx 留在 GPU ===
+        # 原版返回 CPU tensor 触发 device transfer,产生额外分配
+        # 新版直接返回 GPU int64,索引 self.W_pool 无需 transfer
+        return G.nonzero(as_tuple=True)[0]
 
     # ===================== 动态学习率（C方案） =====================
     def _get_lr_vectorized(self, idx: torch.Tensor, step: int) -> torch.Tensor:
@@ -358,16 +377,22 @@ class RTX5090SpikePool:
 
         # ===== 4. 前向：Batch GEMM =====
         S_old = self.S.clone()
-        # 从池中取权重并反量化 [K, d_inner, d_model]
-        # === v3-fix: F1 — 显式 requires_grad_() ===
-        # W_pool 是 int8，索引后转 float 默认无 grad_fn。
-        # 显式标记 leaf 并开启 grad，autograd.grad 才能工作
-        W_active = (
-            self.W_pool[active_idx].float()
-            * self.scale_pool[active_idx].unsqueeze(-1).unsqueeze(-1)
-        ).detach().requires_grad_(True)
-        # S扩展为批处理版本 [K, d_model, 1]
-        S_batch = S_old.unsqueeze(0).unsqueeze(-1).repeat(K, 1, 1)
+        # === v3-fix: F13 — 预分配 FP32 缓存 view + copy_ + mul_（momo 根因修）===
+        # 替换原本的 W_active = (W_pool[idx].float() * scale).detach().requires_grad_()
+        # 那个写法每步新建 ~1GB FP32 tensor,caching allocator 持有可能 fragmentation leak
+        # 新写法:view 预分配 buffer (零分配),detach().requires_grad_() 作为 leaf for autograd
+        #         in-place copy_/mul_ 在 torch.no_grad() 块内执行,绕过 "leaf+grad in-place" 限制
+        W_active = self._W_fp32_cache[:K].detach().requires_grad_(True)
+        S_batch = self._S_fp32_cache[:K]     # view,零分配,不带 grad (无 autograd 需求)
+
+        # 就地填充 W_active:INT8 -> float -> scale
+        # no_grad 块: copy_/mul_ in-place 不破坏 leaf+grad 的 autograd contract
+        with torch.no_grad():
+            W_active.copy_(self.W_pool[active_idx].float())
+            scale_exp = self.scale_pool[active_idx].view(K, 1, 1)
+            W_active.mul_(scale_exp)
+            S_batch.copy_(S_old.unsqueeze(0).unsqueeze(-1).expand(K, -1, -1))
+
         # 🚀 单次CUDA Kernel启动，Tensor Core满载
         deltas = torch.bmm(W_active, S_batch).squeeze(-1)   # [K, d_inner]
         self.S = S_old + deltas.sum(dim=0)
@@ -438,6 +463,19 @@ class RTX5090SpikePool:
                       f"alloc={_alloc:5.2f}GB | peak={_peak:5.2f}GB | "
                       f"allocs={_ms.get('allocation_count.all', 0):8d} "
                       f"frees={_ms.get('free_count.all', 0):8d}")
+
+            # === v3-fix: F13 — 主动内存管理（momo 根因修）===
+            # 预分配 buffer 解决了 W_active leak,但 grads_batch / delta_update
+            # 仍是 autograd 返回的新 tensor,每步新建,需要显式 del + 条件 empty_cache
+            # 注: 用 locals() check 防 lock_phase 跳过训练态时 UnboundLocalError
+            for _v in ('W_active', 'S_batch', 'deltas', 'grads_batch', 'delta_update'):
+                if _v in locals():
+                    del locals()[_v]
+            if step % 10 == 0:
+                _alloc_gb = torch.cuda.memory_allocated() / 1e9
+                _total_gb = torch.cuda.get_device_properties(0).total_memory / 1e9
+                if _alloc_gb > 0.7 * _total_gb:
+                    torch.cuda.empty_cache()
 
         # ===== 7. 微睡眠（周期性执行） =====
         if step % self.cfg['MicroSleep_Interval'] == 0 and not self.lock_phase:
