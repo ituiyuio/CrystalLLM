@@ -90,6 +90,94 @@ INT8 池占显存 ~8GB，**需要 ≥12GB VRAM**（RTX 5090 32GB 满载，但笔
 - **不污染 `experiments/v49_pre/`**：v49_pre 是 CWF/Soft-Exp 那一套，spike_pool 是另一条路
 - **命名**：spike_pool 而非 v51_spike_pool——v 编号留个余量给主线（v50 已经在 main 上）
 
+---
+
+## 推理引擎（infer_engine.py）
+
+训练端的姊妹项目——把训练生成的 `model_pool.bin` + 元数据加载起来跑前向。
+
+### 核心设计
+
+| # | 模块 | 关键想法 |
+|---|------|---------|
+| 1 | 三级存储 | Hot (GPU) / Warm (CPU pinned) / Cold (NVMe memmap) 按激活频次切分 |
+| 2 | 异步预取 | 后台线程从 memmap 读 → pinned `prefetch_buffer`；主循环 cache hit 走异步 H2D |
+| 3 | 异构计算 | 热块在 GPU 做 Batch GEMM（INT8 Tensor Core），温块在 CPU 做小批量矩阵乘（AVX-512 / MKL） |
+| 4 | 全 GPU 门控 | 删 S_cpu 镜像，b_gate / k_embed / q_proj 全在 GPU，跨设备同步点归零 |
+| 5 | 末期对齐 | 硬阈值（`prob > 0.5`）+ 内容寻址偏置，与训练末期 `lock_phase` 完全一致 |
+| 6 | 缓存策略 | prefetch_buffer LRU 上限 256 块，防长跑内存泄漏；冷块首次访问同步兜底 |
+
+### 推理端 v3-fix 修复清单
+
+相对原始 v3-final 推理代码的 5 个硬伤：
+
+| ID | 问题 | 严重度 | 修法 |
+|----|------|-------|------|
+| F1 | `_ensure_blocks_ready` 同步 NVMe 读 + 同步 H2D，**首次冷块访问卡主循环 50-100ms** | 🔴 阻塞 | 拆成"后台 memmap→pinned"和"主循环 pinned→GPU 异步 H2D"两步；cache miss 仍同步兜底（一次性） |
+| F2 | `S_cpu.copy_(self.S.cpu(), non_blocking=True)` 中 `.cpu()` 本身就是同步 D2H，**non_blocking 无效** | 🟠 假同步 | 删 S_cpu 镜像，门控全 GPU（b_gate / k_embed / q_proj 都在 CUDA） |
+| F3 | 预取循环 N 次 `.item()` 触发 GPU→CPU 同步 | 🟠 性能 | 维护 CPU 镜像 `_gpu_resident_cpu` / `_cpu_resident_cpu`，每 `resident_sync_interval=10` 步 sync 一次 |
+| F4 | 推理端无 S 范数闸门，**自回归生成 100+ 步 S 范数累积爆炸**，INT8 量化精度退化 | 🟠 正确性 | 加 `s_norm_cap=512`（与训练端一致），纯 GPU `torch.where` 缩放 |
+| F5 | `self.W_nvme[idx].astype(np.int8)` 冗余（memmap 本身就是 int8，astype 会再拷一份） | 🟡 浪费 | 去掉 |
+
+修复点在代码里全部用 `# === v3-fix: <id> ===` 标注。
+
+### 训练→推理契约（必读）
+
+推理端有几个**隐式假设**，训练端必须满足：
+
+| 假设 | 来源 | 不满足会怎样 |
+|------|------|-------------|
+| `W_pool` 已按 `activation_stats` 降序重排 | 训练端必须调 `pool.finalize_inference()` 后再保存 | Hot/Warm/Cold 划分乱套，高频块可能落到 NVMe |
+| `scale_pool` 已经是训练末期的最终值 | 训练端 `finalize_inference` 已把它跟 W_pool 一起保存 | INT8 反量化系数不对，所有 GEMM 输出偏移 |
+| `b_gate` 是末期锁定后的稳态值 | 训练端末期锁定阶段不更新 b_gate | 推理门控概率分布跟训练不一致 |
+| `S_Norm_Cap=512` 两端对齐 | 推理端 INFER_CONFIG['s_norm_cap'] = 512 | 推理 S 累积爆炸或训练时序漂移 |
+
+简单说：**没调 `pool.finalize_inference()` 之前保存的 .bin 不能直接喂给推理端**。
+
+### 推理快速开始
+
+```bash
+# 已经在 spike-pool-v3 分支上
+# 1. 训练（生成 model_pool.bin + .npy）
+python experiments/spike_pool/train_engine.py
+
+# 2. 推理（加载 .bin 跑前向）
+python experiments/spike_pool/infer_engine.py
+```
+
+跑起来后会看到：
+
+```
+📂 Loading model from NVMe...
+   Loaded W_pool: (128, 16384, 4096), size: 8.59GB
+   Storage hierarchy: Hot=32, Warm=44, Cold=52
+   Loaded 32 hot blocks to GPU.
+   Loaded 44 warm blocks to CPU pinned memory.
+✅ Inference engine ready: 32 hot blocks on GPU, 44 warm blocks on CPU, 52 cold blocks on NVMe.
+   GPU memory used (W_gpu): 8.59GB
+⏱️ 100 steps inference took 245.32ms (2.453ms/step)
+🔮 Generating sequence...
+   Generated 50 states, final S norm: 127.84
+🛑 Inference engine shut down.
+```
+
+### 推理端配置项
+
+`INFER_CONFIG` 字典在 `infer_engine.py` 顶部：
+
+| Key | 默认 | 说明 |
+|-----|------|------|
+| `gpu_hot_ratio` | 0.25 | Hot 集比例（按训练端 `activation_stats` 排序前 25%） |
+| `cpu_warm_ratio` | 0.35 | Warm 集比例（25%~60% 区间） |
+| `prefetch_window` | 16 | 每步预取候选块数（覆盖 NVMe 延迟） |
+| `top_k_active` | 32 | 每步最大激活块数（与训练一致） |
+| `s_norm_cap` | 512 | S 范数硬上限（v3-fix F4，与训练一致） |
+| `resident_sync_interval` | 10 | CPU 镜像同步间隔（v3-fix F3） |
+| `use_cpu_compute` | True | 启用温块 CPU 异构计算（异构模式开关） |
+| `cpu_cores` | 8 | torch CPU 线程数 |
+
+---
+
 ## TODO / 已知限制
 
 - [ ] **真实数据集**：`__main__` 现在用 `torch.randn` 模拟目标，需要接 dataloader
@@ -99,10 +187,22 @@ INT8 池占显存 ~8GB，**需要 ≥12GB VRAM**（RTX 5090 32GB 满载，但笔
 - [ ] **量化感知微调**：当前 scale_pool 手动管理，没用 QAT 工具链
 - [ ] **多卡**：单卡设计，DP/TP/FSDP 都没接
 
+### 推理端 TODO
+
+- [ ] **真实 benchmark**：`__main__` 现在用 `torch.randn` 模拟初始 S，没接真实 tokenizer 出来的 embedding
+- [ ] **预取命中率报表**：prefetch_buffer cache hit rate / NVMe read count 还没监控
+- [ ] **冷块首次访问延迟**：cache miss 同步兜底路径有 ~50-100ms 卡顿，要不要做"宁可跳过该块也不阻塞"
+- [ ] **Stream 优先级**：H2D 预取 stream 跟主计算 stream 的优先级没设，可能互相挤
+- [ ] **evict_cold_blocks 是手动调**：没接自动显存水位监控（`torch.cuda.memory_reserved()`）
+- [ ] **多卡 / 张量并行**：单卡设计，TP 拆分 num_blocks 没做
+- [ ] **dynamic shapes**：当前所有张量 shape 写死，d_model/d_inner/num_blocks 改了要重启引擎
+
 ## 实验日志
 
-- 2026-08-08：v3-final 原始代码 review，识别 5 个硬伤
-- 2026-08-08：v3-fix 落地，本 README
+- 2026-08-08：v3-final 训练引擎 review，识别 5 个硬伤（F1-F5）
+- 2026-08-08：v3-fix 训练引擎落地，commit `091f3c4`
+- 2026-08-08：v3-final 推理引擎 review，识别 5 个硬伤（F1-F5，与训练端平行编号）
+- 2026-08-08：v3-fix 推理引擎落地，README 显式化"训练→推理契约"
 - ...（开了新坑就往下加）
 
 ---
