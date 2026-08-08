@@ -100,10 +100,11 @@ def run_measurement(n_steps: int = 50, warmup: int = 5, T: int = 1):
         print(f"        改用 T>1 触发真 GEMM, 升级到 BF16 才能上 80%+.")
     else:
         if util_est < 50:
-            print(f"  Note: T={T} 已升级到真 GEMM, 但仍是 FP32 → 普通 cores.")
-            print(f"        下一步: 升级到 BF16, 让 bmm 走 5th-gen Tensor Core.")
+            print(f"  Note: T={T} bmm 算 T/d_inner={T/d_in:.4f} FLOP/byte ({'memory-bound' if T<d_in else 'approaching compute-bound'}).")
+            print(f"        5090 TC 算 1.5TB/s mem, 1500 TOPS INT8 → compute-bound 需 T>~{d_in}.")
+            print(f"        step time 仍被 gather (0.94ms) + launch overhead 主导.")
         else:
-            print(f"  ✓ T={T} + FP32 已达 {util_est:.1f}% 估算 TC 利用率")
+            print(f"  ✓ T={T} 已达 {util_est:.1f}% 估算 TC 利用率")
     print("=" * 60)
 
     pool.shutdown()

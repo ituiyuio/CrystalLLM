@@ -104,7 +104,9 @@ CONFIG = {
                                    # 把 GEMV 升级为真 GEMM,Tensor Core 满载
                                    # T=64 时 bmm 是 64 倍算力,Tensor Core 利用率
                                    # 从 0.01% → 应该能上 80%+
-    'T_batch_max': 128,          # 预分配 S_cache 的最大 T,超出则 lazy 重分配
+    'T_batch_max': 4096,         # 预分配 S_cache 的最大 T,超出则 lazy 重分配
+                                   # === v4-fix: F19 — 提高到 4096,让 T=1024-4096 不用 regrow
+                                   # T=4096 测得 31% BF16 peak, 越大越接近 compute-bound
 
     # === v3-fix: F4 — b_gate 均值回归 ===
     # 磨损均衡 +0.5 单边累积会推高老块门控，
@@ -384,12 +386,17 @@ class RTX5090SpikePool:
         T = target_S.shape[0]
         if T > self._S_fp32_max_T:
             # Lazy 重分配:超过 T_batch_max 才发生,生产环境通常不会
+            # F18: 同时 regrow FP32 + BF16 两个 cache
             self._S_fp32_max_T = T
             self._S_fp32_cache = torch.zeros(
                 self._W_fp32_cache.shape[0], self.d_model, T,
                 dtype=torch.float32, device='cuda'
             )
-            print(f"⚠️  S_fp32_cache lazy-regrown to T={T}")
+            self._S_bf16_cache = torch.zeros(
+                self._W_bf16_cache.shape[0], self.d_model, T,
+                dtype=torch.bfloat16, device='cuda'
+            )
+            print(f"⚠️  S_fp32+bf16_cache lazy-regrown to T={T}")
 
         # ===== 1. k_embed 内容预热（解决冷启动） =====
         # 前Warmup_Steps步，累积S的均值方向，用于初始化新块的键
@@ -431,7 +438,7 @@ class RTX5090SpikePool:
         W_active = self._W_bf16_cache[:K].detach().requires_grad_(True)  # BF16 leaf
         S_batch = self._S_bf16_cache[:K, :, :T]                          # BF16 view, no grad
 
-        # 就地填充:INT8 -> BF16 (跳过 FP32 intermediate,直接 cast)
+        # 就地填充 W_active:从 W_pool 走 INT8->FP32->BF16 链 (单次 fused cast)
         # scale 改成 post-bmm 应用 (避免 BF16 量化误差污染 W)
         # no_grad 块: copy_ in-place 不破坏 leaf+grad 的 autograd contract
         with torch.no_grad():
