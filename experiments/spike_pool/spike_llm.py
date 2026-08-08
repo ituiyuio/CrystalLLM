@@ -143,67 +143,37 @@ def estimate_loss(model: SpikeLLM, token_ids: torch.Tensor, B: int, L: int,
     return float(np.mean(losses))
 
 
-def train(args):
-    device = 'cuda'
+def generate(model: SpikeLLM, prompt_ids: torch.Tensor, max_new_tokens: int = 50,
+              temperature: float = 1.0, device='cuda') -> torch.Tensor:
+    """从 prompt_ids 开始自回归生成, 用训练好的 SpikeLLM.
+    返回: [prompt_len + max_new_tokens] 长 token id tensor"""
+    model.eval()
+    prompt_len = prompt_ids.shape[0]
+    generated = prompt_ids.clone()
+    S = model.embed(generated.unsqueeze(0).to(device))  # [1, prompt_len, D]
+    S = S[0, -1:, :]  # 取最后一步的 S 作为下一步的输入
+    # 自回归: 一边生成一边把新 token 拼到 sequence
+    with torch.no_grad():
+        for _ in range(max_new_tokens):
+            # 用 last embed + 上一步 S 做下一步
+            # model.embed 是词表 lookup, 给当前 token
+            cur_target = model.embed(generated[-1:].to(device))  # [1, D]
+            S = model.pool.forward_step_state(cur_target, S)  # [1, D]
+            logits = model.output_head(S)  # [1, vocab]
+            # sample next token
+            probs = F.softmax(logits[0] / temperature, dim=-1)
+            next_id = torch.multinomial(probs, 1).item()
+            generated = torch.cat([generated, torch.tensor([next_id])])
+    model.train()
+    return generated
 
-    # 1. Pool + Model
-    print(f"  Creating pool: d_model={args.d_model}, d_inner={args.d_inner}, "
-          f"num_blocks={args.num_blocks}, top_k={args.top_k}")
-    pool = make_pool(d_model=args.d_model, d_inner=args.d_inner,
-                     num_blocks=args.num_blocks, top_k=args.top_k)
-    print(f"  Creating SpikeLLM: vocab_size={args.vocab_size}, "
-          f"embed params={args.vocab_size * args.d_model:,}")
-    model = SpikeLLM(pool, vocab_size=args.vocab_size).to(device)
-    n_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
-    print(f"  Trainable params (embed + output_head): {n_params:,}")
-    print(f"  Pool INT8 params: {pool.W_pool.numel():,}")
 
-    # 2. Data
-    bpe_path = os.path.join(
-        "D:/CrystaLLM/experiments/v49_pre", args.bpe_file
-    )
-    print(f"  Loading BPE data: {bpe_path}")
-    token_ids = get_bpe_data(bpe_path, max_tokens=args.max_tokens)
-    print(f"  Total tokens: {len(token_ids):,}")
-
-    # 3. Optimizer (only embed + output_head, pool 内部自己更新)
-    optimizer = torch.optim.AdamW(
-        [p for n, p in model.named_parameters() if 'embed' in n or 'output' in n],
-        lr=args.lr, betas=(0.9, 0.95), weight_decay=0.0
-    )
-
-    # 4. Train loop
-    print(f"\n  Training: B={args.batch_size}, L={args.seq_len}, "
-          f"steps={args.steps}, eval_every={args.eval_every}")
-    print("=" * 60)
-    t_start = time.time()
-    for step in range(args.steps):
-        inp, tgt = get_batch(token_ids, args.batch_size, args.seq_len, device)
-
-        loss = model(inp)
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
-
-        if step % args.log_every == 0:
-            elapsed = time.time() - t_start
-            sps = (step + 1) / elapsed if elapsed > 0 else 0
-            print(f"  step {step:5d} | loss {loss.item() / (args.seq_len - 1):.4f} "
-                  f"| sps {sps:.2f} | elapsed {elapsed:.0f}s")
-
-        if (step + 1) % args.eval_every == 0:
-            val_loss = estimate_loss(model, token_ids, args.batch_size,
-                                     args.seq_len, n_batches=10, device=device)
-            ppl = math.exp(val_loss) if val_loss < 20 else float('inf')
-            print(f"  === eval @ step {step+1} | val_loss {val_loss:.4f} | "
-                  f"ppl {ppl:.2f}")
-
-    # 5. Final eval
-    final_loss = estimate_loss(model, token_ids, args.batch_size,
-                               args.seq_len, n_batches=50, device=device)
-    final_ppl = math.exp(final_loss) if final_loss < 20 else float('inf')
-    print(f"\n  FINAL val_loss {final_loss:.4f} | ppl {final_ppl:.2f}")
-    return final_loss
+def decode_ids(token_ids, tokenizer_path="D:/CrystaLLM/experiments/v49_pre/bpe_tokenizer.pkl"):
+    """BPE token ids -> text"""
+    import pickle
+    with open(tokenizer_path, 'rb') as f:
+        enc = pickle.load(f)
+    return enc.decode(token_ids.tolist())
 
 
 if __name__ == "__main__":
@@ -222,5 +192,123 @@ if __name__ == "__main__":
     p.add_argument("--lr", type=float, default=1e-3)
     p.add_argument("--log_every", type=int, default=10)
     p.add_argument("--eval_every", type=int, default=100)
+    p.add_argument("--generate", action="store_true", help="训完跑一个 generation demo")
+    p.add_argument("--gen_prompt", type=str, default="The", help="起始 prompt text")
+    p.add_argument("--gen_length", type=int, default=50, help="生成 token 数")
     args = p.parse_args()
-    train(args)
+
+    if not args.generate:
+        # 训练模式 (原 main)
+        def _train_only():
+            device = 'cuda'
+            print(f"  Creating pool: d_model={args.d_model}, d_inner={args.d_inner}, "
+                  f"num_blocks={args.num_blocks}, top_k={args.top_k}")
+            pool = make_pool(d_model=args.d_model, d_inner=args.d_inner,
+                             num_blocks=args.num_blocks, top_k=args.top_k)
+            print(f"  Creating SpikeLLM: vocab_size={args.vocab_size}, "
+                  f"embed params={args.vocab_size * args.d_model:,}")
+            model = SpikeLLM(pool, vocab_size=args.vocab_size).to(device)
+            n_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+            print(f"  Trainable params (embed + output_head): {n_params:,}")
+            print(f"  Pool INT8 params: {pool.W_pool.numel():,}")
+
+            bpe_path = os.path.join("D:/CrystaLLM/experiments/v49_pre", args.bpe_file)
+            print(f"  Loading BPE data: {bpe_path}")
+            token_ids = get_bpe_data(bpe_path, max_tokens=args.max_tokens)
+            print(f"  Total tokens: {len(token_ids):,}")
+
+            optimizer = torch.optim.AdamW(
+                [p for n, p in model.named_parameters() if 'embed' in n or 'output' in n],
+                lr=args.lr, betas=(0.9, 0.95), weight_decay=0.0
+            )
+
+            print(f"\n  Training: B={args.batch_size}, L={args.seq_len}, "
+                  f"steps={args.steps}, eval_every={args.eval_every}")
+            print("=" * 60)
+            t_start = time.time()
+            for step in range(args.steps):
+                inp, tgt = get_batch(token_ids, args.batch_size, args.seq_len, device)
+                loss = model(inp)
+                optimizer.zero_grad()
+                loss.backward()
+                optimizer.step()
+                if step % args.log_every == 0:
+                    elapsed = time.time() - t_start
+                    sps = (step + 1) / elapsed if elapsed > 0 else 0
+                    print(f"  step {step:5d} | loss {loss.item() / (args.seq_len - 1):.4f} "
+                          f"| sps {sps:.2f} | elapsed {elapsed:.0f}s")
+                if (step + 1) % args.eval_every == 0:
+                    val_loss = estimate_loss(model, token_ids, args.batch_size,
+                                             args.seq_len, n_batches=10, device=device)
+                    ppl = math.exp(val_loss) if val_loss < 20 else float('inf')
+                    print(f"  === eval @ step {step+1} | val_loss {val_loss:.4f} | ppl {ppl:.2f}")
+
+            final_loss = estimate_loss(model, token_ids, args.batch_size,
+                                       args.seq_len, n_batches=50, device=device)
+            final_ppl = math.exp(final_loss) if final_loss < 20 else float('inf')
+            print(f"\n  FINAL val_loss {final_loss:.4f} | ppl {final_ppl:.2f}")
+            # === v4-fix: F20e — 训完跑 generation demo, momo 看实际输出 ===
+            try:
+                import pickle
+                with open("D:/CrystaLLM/experiments/v49_pre/bpe_tokenizer.pkl", 'rb') as f:
+                    enc = pickle.load(f)
+                for prompt in ["The ", "In ", "Once "]:
+                    try:
+                        prompt_ids = torch.tensor(enc.encode_ordinary(prompt), dtype=torch.long)
+                        out = generate(model, prompt_ids, max_new_tokens=30, device=device)
+                        text = decode_ids(out)
+                        print(f"  [{prompt!r}] -> {text!r}")
+                    except Exception as ex:
+                        print(f"  [{prompt!r}] gen failed: {ex}")
+            except Exception as ex:
+                print(f"  (skip generation, tokenizer error: {ex})")
+            return model, token_ids
+        _train_only()
+    else:
+        # 生成模式: 先训一点再 generate
+        device = 'cuda'
+        print(f"  Creating pool + model for generation test")
+        pool = make_pool(d_model=args.d_model, d_inner=args.d_inner,
+                         num_blocks=args.num_blocks, top_k=args.top_k)
+        model = SpikeLLM(pool, vocab_size=args.vocab_size).to(device)
+        bpe_path = os.path.join("D:/CrystaLLM/experiments/v49_pre", args.bpe_file)
+        token_ids = get_bpe_data(bpe_path, max_tokens=args.max_tokens)
+        print(f"  Total tokens: {len(token_ids):,}")
+        
+        if args.steps > 0:
+            optimizer = torch.optim.AdamW(
+                [p for n, p in model.named_parameters() if 'embed' in n or 'output' in n],
+                lr=args.lr, betas=(0.9, 0.95), weight_decay=0.0
+            )
+            print(f"  Quick training: {args.steps} steps")
+            t_start = time.time()
+            for step in range(args.steps):
+                inp, tgt = get_batch(token_ids, args.batch_size, args.seq_len, device)
+                loss = model(inp)
+                optimizer.zero_grad()
+                loss.backward()
+                optimizer.step()
+                if step % 20 == 0:
+                    print(f"  step {step} | loss {loss.item() / (args.seq_len - 1):.4f}")
+            print(f"  Training done in {time.time() - t_start:.0f}s")
+        
+        # Generate
+        print(f"\n  === GENERATION TEST ===")
+        try:
+            import pickle
+            with open("D:/CrystaLLM/experiments/v49_pre/bpe_tokenizer.pkl", 'rb') as f:
+                enc = pickle.load(f)
+            prompt_ids_list = enc.encode_ordinary(args.gen_prompt)
+            prompt_ids = torch.tensor(prompt_ids_list, dtype=torch.long)
+            print(f"  Prompt: '{args.gen_prompt}' -> {prompt_ids_list}")
+        except Exception as ex:
+            print(f"  Tokenizer load failed: {ex}, using random prompt")
+            prompt_ids = torch.randint(0, args.vocab_size, (3,))
+            args.gen_prompt = "<random>"
+        
+        out_ids = generate(model, prompt_ids, max_new_tokens=args.gen_length, device=device)
+        out_text = decode_ids(out_ids)
+        print(f"\n  === OUTPUT ===")
+        print(f"  {out_text}")
+        print(f"  ===============\n")
+
