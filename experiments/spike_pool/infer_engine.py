@@ -159,17 +159,23 @@ class RTX5090InferenceEngine:
     def _load_model(self):
         """
         从NVMe加载训练好的池子及元数据。
-        使用np.memmap实现零拷贝，不占用CPU DRAM。
+
+        === v3-fix: F14 — Windows np.memmap 大文件限制 ===
+        原: np.memmap 1.07GB 触发 WinError 8 (内存资源不足)
+            Windows mmap 句柄对大文件有限制 (标准用户 ~2GB)
+        改: np.fromfile 一次性读进 CPU memory
+            1.07GB 远小于 momo 系统 RAM (32-64GB),无压力
+        trade-off: 失去零拷贝 + 节省 CPU DRAM,但推理阶段只读一次,
+                   后续全部是 CPU/GPU 计算,影响小
         """
         prefix = self.cfg['model_prefix']
         pool_path = f"{prefix}.bin"
         if not os.path.exists(pool_path):
             raise FileNotFoundError(f"Model file not found: {pool_path}")
 
-        # 权重池（INT8） - memmap只读映射
-        self.W_nvme = np.memmap(
-            pool_path, dtype=np.int8, mode='r',
-            shape=(self.num_blocks, self.d_inner, self.d_model)
+        # 权重池（INT8） - 一次性读进 CPU memory (替代 np.memmap 避免 Windows 限制)
+        self.W_nvme = np.fromfile(pool_path, dtype=np.int8).reshape(
+            self.num_blocks, self.d_inner, self.d_model
         )
 
         # 加载元数据（直接 mmap，numpy 自动处理）
