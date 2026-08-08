@@ -54,8 +54,12 @@ if hasattr(sys.stderr, 'reconfigure'):
 # ======================== 配置 ========================
 INFER_CONFIG = {
     'd_model': 4096,              # 必须与训练一致
-    'd_inner': 16384,             # 必须与训练一致
-    'num_blocks': 128,            # 必须与训练一致
+    'd_inner': 4096,              # === v3-fix: F15 — 同步 train_engine F7 ===
+                                   # 训练侧 F7 把 d_inner 16384 -> 4096 (与 d_model 对齐)
+                                   # 这里必须同步,否则 .bin reshape 失败
+    'num_blocks': 64,             # === v3-fix: F15 — 同步 train_engine F10 ===
+                                   # 训练侧 F10 把 num_blocks 128 -> 64 (OOM 修)
+                                   # 这里必须同步
     'd_k': 16,                    # 必须与训练一致
     'gpu_hot_ratio': 0.25,        # 常驻GPU的热块比例（按激活频次Top%）
     'cpu_warm_ratio': 0.35,       # 驻留CPU钉锁内存的温块比例
