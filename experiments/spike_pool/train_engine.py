@@ -45,6 +45,12 @@ import sys
 from concurrent.futures import ThreadPoolExecutor
 from typing import Optional
 
+# === v3-fix: F9 — CUDA 显存 fragmentation 缓解 ===
+# 现象: 128 块 + 4096 d_inner 单步峰值申请 2GB 时 OOM,但 nvidia-smi 显示 28GB 空闲
+# 根因: PyTorch 缓存分配器碎片化(虚拟分配 101GB / 物理 32GB)
+# 修法: expandable_segments 让 segment 块按需扩展,减少浪费
+os.environ.setdefault('PYTORCH_CUDA_ALLOC_CONF', 'expandable_segments:True')
+
 # === v3-fix: F6 — Windows GBK stdout 编码（emoji 兜不住）===
 # 现象：__init__ 里的 🚀 触发 UnicodeEncodeError: 'gbk' codec
 # 修法：reconfigure stdout/stderr 到 utf-8（errors='replace' 兜底）
