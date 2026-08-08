@@ -97,6 +97,14 @@ CONFIG = {
     # 物理闸门
     'S_Norm_Cap': 512.0,          # S范数硬上限（超过则缩放到128）
     'Warmup_Steps': 100,          # k_embed预热步数
+    'T_batch': 64,                # === v4-fix: F17 — 序列批维度
+                                   # 1D target 走 T=1 旧路径（向后兼容）
+                                   # 2D target [T, d_model] 把 bmm 第二参数
+                                   # 从 [K, d_model, 1] 扩到 [K, d_model, T]
+                                   # 把 GEMV 升级为真 GEMM,Tensor Core 满载
+                                   # T=64 时 bmm 是 64 倍算力,Tensor Core 利用率
+                                   # 从 0.01% → 应该能上 80%+
+    'T_batch_max': 128,          # 预分配 S_cache 的最大 T,超出则 lazy 重分配
 
     # === v3-fix: F4 — b_gate 均值回归 ===
     # 磨损均衡 +0.5 单边累积会推高老块门控，
@@ -196,8 +204,14 @@ class RTX5090SpikePool:
             max_k, self.d_inner, self.d_model,
             dtype=torch.float32, device='cuda'
         )   # 不带 grad,纯数据 buffer
+        # === v4-fix: F17 — _S_fp32_cache 升级为 [K, d_model, T_max] ===
+        # 原 [K, d_model, 1] 把 bmm 钉死在 GEMV (P=1),Tensor Core 大量空闲
+        # 新 [K, d_model, T_max] 让 bmm 第二参数可塞 T 个位置,
+        # 变成真 GEMM [K, d_inner, d_model] @ [K, d_model, T] = [K, d_inner, T]
+        # T_max 决定最大支持 T_batch,超出 lazy 重分配
+        self._S_fp32_max_T = config.get('T_batch_max', 128)
         self._S_fp32_cache = torch.zeros(
-            max_k, self.d_model, 1,
+            max_k, self.d_model, self._S_fp32_max_T,
             dtype=torch.float32, device='cuda'
         )
 
@@ -343,6 +357,24 @@ class RTX5090SpikePool:
         self._step_counter += 1
         lock_start = int(self.cfg['T_total'] * self.cfg['Lock_Ratio'])
 
+        # === v4-fix: F17 — 序列批维度检测 ===
+        # 1D target [d_model]  → T=1  旧 GEMV 路径（向后兼容,推理侧不变）
+        # 2D target [T, d_model] → T 位置 bmm [K,d_inner,d_model] @ [K,d_model,T]
+        #                       = [K,d_inner,T]  真 GEMM,5th-gen Tensor Core 满载
+        # T=1 时所有后续逻辑数学上完全等价于 v3 (bmm 后 [K,d_inner,1] 等价于
+        # squeeze 后的 [K,d_inner]; mean(dim=2) 是 identity; .T + mean(dim=0) 等价)
+        if target_S.dim() == 1:
+            target_S = target_S.unsqueeze(0)  # [1, d_model]
+        T = target_S.shape[0]
+        if T > self._S_fp32_max_T:
+            # Lazy 重分配:超过 T_batch_max 才发生,生产环境通常不会
+            self._S_fp32_max_T = T
+            self._S_fp32_cache = torch.zeros(
+                self._W_fp32_cache.shape[0], self.d_model, T,
+                dtype=torch.float32, device='cuda'
+            )
+            print(f"⚠️  S_fp32_cache lazy-regrown to T={T}")
+
         # ===== 1. k_embed 内容预热（解决冷启动） =====
         # 前Warmup_Steps步，累积S的均值方向，用于初始化新块的键
         if step < self.warmup_steps:
@@ -375,15 +407,12 @@ class RTX5090SpikePool:
         if K == 0:
             return self.S   # 全休眠，直接返回
 
-        # ===== 4. 前向：Batch GEMM =====
+        # ===== 4. 前向：Batch GEMM (with T dim) =====
         S_old = self.S.clone()
         # === v3-fix: F13 — 预分配 FP32 缓存 view + copy_ + mul_（momo 根因修）===
-        # 替换原本的 W_active = (W_pool[idx].float() * scale).detach().requires_grad_()
-        # 那个写法每步新建 ~1GB FP32 tensor,caching allocator 持有可能 fragmentation leak
-        # 新写法:view 预分配 buffer (零分配),detach().requires_grad_() 作为 leaf for autograd
-        #         in-place copy_/mul_ 在 torch.no_grad() 块内执行,绕过 "leaf+grad in-place" 限制
+        # === v4-fix: F17 — S_batch 升级为 [K, d_model, T] (T=1 时数学等价) ===
         W_active = self._W_fp32_cache[:K].detach().requires_grad_(True)
-        S_batch = self._S_fp32_cache[:K]     # view,零分配,不带 grad (无 autograd 需求)
+        S_batch = self._S_fp32_cache[:K, :, :T]   # view [K, d_model, T], T=1 旧路径
 
         # 就地填充 W_active:INT8 -> float -> scale
         # no_grad 块: copy_/mul_ in-place 不破坏 leaf+grad 的 autograd contract
@@ -391,26 +420,38 @@ class RTX5090SpikePool:
             W_active.copy_(self.W_pool[active_idx].float())
             scale_exp = self.scale_pool[active_idx].view(K, 1, 1)
             W_active.mul_(scale_exp)
-            S_batch.copy_(S_old.unsqueeze(0).unsqueeze(-1).expand(K, -1, -1))
+            S_batch.copy_(S_old.unsqueeze(0).unsqueeze(-1).expand(K, -1, T))
 
-        # 🚀 单次CUDA Kernel启动，Tensor Core满载
-        deltas = torch.bmm(W_active, S_batch).squeeze(-1)   # [K, d_inner]
-        self.S = S_old + deltas.sum(dim=0)
+        # bmm: [K, d_inner, d_model] @ [K, d_model, T] = [K, d_inner, T]
+        # T=1  →  [K, d_inner, 1]  旧 GEMV 路径,数值等价 squeeze 后的 [K, d_inner]
+        # T>1  →  [K, d_inner, T]  真 GEMM, Tensor Core 跑满
+        deltas = torch.bmm(W_active, S_batch)   # === v4-fix: F17 — 不再 squeeze(-1) ===
+        # 持久 S 更新:sum over K, mean over T (per-token 效应,T 不影响更新幅度)
+        # T=1 时 delta_S = deltas.sum(dim=0).T 是 [1, d_inner], mean(dim=0) = [d_inner]
+        #         等价 v3 的 self.S = S_old + deltas.sum(dim=0)
+        delta_S = deltas.sum(dim=0).T             # [T, d_inner] = [T, d_model]
+        self.S = S_old + delta_S.mean(dim=0)      # [d_model]
 
         # ===== 5. 更新历史增量（GDP核算数据） =====
         if not self.lock_phase:
             # === v3-fix: F7b — 直接 += deltas（[K, d_inner]），hist_delta 形状已对齐 ===
             # 原 v3-final 用 pooled_delta = deltas.mean(dim=1) 把 d_inner 维求平均成 [K]，
             # 跟 [K, d_model] 的 hist_delta 形状冲突。这里直接存 d_inner 维 hidden 方向。
-            self.hist_delta[active_idx] += deltas  # deltas: [K, d_inner]
+            # === v4-fix: F17 — deltas 现在是 [K, d_inner, T], mean(dim=2) 折叠 T 维 ===
+            self.hist_delta[active_idx] += deltas.mean(dim=2)  # [K, d_inner]
 
         # ===== 6. 局部反向传播（仅训练态） =====
         if not self.lock_phase:
-            # 构造批量局部损失：让 S_old + delta_i 逼近 target_S
-            S_old_exp = S_old.unsqueeze(0).repeat(K, 1)
-            target_exp = target_S.unsqueeze(0).repeat(K, 1)
-            delta_contrib = S_old_exp + deltas   # [K, d_model]
-            losses = F.mse_loss(delta_contrib, target_exp, reduction='none').mean(dim=1)
+            # === v4-fix: F17 — loss 扩展到 T 维 ===
+            # 表达式: 对每个 (k, t) 让 S_old + deltas[k, :, t] 逼近 target_S[t]
+            # S_old broadcast 到 [1, 1, d_model], deltas.permute(0,2,1) = [K, T, d_inner]
+            # T=1 时退化为 [K, 1, d_model], 数值上等价 v3 的 [K, d_model]
+            S_old_exp = S_old.view(1, 1, self.d_model)            # [1, 1, d_model]
+            deltas_perm = deltas.permute(0, 2, 1)                  # [K, T, d_inner] = [K, T, d_model]
+            delta_contrib = S_old_exp + deltas_perm                # [K, T, d_model]
+            # === v4-fix: F17 — target 显式 expand 到 [K, T, d_model],避免 mse_loss 广播 warning ===
+            target_exp = target_S.unsqueeze(0).expand(K, T, self.d_model)  # [K, T, d_model]
+            losses = F.mse_loss(delta_contrib, target_exp, reduction='none').mean(dim=2)  # [K, T]
             total_loss = losses.sum()
 
             # 🚀 唯一反向传播Kernel（批处理）
