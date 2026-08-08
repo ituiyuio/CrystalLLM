@@ -47,6 +47,7 @@ os.environ.setdefault('PYTORCH_CUDA_ALLOC_CONF', 'expandable_segments:True')
 import torch
 import torch.nn.functional as F
 import math
+import time   # === v4-fix: F20c — progress writer 用 ===
 import numpy as np
 import sys
 from concurrent.futures import ThreadPoolExecutor
@@ -76,7 +77,7 @@ CONFIG = {
 
     # 训练控制
     'lr_base': 1e-3,              # 基础学习率
-    'T_total': 10000,             # 总训练步数
+    'T_total': 2000,              # 总训练步数 (先 2K 验证 DataLoader + T=128, 完整跑 10K)
     'T_report': 100,              # 有形大手调度间隔（步）
     'T_warm': 500,                # 新块学习率升温步数
 
@@ -97,7 +98,7 @@ CONFIG = {
     # 物理闸门
     'S_Norm_Cap': 512.0,          # S范数硬上限（超过则缩放到128）
     'Warmup_Steps': 100,          # k_embed预热步数
-    'T_batch': 64,                # === v4-fix: F17 — 序列批维度
+    'T_batch': 128,               # === v4-fix: F17 — 序列批维度
                                    # 1D target 走 T=1 旧路径（向后兼容）
                                    # 2D target [T, d_model] 把 bmm 第二参数
                                    # 从 [K, d_model, 1] 扩到 [K, d_model, T]
@@ -107,6 +108,10 @@ CONFIG = {
     'T_batch_max': 4096,         # 预分配 S_cache 的最大 T,超出则 lazy 重分配
                                    # === v4-fix: F19 — 提高到 4096,让 T=1024-4096 不用 regrow
                                    # T=4096 测得 31% BF16 peak, 越大越接近 compute-bound
+    'gpu_mem_fraction': 1.0,      # === v4-fix: F20c — momo 调高内存墙到 100% (32GB 整张卡)
+                                   # 之前 0.85 限到 27GB, v3 跑 100 步就 OOM (caching allocator 持 100GB 虚拟)
+                                   # 现在 1.0 让 PyTorch 把整张 5090 都用上, expandable_segments
+                                   # 仍设着 (Windows 失效但 Linux 兼容)
 
     # === v3-fix: F4 — b_gate 均值回归 ===
     # 磨损均衡 +0.5 单边累积会推高老块门控，
@@ -123,6 +128,24 @@ CONFIG = {
     'gpu_mem_fraction': 0.85,        # 进程级显存硬上限 (RTX 5090 32GB * 0.85 = ~27GB)
     'mem_log_interval': 50,          # 每 N 步打印 memory_stats
 }
+
+
+# === v4-fix: F20c — _TargetIterable 提到模块级 (Windows multiprocessing pickle 要求) ===
+# 现象: 在 if __name__ == "__main__": 里定义 class, DataLoader workers (子进程) 找不到
+#       "Can't get attribute '_TargetIterable' on <module '__mp_main__'>"
+# 修法: 模块顶层定义, 跨进程可见
+class _TargetIterable(torch.utils.data.IterableDataset):
+    """无尽生成 [T, d_model] 随机 targets 在 CPU 上, 配 DataLoader pin_memory=True
+    实际生产替换为真实 dataset (token IDs from disk, etc.)"""
+    def __init__(self, T, d_model, seed=0):
+        self.T = T
+        self.d_model = d_model
+        self.seed = seed
+    def __iter__(self):
+        g = torch.Generator()
+        g.manual_seed(self.seed)
+        while True:
+            yield torch.randn(self.T, self.d_model, generator=g)
 
 
 class RTX5090SpikePool:
@@ -216,6 +239,21 @@ class RTX5090SpikePool:
             max_k, self.d_model, self._S_fp32_max_T,
             dtype=torch.float32, device='cuda'
         )
+        # === v4-fix: F20c — _microsleep 专用预分配 buffer (覆盖 num_blocks 个冻结块) ===
+        # 根因: _microsleep 每 100 步执行, 后期 freeze_idx 可达 64 (所有块都冻结),
+        #       旧代码 self.W_pool[freeze_idx].float() * scale 每次新建 1GB FP32,
+        #       10000 步 = 100 次 × 1GB = 100GB 分配压力, caching allocator 撑不住
+        # 修法: 预分配 _W_freeze_cache 大小为 num_blocks (跟 update_buffer 一样大),
+        #       _microsleep 复用这个 buffer, 跟 forward_step 的 F13 同款
+        self._W_freeze_fp32_cache = torch.zeros(
+            self.num_blocks, self.d_inner, self.d_model,
+            dtype=torch.float32, device='cuda'
+        )  # 1.07GB, _microsleep 专用
+        self._S_freeze_fp32_cache = torch.zeros(
+            self.num_blocks, self.d_model, 1,
+            dtype=torch.float32, device='cuda'
+        )  # 256KB, S 缓存 (T=1 路径)
+
         # === v4-fix: F18 — 预分配 BF16 cache,让 bmm 走 5th-gen Tensor Core ===
         # 根因: 5090 5th-gen TC 跑 BF16/FP16/INT8/FP8, FP32 走普通 SIMT cores (~21 TFLOPS)
         #       BF16 TC 峰值 ~250 TFLOPS, ~12x speedup. 即使小 bmm 也能用满 TC.
@@ -574,6 +612,10 @@ class RTX5090SpikePool:
     # ===================== 微睡眠 =====================
     def _microsleep(self, target_S: torch.Tensor):
         """
+        === v4-fix: F20c — target_S dim-agnostic ===
+        F17 在 forward_step 顶部把 1D target 升到 2D [1, d_model],
+        旧的 _microsleep 假设 1D [d_model] 又 unsqueeze(0) → 3D 跟 repeat 冲突.
+        修法: 函数开头 normalize 到 2D, 后面就跟原来一样.
         微睡眠：离线巩固，两步操作：
             1. 即时重演：唤醒长期冻结块，用当前S做一次低学习率更新
             2. Scale全局归一化：统一各块动态范围
@@ -583,18 +625,35 @@ class RTX5090SpikePool:
         freeze_mask = (step - self.last_active) > self.cfg['Freeze_Limit']
         freeze_idx = freeze_mask.nonzero(as_tuple=True)[0]
 
+        # F20c: normalize target_S 到 2D [1, d_model] (兼容 T=1 旧 1D 和 T>1 2D 路径)
+        if target_S.dim() == 1:
+            target_S = target_S.unsqueeze(0)  # [1, d_model]
+        # target_S 现在是 [T, d_model] (T=1 或 T>1), 跟 freeze_idx 维度对齐需要 [1, d_model]
+        # microsleep 只用一个 target, 拿第一个位置即可
+        if target_S.shape[0] > 1:
+            target_S = target_S[:1]  # 取第一个位置作为 microsleep target
+
         # 阶段1：即时重演（让冻结块用当前S练手）
         if len(freeze_idx) > 0:
-            # === v3-fix: F1 — 微睡眠里同样的 autograd 修复 ===
-            W_freeze = (
-                self.W_pool[freeze_idx].float()
-                * self.scale_pool[freeze_idx].unsqueeze(-1).unsqueeze(-1)
-            ).detach().requires_grad_(True)
-            S_batch = self.S.unsqueeze(0).unsqueeze(-1).repeat(len(freeze_idx), 1, 1)
-            deltas_freeze = torch.bmm(W_freeze, S_batch).squeeze(-1)
+            N = len(freeze_idx)
+            # === v4-fix: F20c — 用预分配 _W_freeze_fp32_cache (跟 forward_step F13 同款) ===
+            # 旧代码每 100 步新建 1GB FP32 tensor, 10000 步 = 100GB 分配压力
+            # 新写法: view 预分配 buffer (零分配), detach().requires_grad_() 作为 leaf
+            W_freeze = self._W_freeze_fp32_cache[:N].detach().requires_grad_(True)
+            S_freeze = self._S_freeze_fp32_cache[:N]  # view, no grad
 
-            S_exp = self.S.unsqueeze(0).repeat(len(freeze_idx), 1)
-            target_exp = target_S.unsqueeze(0).repeat(len(freeze_idx), 1)
+            # 就地填充:INT8 -> FP32, scale 已 baked into scale_pool
+            with torch.no_grad():
+                W_freeze.copy_(self.W_pool[freeze_idx].float())
+                scale_exp = self.scale_pool[freeze_idx].view(N, 1, 1)
+                W_freeze.mul_(scale_exp)
+                S_freeze.copy_(self.S.unsqueeze(0).unsqueeze(-1).expand(N, -1, -1))
+
+            deltas_freeze = torch.bmm(W_freeze, S_freeze).squeeze(-1)   # [N, d_inner]
+
+            S_exp = self.S.unsqueeze(0).repeat(N, 1)
+            # === v4-fix: F20c — target_S 已 normalize 到 2D, 不再 unsqueeze ===
+            target_exp = target_S.repeat(N, 1)  # [1, d_model] → [N, d_model]
             losses = F.mse_loss(S_exp + deltas_freeze, target_exp, reduction='none').mean(dim=1)
             grads = torch.autograd.grad(losses.sum(), W_freeze)[0]
 
@@ -604,13 +663,19 @@ class RTX5090SpikePool:
             self.update_buffer[freeze_idx] += delta_update
 
             # 提交
-            update_norms = self.update_buffer[freeze_idx].view(len(freeze_idx), -1).abs().mean(dim=1)
+            update_norms = self.update_buffer[freeze_idx].view(N, -1).abs().mean(dim=1)
             commit_mask = update_norms > 0.5
             if commit_mask.any():
                 commit_idx = freeze_idx[commit_mask]
                 rounded = torch.round(self.update_buffer[commit_idx]).to(torch.int8)
                 self.W_pool[commit_idx] = torch.clamp(self.W_pool[commit_idx] + rounded, -128, 127)
                 self.update_buffer[commit_idx] -= rounded.float()
+
+            # === v4-fix: F20c — 显式 del + 缓存 alloc ===
+            del W_freeze, deltas_freeze, losses, grads, delta_update, update_norms
+            if 'rounded' in locals():
+                del rounded
+            torch.cuda.empty_cache()
 
         # 阶段2：Scale归一化（统一各块动态范围）
         # === v3-fix: F5 — 只调 scale_pool，不动 W_pool ===
@@ -670,6 +735,36 @@ class RTX5090SpikePool:
             self.hist_delta *= 0.5
 
     # ===================== 训练结束固化 =====================
+    # === v4-fix: F20c — progress writer (momo 实时看训练状态) ===
+    # 每 progress_interval 步把状态写到 JSON 文件, _monitor.py 读它显示
+    def write_progress(self, step: int, t_start: float):
+        """写一个 JSON 行到 <save_path>_progress.json, _monitor.py 读这个文件显示
+        不要用 json.dump + open, 慢. 用单行 write + atomic replace."""
+        import json, os
+        s_norm = float(self.S.norm().item())  # sync
+        active_logical = int((self.b_gate > -1e5).sum().item())
+        elapsed = time.time() - t_start
+        sps = (step + 1) / elapsed if elapsed > 0 else 0
+        eta = (self.cfg['T_total'] - step - 1) / sps if sps > 0 else 0
+        progress = {
+            "step": step,
+            "total": self.cfg['T_total'],
+            "sps": sps,
+            "elapsed_s": elapsed,
+            "eta_s": eta,
+            "s_norm": s_norm,
+            "active_logical": active_logical,
+            "num_blocks": self.num_blocks,
+            "top_k": self.cfg['Top_K_Active'],
+            "t_batch": self.cfg.get('T_batch', 1),
+        }
+        path = self.cfg.get('save_path', './model_pool') + '_progress.json'
+        # atomic write: 写 .tmp 然后 rename, 避免 _monitor 读到半截
+        tmp = path + '.tmp'
+        with open(tmp, 'w', encoding='utf-8') as f:
+            json.dump(progress, f)
+        os.replace(tmp, path)
+
     def finalize_inference(self, save_path: Optional[str] = None):
         """
         训练结束后调用，执行：
@@ -712,16 +807,51 @@ if __name__ == "__main__":
     # 初始化训练池
     pool = RTX5090SpikePool(CONFIG)
 
-    # 生成模拟目标数据（实际训练时替换为dataloader）
-    # 这里仅作演示，真实场景应使用真实数据集迭代器
-    targets = [torch.randn(CONFIG['d_model'], device='cuda') for _ in range(CONFIG['T_total'])]
+    # === v4-fix: F20c — 用 2D target [T, d_model] 触发 F17 T batching + F18 BF16 bmm ===
+    # T=1 是 v3 老路径 (F18 BF16 cast 开销 > TC 收益, 反而慢)
+    # T=64+ 让 bmm [K, d_inner, d_model] @ [K, d_model, T] 走真 GEMM, F18 BF16 TC 才有意义
+    # 取 CONFIG['T_batch'] 作 T, 推理路径 (1D target) 仍兼容
+    # === v4-fix: F20c — DataLoader 走 CPU 多 worker (momo 反馈 CPU RAM 没利用) ===
+    # 10000 * T * 4096 * 4 bytes targets 太大 (T=64 时 10GB, T=128 时 20GB),
+    # 改用 IterableDataset + DataLoader + num_workers, workers 在 CPU 后台生成
+    train_T = CONFIG.get('T_batch', 64)
+
+    if train_T == 1:
+        # T=1 仍用 list (1D target, 推理兼容)
+        targets = [torch.randn(CONFIG['d_model'], pin_memory=True) for _ in range(CONFIG['T_total'])]
+        target_iter = iter(targets)
+        print(f"  Training with T_batch={train_T} ({'v3 1D 路径' if train_T == 1 else 'v4 2D + BF16 TC 路径'})")
+        print(f"  targets: {len(targets)} x [{train_T}, {CONFIG['d_model']}] on CPU pinned (pre-alloc)")
+    else:
+        # 2D target 走 DataLoader 多 worker
+        # num_workers=4 让 4 个 CPU 进程并行生成, 每步主进程拿一个 batch
+        # _TargetIterable 在模块级定义 (Windows multiprocessing pickle 要求)
+        ds = _TargetIterable(train_T, CONFIG['d_model'], seed=42)
+        loader = torch.utils.data.DataLoader(
+            ds,
+            batch_size=None,            # IterableDataset 已经按 T 输出
+            num_workers=4,              # 4 个 CPU worker 并行生成
+            pin_memory=True,            # 锁页内存, H2D 走 DMA 不阻塞
+        )
+        target_iter = iter(loader)
+        # 估算 CPU 占用: 4 workers * T * d_model * 4 bytes = 16 * T MB pinned
+        cpu_mem_mb = 4 * train_T * CONFIG['d_model'] * 4 / 1e6
+        print(f"  Training with T_batch={train_T} ({'v3 1D 路径' if train_T == 1 else 'v4 2D + BF16 TC 路径'})")
+        print(f"  DataLoader: 4 CPU workers, ~{cpu_mem_mb:.0f}MB pinned per worker")
+        print(f"  targets: 无尽 IterableDataset (T={train_T}, d_model={CONFIG['d_model']})")
 
     print("\n" + "=" * 60)
     print("Starting training...")
     print("=" * 60 + "\n")
 
+    t_start = time.time()
+    progress_interval = 100  # 每 100 步写 progress JSON 给 _monitor.py 读
     for step in range(CONFIG['T_total']):
-        target = targets[step]
+        # === v4-fix: F20c — 从 target_iter 拿下一个 target (DataLoader 或 list 通用) ===
+        target_cpu = next(target_iter)
+        # === v4-fix: F20c — H2D transfer (CPU pinned -> GPU) 每步做一次, 走 pinned 通道 ===
+        # 第一次 .cuda(non_blocking=True) 触发实际传输, 后续 reuse
+        target = target_cpu.cuda(non_blocking=True)
         try:
             S_new = pool.forward_step(target)
         except torch.cuda.OutOfMemoryError as oom:
@@ -750,6 +880,13 @@ if __name__ == "__main__":
             norm_S = S_new.norm().item()
             print(f"Step {step:5d} | Active logical: {active_logical:3d}/{CONFIG['num_blocks']} | "
                   f"S_norm: {norm_S:.4f}")
+
+        # === v4-fix: F20c — progress writer 给 _monitor.py 实时看 ===
+        if step % progress_interval == 0:
+            pool.write_progress(step, t_start)
+
+    # 写最后一步
+    pool.write_progress(CONFIG['T_total'] - 1, t_start)
 
     print("\n" + "=" * 60)
     print("Training complete. Freezing model...")
