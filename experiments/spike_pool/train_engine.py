@@ -71,7 +71,7 @@ CONFIG = {
                                    # 导致 bmm 输出 [d_inner] 加回 [d_model] shape 不匹配。
                                    # 折中：d_inner = d_model = 方阵权重 W @ S = delta
                                    # 显存：8.59GB → 2.15GB（参数减 4 倍）
-    'num_blocks': 128,            # 残差块总数（即“专家”数量）
+    'num_blocks': 64,             # 残差块总数（v3-final 原 128,RTX 5090 32GB 装不下,改 64）
     'd_k': 16,                    # 内容寻址的键维度（极小的路由表）
 
     # 训练控制
@@ -85,7 +85,7 @@ CONFIG = {
     'Burst_Limit': 20,            # 行锤击缓解：连续激活超过此值则强制静默
     'MicroSleep_Interval': 100,   # 微睡眠间隔（步）
     'Lock_Ratio': 0.95,           # 末期锁定起始比例（最后5%步数）
-    'Top_K_Active': 32,           # 每步最大激活块数（保证Batch GEMM最优）
+    'Top_K_Active': 16,           # 每步最大激活块数（v3-final 原 32,改 16 压峰值）
 
     # GDP税收（同质化惩罚）
     'GDP_Threshold': 0.6,         # |余弦相似度|超过此值则收税（双向）
