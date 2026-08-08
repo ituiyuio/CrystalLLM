@@ -106,6 +106,12 @@ CONFIG = {
 
     # 保存路径
     'save_path': './model_pool',  # 模型文件前缀
+
+    # === v3-fix: F12 — 显存 instrumentation + 硬限制 ===
+    # momo 提议: 不要靠猜峰值,加进程级硬限制 + memory_stats 周期性打印 + OOM dump
+    # fail-fast 原则: 超预算立刻崩,崩时拿到完整 memory_stats,不靠试错
+    'gpu_mem_fraction': 0.85,        # 进程级显存硬上限 (RTX 5090 32GB * 0.85 = ~27GB)
+    'mem_log_interval': 50,          # 每 N 步打印 memory_stats
 }
 
 
@@ -126,6 +132,11 @@ class RTX5090SpikePool:
 
         # ----- 1. 核心存储：巨型连续3D张量 [num_blocks, d_inner, d_model] -----
         # 所有块的权重在显存中物理连续，L2缓存预取效率极高
+        # === v3-fix: F12 — 进程级显存硬限制（momo fail-fast 方案）===
+        # 不靠猜峰值,设 85% (~27GB) 上限,超过 OOM,崩时 dump memory_stats
+        torch.cuda.set_per_process_memory_fraction(
+            config['gpu_mem_fraction'], device=0
+        )
         self.W_pool = torch.zeros(
             self.num_blocks, self.d_inner, self.d_model,
             dtype=torch.int8, device='cuda'
@@ -414,6 +425,20 @@ class RTX5090SpikePool:
             if step % 50 == 0:
                 torch.cuda.empty_cache()
 
+            # === v3-fix: F12 — 周期性 memory_stats 打印（momo fail-fast 方案）===
+            # 不靠猜峰值,每 50 步 print 真实 reserved/allocated/allocs/frees
+            # 找到 leak 时已经知道从哪一步开始膨胀
+            if step % self.cfg['mem_log_interval'] == 0 and step > 0:
+                _ms = torch.cuda.memory_stats()
+                _peak = _ms['reserved_bytes.all.peak'] / 1e9
+                _cur = _ms['reserved_bytes.all.current'] / 1e9
+                _alloc = _ms['allocated_bytes.all.current'] / 1e9
+                _n_alloc = _ms.get('num_alloc_retries', 0) + _ms.get('num_ooms', 0)
+                print(f"  [mem] step={step:5d} | reserved={_cur:5.2f}GB "
+                      f"alloc={_alloc:5.2f}GB | peak={_peak:5.2f}GB | "
+                      f"allocs={_ms.get('allocation_count.all', 0):8d} "
+                      f"frees={_ms.get('free_count.all', 0):8d}")
+
         # ===== 7. 微睡眠（周期性执行） =====
         if step % self.cfg['MicroSleep_Interval'] == 0 and not self.lock_phase:
             self._microsleep(target_S)
@@ -585,7 +610,27 @@ if __name__ == "__main__":
 
     for step in range(CONFIG['T_total']):
         target = targets[step]
-        S_new = pool.forward_step(target)
+        try:
+            S_new = pool.forward_step(target)
+        except torch.cuda.OutOfMemoryError as oom:
+            # === v3-fix: F12 — OOM fail-fast + dump 完整现场（momo 方案）===
+            # 不要靠猜峰值,崩时直接 dump memory_stats + 上下文,不靠试错
+            print("\n" + "=" * 60)
+            print(f"💥 CUDA OOM at step {step}!")
+            print("=" * 60)
+            _ms = torch.cuda.memory_stats()
+            print(f"  reserved:  {_ms['reserved_bytes.all.current']/1e9:.2f} GB")
+            print(f"  allocated: {_ms['allocated_bytes.all.current']/1e9:.2f} GB")
+            print(f"  peak:      {_ms['reserved_bytes.all.peak']/1e9:.2f} GB")
+            print(f"  num allocs: {_ms.get('allocation_count.all', 0)}")
+            print(f"  num frees:  {_ms.get('free_count.all', 0)}")
+            print(f"  num ooms:   {_ms.get('num_ooms', 0)}")
+            print(f"  active blocks: {(pool.b_gate > -1e5).sum().item()}/{CONFIG['num_blocks']}")
+            print(f"  W_pool size: {pool.W_pool.element_size() * pool.W_pool.nelement() / 1e9:.2f} GB")
+            print(f"  update_buffer size: {pool.update_buffer.element_size() * pool.update_buffer.nelement() / 1e9:.2f} GB")
+            print(f"\nOriginal error: {oom}")
+            pool.shutdown()
+            raise
 
         # 每500步打印监控信息
         if step % 500 == 0:
