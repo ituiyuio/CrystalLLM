@@ -178,7 +178,9 @@ class RTX5090SpikePool:
             self.num_blocks, self.d_inner, self.d_model,
             dtype=torch.int8, device='cuda'
         )
-        self.scale_pool = torch.ones(self.num_blocks, device='cuda')  # 每个块独有的FP32缩放因子
+        self.scale_pool = torch.full((self.num_blocks,), 0.01, device='cuda')  # === v4-fix: F20e — scale init 0.01 (momo LM)
+                                   # 原来 torch.ones (1.0) 配 INT8 [-128,127] W 太大, bmm 输出爆炸
+                                   # 0.01 让 W_eff = INT8 * 0.01 = [-1.28, 1.27] FP32, 量级跟 embed (std=0.02) 匹配
 
         # 门控偏置（FP32），由"有形大手"直接操纵，不参与梯度
         self.b_gate = torch.full((self.num_blocks,), -1e6, device='cuda')
@@ -740,6 +742,115 @@ class RTX5090SpikePool:
         # 每500步衰减历史方向（防止陈旧信息干扰）
         if step % 500 == 0:
             self.hist_delta *= 0.5
+
+    # ===================== SpikeLLM 外部 S 接口 =====================
+    # === v4-fix: F20e — forward_step_state (momo LM 提议) ===
+    # 跟 forward_step 区别:
+    #   1. S_old 由外部传入 (caller 维护), 不读 self.S
+    #   2. 返回 S_new 后不写 self.S (caller 决定是否保留)
+    #   3. W_active 一次性新分配 (不共享 F13 预分配 buffer), autograd 用完即弃
+    #   4. 调 autograd.grad 立即消化 graph, 不累积 (BPTT 安全)
+    # 用途: 语言模型 (SpikeLLM) 序列里反复调, 每次独立 W_active leaf
+    def forward_step_state(self, target_S: torch.Tensor,
+                           S_old: torch.Tensor) -> torch.Tensor:
+        """
+        一步训练 (momo SpikeLLM 风格):
+            1. 门控决策 (用 self.b_gate)
+            2. 一次性分配 W_active BF16 (新 leaf), 从 W_pool 复制数据
+            3. bmm: deltas = W_active @ S_old.unsqueeze(-1)
+            4. S_new = S_old + deltas.sum(dim=0) (用 caller 传进来的 S_old)
+            5. 内部 MSE 损失 -> autograd.grad -> W_pool INT8 update
+            6. 立即 return S_new (autograd 链: S_new -> S_old, W_active 已用完)
+        """
+        step = self._step_counter
+        self._step_counter += 1
+
+        # 1. 门控
+        active_idx = self._compute_gates(step)
+        K = len(active_idx)
+        if K == 0:
+            return S_old
+        if target_S.dim() == 1:
+            target_S = target_S.unsqueeze(0)
+        if S_old.dim() == 1:
+            S_old = S_old.unsqueeze(0)
+        T = 1  # spike pool 自身 bmm 仍 T=1 (per-position); S_old batch 维在 bmm 外
+
+        # 2. W_active 一次性分配 BF16 (per-call, 不共享 F13 buffer)
+        # 内存: K * d_inner * d_model * 2 bytes (BF16)
+        W_active = torch.empty(
+            K, self.d_inner, self.d_model,
+            dtype=torch.bfloat16, device='cuda'
+        ).requires_grad_(True)
+
+        # 3. 填数据: INT8 -> FP32 -> BF16 + scale
+        with torch.no_grad():
+            W_active.copy_(self.W_pool[active_idx].float().bfloat16())
+            scale_exp = self.scale_pool[active_idx].view(K, 1, 1)
+            W_active.mul_(scale_exp)
+
+        # 4. bmm: [K, d_inner, d_model] @ [K, d_model, 1] = [K, d_inner, 1]
+        # S_old shape: 1D [d_model] 或 2D [B, d_model]
+        # 目标: [K, d_model, 1] BF16 (跟 W_active dtype 一致)
+        if S_old.dim() == 1:
+            S_1d = S_old
+        else:
+            S_1d = S_old[0]  # batch 1
+        S_for_bmm = S_1d.to(torch.bfloat16).unsqueeze(0).unsqueeze(-1).expand(K, -1, -1)
+        deltas_bf16 = torch.bmm(W_active, S_for_bmm).squeeze(-1)   # [K, d_inner]
+
+        # post-scale (跟 v4 F18 一样)
+        deltas_fp32 = deltas_bf16.float() * self.scale_pool[active_idx].view(K, 1)
+        # S_new: per-position sum over K
+        delta_S = deltas_fp32.sum(dim=0)    # [d_inner]
+        S_new = S_old + delta_S             # broadcast [B, d_inner] + [d_inner] = [B, d_inner]
+
+        # === v4-fix: F20e — S_norm clip (防 S 爆炸, 跟 v3 forward_step 末段一样) ===
+        s_norm = S_new.norm(dim=-1, keepdim=True)  # [B, 1]
+        over = s_norm > self.cfg['S_Norm_Cap']
+        scale = s_norm / self._s_norm_target
+        S_new = torch.where(over, S_new / scale, S_new)
+
+        # 5. 内部 MSE 损失: 让 S_new 逼近 target_S (teacher forcing)
+        # === v4-fix: F20e — momo SpikeLLM 设计: 整个 W 更新放 no_grad, 不建 autograd 图 ===
+        # 外层 loss (CE) 不会反传到 W_active, 干净 BPTT
+        # W 更新用 manual gradient: dL/dW = (S_new - target) * S_old^T
+        if not self.lock_phase:
+            with torch.no_grad():
+                # 取 batch 第一个元素
+                S_pred = S_new[0] if S_new.shape[0] > 1 else S_new.squeeze(0)
+                target = target_S[0] if target_S.shape[0] > 1 else target_S.squeeze(0)
+                # manual gradient: dL/dW[k, i, j] = Σ_p (S_new[p,i] - target[p,i]) * S_old[p,j]
+                # 简化: 单 token, 残差 = (S_pred - target) [d_inner]
+                residual = (S_pred.float() - target)  # [d_inner]
+                S_1d = S_old[0] if S_old.dim() > 1 else S_old
+                # grad_W[k, i, j] = residual[i] * S_old[j]
+                # 用 outer product: residual.unsqueeze(0).T @ S_1d.unsqueeze(0) = [d_inner, d_model]
+                # grad_W[k] = residual.outer(S_1d.float()) -> [d_inner, d_model]
+                # scale 到 [K, d_inner, d_model]:
+                grad_W = residual.unsqueeze(0).unsqueeze(-1) * S_1d.float().unsqueeze(0).unsqueeze(0)  # [K, d_inner, d_model]
+                # 注意: W_active 实际是 BF16 量化版 W_pool, 但这里我们直接对 W_pool 的 BF16 近似做 update
+                # 真实梯度应该是 W_active 的 BF16 表征, 但 W_active = W_pool * scale (post-bmm)
+                # 这里简化: 直接用 manual grad
+                scale_exp_g = self.scale_pool[active_idx].unsqueeze(-1).unsqueeze(-1)
+                delta_update = -self.cfg['lr_base'] * grad_W / (scale_exp_g + 1e-8)
+                self.update_buffer[active_idx] += delta_update
+
+                update_norms = self.update_buffer[active_idx].view(K, -1).abs().mean(dim=1)
+                commit_mask = update_norms > 0.5
+                if commit_mask.any():
+                    commit_idx = active_idx[commit_mask]
+                    rounded = torch.round(self.update_buffer[commit_idx]).to(torch.int8)
+                    self.W_pool[commit_idx] = torch.clamp(
+                        self.W_pool[commit_idx] + rounded, -128, 127
+                    )
+                    self.update_buffer[commit_idx] -= rounded.float()
+
+            # 显式释放 W_active 和 intermediates
+            del W_active, deltas_bf16, deltas_fp32, delta_S, residual
+            torch.cuda.empty_cache()  # 关键: LM 序列里每步都调, 不释放会累积
+
+        return S_new
 
     # ===================== 训练结束固化 =====================
     # === v4-fix: F20c — progress writer (momo 实时看训练状态) ===
