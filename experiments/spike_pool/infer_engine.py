@@ -37,9 +37,19 @@ import torch
 import torch.nn.functional as F
 import numpy as np
 import os
+import sys
 import time
 from concurrent.futures import ThreadPoolExecutor
 from typing import Optional, List
+
+# === v3-fix: F6 — Windows GBK stdout 编码（emoji 兜不住）===
+# 现象: __init__ 里的 📂 触发 UnicodeEncodeError: 'gbk' codec
+# 修法: reconfigure stdout/stderr 到 utf-8 (errors='replace' 兜底)
+# 注: 训练引擎 train_engine.py F6 已加,这里同步
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+if hasattr(sys.stderr, 'reconfigure'):
+    sys.stderr.reconfigure(encoding='utf-8', errors='replace')
 
 # ======================== 配置 ========================
 INFER_CONFIG = {
