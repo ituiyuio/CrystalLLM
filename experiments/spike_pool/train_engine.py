@@ -29,6 +29,11 @@
   F3. k_embed 预热的 Python for 循环    → 全向量化（base + noise_matrix）
   F4. b_gate 缺少对称机制               → 增加均值回归项 (均值向历史激活率靠拢)
   F5. 微睡眠 scale 归一化误改 W_pool    → 只调 scale_pool，不动权重（scale 本就是干这用的）
+  F6. Windows GBK stdout 编码          → 顶部 import sys + reconfigure utf-8
+  F7. FFN 漏写 down-projection (W2)    → d_inner = d_model = 4096（方阵权重）
+      原 v3-final 设 d_inner=16384 但只写了一段 W @ S，
+      bmm 输出 [d_inner] 加回 [d_model] shape 不匹配 (4096 vs 16384)。
+      折中：d_inner 塌缩为 d_model，去掉 expand 概念，保留残差池 + 门控设计。
 """
 
 import torch
@@ -53,7 +58,12 @@ if hasattr(sys.stderr, 'reconfigure'):
 CONFIG = {
     # 模型维度（必须16的倍数，Tensor Core对齐）
     'd_model': 4096,              # 全局状态向量维度
-    'd_inner': 16384,             # FFN内部维度（通常4倍于d_model）
+    'd_inner': 4096,              # === v3-fix: F7 — 与 d_model 对齐 ===
+                                   # 原 v3-final 写 16384(FFN 4x expand)，
+                                   # 但漏了 FFN 的 down-projection (W2)，
+                                   # 导致 bmm 输出 [d_inner] 加回 [d_model] shape 不匹配。
+                                   # 折中：d_inner = d_model = 方阵权重 W @ S = delta
+                                   # 显存：8.59GB → 2.15GB（参数减 4 倍）
     'num_blocks': 128,            # 残差块总数（即“专家”数量）
     'd_k': 16,                    # 内容寻址的键维度（极小的路由表）
 
@@ -144,7 +154,12 @@ class RTX5090SpikePool:
         self.last_active = torch.zeros(self.num_blocks, dtype=torch.long, device='cuda') # 最后激活步
         self.grad_norm_ema = torch.zeros(self.num_blocks, device='cuda') # 梯度范数滑动平均（僵尸检测）
         self.activation_stats = torch.zeros(self.num_blocks, dtype=torch.long, device='cuda') # 总激活次数（重排用）
-        self.hist_delta = torch.zeros(self.num_blocks, self.d_model, device='cuda') # 历史增量方向（GDP核算）
+        # === v3-fix: F7b — hist_delta 形状修正 ===
+        # 原 v3-final 写 self.d_model，但 deltas 是 [K, d_inner]，
+        # pooled_delta = deltas.mean(dim=1) -> [K]，跟 [K, d_model] 不对齐
+        # 修法：hist_delta 存 d_inner 维的 hidden 方向（d_inner==d_model 时等价于 d_model 维），
+        # 直接 += deltas（语义：累积每个块在 d_inner 维的 hidden 输出）
+        self.hist_delta = torch.zeros(self.num_blocks, self.d_inner, device='cuda') # 历史增量方向（GDP核算）
 
         # k_embed预热相关
         self.S_avg_buffer = torch.zeros(self.d_model, device='cuda')    # 前Warmup_Steps步的S累积
@@ -260,10 +275,10 @@ class RTX5090SpikePool:
         is_new = self.b_gate[idx] < -1e5
 
         if is_new.any():
-            warm_factor = torch.clamp(
-                0.05 * math.exp(step / self.cfg['T_warm']),
-                max=1.0
-            )
+            # === v3-fix: F8 — torch.clamp 标量 + max= 在 PyTorch 2.9 不支持 ===
+            # 原写法: torch.clamp(0.05 * math.exp(...), max=1.0)
+            # 修法: 用 Python min 算标量值
+            warm_factor = min(0.05 * math.exp(step / self.cfg['T_warm']), 1.0)
             warm_factor_t = torch.full_like(idx, warm_factor, dtype=torch.float, device='cuda')
             return torch.where(is_new, lr_old_t * warm_factor_t, lr_old_t)
         else:
@@ -341,9 +356,10 @@ class RTX5090SpikePool:
 
         # ===== 5. 更新历史增量（GDP核算数据） =====
         if not self.lock_phase:
-            # 将deltas降维到d_model（平均池化，因d_inner通常远大于d_model）
-            pooled_delta = deltas.mean(dim=1)   # [K, d_model]
-            self.hist_delta[active_idx] += pooled_delta
+            # === v3-fix: F7b — 直接 += deltas（[K, d_inner]），hist_delta 形状已对齐 ===
+            # 原 v3-final 用 pooled_delta = deltas.mean(dim=1) 把 d_inner 维求平均成 [K]，
+            # 跟 [K, d_model] 的 hist_delta 形状冲突。这里直接存 d_inner 维 hidden 方向。
+            self.hist_delta[active_idx] += deltas  # deltas: [K, d_inner]
 
         # ===== 6. 局部反向传播（仅训练态） =====
         if not self.lock_phase:
