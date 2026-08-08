@@ -14,16 +14,20 @@ if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 
 PROGRESS_FILE = Path("D:/CrystaLLM/model_pool_progress.json")
+SPIKE_LLM_PROGRESS = Path("D:/CrystaLLM/spike_llm_progress.json")
 REFRESH_S = 1.0
 
 
 def read_progress():
-    """读 progress JSON, 返回 None 如果文件不存在"""
-    try:
-        with open(PROGRESS_FILE, 'r', encoding='utf-8') as f:
-            return json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        return None
+    """读 progress JSON, 优先 spike_llm_progress.json (LM 训练), fallback model_pool_progress.json"""
+    # LM 训练优先 (字段略不同, 但 step/sps/eta 都有)
+    for path in (SPIKE_LLM_PROGRESS, PROGRESS_FILE):
+        try:
+            with open(path, 'r', encoding='utf-8') as f:
+                return json.load(f), path
+        except (FileNotFoundError, json.JSONDecodeError):
+            continue
+    return None, None
 
 
 def nvidia_smi():
@@ -82,7 +86,7 @@ def main():
     try:
         while True:
             clear()
-            prog = read_progress()
+            prog, prog_path = read_progress()
             gpu = nvidia_smi()
 
             # Header
@@ -103,9 +107,14 @@ def main():
             # Training section
             print(f"\n  {'─'*56}")
             if prog is None:
-                print(f"  ⏳ 等待训练启动 (model_pool_progress.json 不存在)")
+                print(f"  ⏳ 等待训练启动 (model_pool_progress.json / spike_llm_progress.json 不存在)")
                 print(f"      提示: 训练启动后每 100 步写一次进度")
             else:
+                # 标识当前读的是哪个 progress
+                if prog_path == SPIKE_LLM_PROGRESS:
+                    print(f"  📚 SpikeLLM 训练 (spike_llm_progress.json)")
+                else:
+                    print(f"  📈 Spike Pool 训练 (model_pool_progress.json)")
                 # Compute progress
                 pct = 100.0 * prog['step'] / max(1, prog['total'])
                 bar = draw_bar(pct, 30)
