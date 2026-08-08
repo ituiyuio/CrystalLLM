@@ -226,6 +226,27 @@ if __name__ == "__main__":
                   f"steps={args.steps}, eval_every={args.eval_every}")
             print("=" * 60)
             t_start = time.time()
+            # === v4-fix: F20e — progress writer 给 _monitor.py 实时看 (跟 train_engine 同款 JSON) ===
+            def _write_progress(step, loss_val):
+                import json
+                progress = {
+                    "step": step,
+                    "total": args.steps,
+                    "sps": (step + 1) / (time.time() - t_start) if (time.time() - t_start) > 0 else 0,
+                    "elapsed_s": time.time() - t_start,
+                    "eta_s": (args.steps - step - 1) / max(1e-9, (step + 1) / (time.time() - t_start)),
+                    "s_norm": float(loss_val / (args.seq_len - 1)),
+                    "t_batch": args.batch_size * args.seq_len,
+                    "active_logical": 0,  # SpikeLLM 不用 spike pool 的 active 概念
+                    "num_blocks": args.num_blocks,
+                    "top_k": args.top_k,
+                }
+                path = "D:/CrystaLLM/spike_llm_progress.json"
+                tmp = path + ".tmp"
+                with open(tmp, 'w', encoding='utf-8') as f:
+                    json.dump(progress, f)
+                import os as _os
+                _os.replace(tmp, path)
             for step in range(args.steps):
                 inp, tgt = get_batch(token_ids, args.batch_size, args.seq_len, device)
                 loss = model(inp)
@@ -236,12 +257,14 @@ if __name__ == "__main__":
                     elapsed = time.time() - t_start
                     sps = (step + 1) / elapsed if elapsed > 0 else 0
                     print(f"  step {step:5d} | loss {loss.item() / (args.seq_len - 1):.4f} "
-                          f"| sps {sps:.2f} | elapsed {elapsed:.0f}s")
+                          f"| sps {sps:.2f} | elapsed {elapsed:.0f}s", flush=True)
+                    _write_progress(step, loss.item())
                 if (step + 1) % args.eval_every == 0:
                     val_loss = estimate_loss(model, token_ids, args.batch_size,
                                              args.seq_len, n_batches=10, device=device)
                     ppl = math.exp(val_loss) if val_loss < 20 else float('inf')
-                    print(f"  === eval @ step {step+1} | val_loss {val_loss:.4f} | ppl {ppl:.2f}")
+                    print(f"  === eval @ step {step+1} | val_loss {val_loss:.4f} | ppl {ppl:.2f}", flush=True)
+                    _write_progress(step, val_loss)
 
             final_loss = estimate_loss(model, token_ids, args.batch_size,
                                        args.seq_len, n_batches=50, device=device)
