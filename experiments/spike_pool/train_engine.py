@@ -214,6 +214,22 @@ class RTX5090SpikePool:
             max_k, self.d_model, self._S_fp32_max_T,
             dtype=torch.float32, device='cuda'
         )
+        # === v4-fix: F18 — 预分配 BF16 cache,让 bmm 走 5th-gen Tensor Core ===
+        # 根因: 5090 5th-gen TC 跑 BF16/FP16/INT8/FP8, FP32 走普通 SIMT cores (~21 TFLOPS)
+        #       BF16 TC 峰值 ~250 TFLOPS, ~12x speedup. 即使小 bmm 也能用满 TC.
+        # 策略:
+        #   - W_active 改成 BF16 leaf (was FP32),autograd backward 走 BF16 bmm (也在 TC)
+        #   - scale 改成 post-bmm (避免 BF16 量化误差传到 W 上)
+        #   - grads_batch 是 BF16, INT8 更新前 cast FP32
+        # 内存: BF16 W cache = 512MB (vs FP32 1GB) — 同时省一半显存
+        self._W_bf16_cache = torch.zeros(
+            max_k, self.d_inner, self.d_model,
+            dtype=torch.bfloat16, device='cuda'
+        )
+        self._S_bf16_cache = torch.zeros(
+            max_k, self.d_model, self._S_fp32_max_T,
+            dtype=torch.bfloat16, device='cuda'
+        )
 
         # === v3-fix: F2 — 预算缩放因子张量，避免每步 .item() 同步 ===
         # 预分配 inv_scale_ratio = cap / S_Norm_Cap = 128/512 = 0.25
@@ -407,30 +423,39 @@ class RTX5090SpikePool:
         if K == 0:
             return self.S   # 全休眠，直接返回
 
-        # ===== 4. 前向：Batch GEMM (with T dim) =====
+        # ===== 4. 前向：Batch GEMM (BF16 Tensor Core, with T dim) =====
         S_old = self.S.clone()
-        # === v3-fix: F13 — 预分配 FP32 缓存 view + copy_ + mul_（momo 根因修）===
+        # === v3-fix: F13 — 预分配缓存 view + copy_ + mul_（momo 根因修）===
         # === v4-fix: F17 — S_batch 升级为 [K, d_model, T] (T=1 时数学等价) ===
-        W_active = self._W_fp32_cache[:K].detach().requires_grad_(True)
-        S_batch = self._S_fp32_cache[:K, :, :T]   # view [K, d_model, T], T=1 旧路径
+        # === v4-fix: F18 — W/S 全部 BF16, bmm 走 5th-gen TC (peak 250 TFLOPS) ===
+        W_active = self._W_bf16_cache[:K].detach().requires_grad_(True)  # BF16 leaf
+        S_batch = self._S_bf16_cache[:K, :, :T]                          # BF16 view, no grad
 
-        # 就地填充 W_active:INT8 -> float -> scale
-        # no_grad 块: copy_/mul_ in-place 不破坏 leaf+grad 的 autograd contract
+        # 就地填充:INT8 -> BF16 (跳过 FP32 intermediate,直接 cast)
+        # scale 改成 post-bmm 应用 (避免 BF16 量化误差污染 W)
+        # no_grad 块: copy_ in-place 不破坏 leaf+grad 的 autograd contract
         with torch.no_grad():
-            W_active.copy_(self.W_pool[active_idx].float())
-            scale_exp = self.scale_pool[active_idx].view(K, 1, 1)
-            W_active.mul_(scale_exp)
-            S_batch.copy_(S_old.unsqueeze(0).unsqueeze(-1).expand(K, -1, T))
+            W_active.copy_(self.W_pool[active_idx].float().bfloat16())  # 读 256MB INT8, 写 512MB BF16
+            S_batch.copy_(S_old.unsqueeze(0).unsqueeze(-1).expand(K, -1, T).bfloat16())  # S 也 BF16
 
-        # bmm: [K, d_inner, d_model] @ [K, d_model, T] = [K, d_inner, T]
-        # T=1  →  [K, d_inner, 1]  旧 GEMV 路径,数值等价 squeeze 后的 [K, d_inner]
-        # T>1  →  [K, d_inner, T]  真 GEMM, Tensor Core 跑满
-        deltas = torch.bmm(W_active, S_batch)   # === v4-fix: F17 — 不再 squeeze(-1) ===
+        # bmm: [K, d_inner, d_model]_BF16 @ [K, d_model, T]_BF16 = [K, d_inner, T]_BF16
+        # === v4-fix: F18 — BF16 bmm 走 Tensor Core,FP32 累积 (cuBLAS 默认), 输出 BF16 ===
+        deltas_bf16 = torch.bmm(W_active, S_batch)   # [K, d_inner, T] BF16
+
+        # post-scale: deltas *= scale.view(K,1,1)  FP32 scale × BF16 deltas → FP32 (数值稳)
+        # scale_pool 是 per-block 的标量,后乘比预乘 W 精度更好 (BF16 mantissa 7-bit 有限)
+        deltas_fp32 = deltas_bf16.float() * self.scale_pool[active_idx].view(K, 1, 1)
         # 持久 S 更新:sum over K, mean over T (per-token 效应,T 不影响更新幅度)
-        # T=1 时 delta_S = deltas.sum(dim=0).T 是 [1, d_inner], mean(dim=0) = [d_inner]
+        # T=1 时 deltas_fp32 是 [K, d_inner, 1], .sum(0).T = [1, d_inner], .mean(0) = [d_inner]
         #         等价 v3 的 self.S = S_old + deltas.sum(dim=0)
-        delta_S = deltas.sum(dim=0).T             # [T, d_inner] = [T, d_model]
-        self.S = S_old + delta_S.mean(dim=0)      # [d_model]
+        delta_S = deltas_fp32.sum(dim=0).T          # [T, d_inner] = [T, d_model]
+        self.S = S_old + delta_S.mean(dim=0)        # [d_model]
+
+        # === v4-fix: F18 — hist_delta / loss 全部用 FP32 deltas (post-scale 后的精确值) ===
+        # === v4-fix: F17 — deltas 现在是 [K, d_inner, T], mean(dim=2) 折叠 T 维 ===
+        # 同时把 deltas 改成 deltas_fp32 (从 BF16 cast),hist_delta 是 FP32 累加更稳定
+        deltas = deltas_fp32   # 别名给下面用,避免重写
+        # 替换 W_active 指向 (autograd 用,无变化)
 
         # ===== 5. 更新历史增量（GDP核算数据） =====
         if not self.lock_phase:
@@ -455,7 +480,8 @@ class RTX5090SpikePool:
             total_loss = losses.sum()
 
             # 🚀 唯一反向传播Kernel（批处理）
-            grads_batch = torch.autograd.grad(total_loss, W_active, retain_graph=False)[0]  # [K, d_inner, d_model]
+            # === v4-fix: F18 — W_active 是 BF16 leaf, grads_batch 是 BF16, cast FP32 给 INT8 更新用 ===
+            grads_batch = torch.autograd.grad(total_loss, W_active, retain_graph=False)[0].float()  # [K, d_inner, d_model] FP32
 
             # 动态学习率（向量化C方案）
             lr = self._get_lr_vectorized(active_idx, step)   # [K]
