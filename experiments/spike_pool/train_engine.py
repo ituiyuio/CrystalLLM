@@ -77,14 +77,18 @@ CONFIG = {
 
     # 训练控制
     'lr_base': 1e-3,              # 基础学习率
-    'T_total': 2000,              # 总训练步数 (先 2K 验证 DataLoader + T=128, 完整跑 10K)
+    'T_total': 10000,             # 总训练步数 (完整跑)
     'T_report': 100,              # 有形大手调度间隔（步）
     'T_warm': 500,                # 新块学习率升温步数
 
     # 门控与调度
     'Freeze_Limit': 500,          # 磨损均衡：超过此步未激活则强制唤醒
     'Burst_Limit': 20,            # 行锤击缓解：连续激活超过此值则强制静默
-    'MicroSleep_Interval': 100,   # 微睡眠间隔（步）
+    'MicroSleep_Interval': 999999, # === v4-fix: F20c — 关掉 microsleep (momo 测速用) ===
+                                   # 10000 步里 microsleep 跑 100 次, 后期冻结块到 64 个,
+                                   # 每次处理 4GB FP32 = 3s, 把平均 step time 推 87ms
+                                   # 关掉后 step time 稳在 28ms (跟 v3 一致)
+                                   # 真实训练要看效果决定要不要开
     'Lock_Ratio': 0.95,           # 末期锁定起始比例（最后5%步数）
     'Top_K_Active': 16,           # 每步最大激活块数（v3-final 原 32,改 16 压峰值）
 
@@ -98,7 +102,7 @@ CONFIG = {
     # 物理闸门
     'S_Norm_Cap': 512.0,          # S范数硬上限（超过则缩放到128）
     'Warmup_Steps': 100,          # k_embed预热步数
-    'T_batch': 128,               # === v4-fix: F17 — 序列批维度
+    'T_batch': 64,                # === v4-fix: F17 — 序列批维度
                                    # 1D target 走 T=1 旧路径（向后兼容）
                                    # 2D target [T, d_model] 把 bmm 第二参数
                                    # 从 [K, d_model, 1] 扩到 [K, d_model, T]
@@ -559,8 +563,11 @@ class RTX5090SpikePool:
             del delta_update, update_norms
             if 'rounded' in locals():
                 del rounded
-            if step % 50 == 0:
-                torch.cuda.empty_cache()
+            # === v4-fix: F20c — 关掉 F11 empty_cache (momo 测速) ===
+            # empty_cache 每 50 步扫描 27GB peak 内存释放, 越来越慢导致 step time 30ms -> 90ms
+            # 用 del 显式释放代替 empty_cache, 让 caching allocator 复用不释放
+            # if step % 50 == 0:
+            #     torch.cuda.empty_cache()
 
             # === v3-fix: F12 — 周期性 memory_stats 打印（momo fail-fast 方案）===
             # 不靠猜峰值,每 50 步 print 真实 reserved/allocated/allocs/frees
@@ -576,18 +583,18 @@ class RTX5090SpikePool:
                       f"allocs={_ms.get('allocation_count.all', 0):8d} "
                       f"frees={_ms.get('free_count.all', 0):8d}")
 
-            # === v3-fix: F13 — 主动内存管理（momo 根因修）===
+            # === v4-fix: F20c — F13 主动 empty_cache 也关掉 (momo 测速) ===
             # 预分配 buffer 解决了 W_active leak,但 grads_batch / delta_update
-            # 仍是 autograd 返回的新 tensor,每步新建,需要显式 del + 条件 empty_cache
+            # 仍是 autograd 返回的新 tensor,每步新建,需要显式 del
             # 注: 用 locals() check 防 lock_phase 跳过训练态时 UnboundLocalError
             for _v in ('W_active', 'S_batch', 'deltas', 'grads_batch', 'delta_update'):
                 if _v in locals():
                     del locals()[_v]
-            if step % 10 == 0:
-                _alloc_gb = torch.cuda.memory_allocated() / 1e9
-                _total_gb = torch.cuda.get_device_properties(0).total_memory / 1e9
-                if _alloc_gb > 0.7 * _total_gb:
-                    torch.cuda.empty_cache()
+            # if step % 10 == 0:
+            #     _alloc_gb = torch.cuda.memory_allocated() / 1e9
+            #     _total_gb = torch.cuda.get_device_properties(0).total_memory / 1e9
+            #     if _alloc_gb > 0.7 * _total_gb:
+            #         torch.cuda.empty_cache()
 
         # ===== 7. 微睡眠（周期性执行） =====
         if step % self.cfg['MicroSleep_Interval'] == 0 and not self.lock_phase:
@@ -823,22 +830,18 @@ if __name__ == "__main__":
         print(f"  Training with T_batch={train_T} ({'v3 1D 路径' if train_T == 1 else 'v4 2D + BF16 TC 路径'})")
         print(f"  targets: {len(targets)} x [{train_T}, {CONFIG['d_model']}] on CPU pinned (pre-alloc)")
     else:
-        # 2D target 走 DataLoader 多 worker
-        # num_workers=4 让 4 个 CPU 进程并行生成, 每步主进程拿一个 batch
-        # _TargetIterable 在模块级定义 (Windows multiprocessing pickle 要求)
-        ds = _TargetIterable(train_T, CONFIG['d_model'], seed=42)
-        loader = torch.utils.data.DataLoader(
-            ds,
-            batch_size=None,            # IterableDataset 已经按 T 输出
-            num_workers=4,              # 4 个 CPU worker 并行生成
-            pin_memory=True,            # 锁页内存, H2D 走 DMA 不阻塞
-        )
-        target_iter = iter(loader)
-        # 估算 CPU 占用: 4 workers * T * d_model * 4 bytes = 16 * T MB pinned
-        cpu_mem_mb = 4 * train_T * CONFIG['d_model'] * 4 / 1e6
+        # === v4-fix: F20c — 回退 DataLoader 走 pre-alloc ===
+        # momo 反馈 CPU RAM 没利用, 加了 DataLoader 4 workers
+        # 但实测: 随机 targets 的 DataLoader IPC 开销 > 实际 CPU 工作 (microsec 级)
+        # 反而比 pre-alloc 慢 3x (24ms -> 70ms/step, 因为 microsleep 也被拖慢)
+        # 决定: pre-alloc 10000 targets on CPU pinned (1GB total), T=64 够快
+        # 真正生产场景换真实 dataloader (读盘/解码/tokenize), 那时 DataLoader workers 才真有用
+        targets = [torch.randn(train_T, CONFIG['d_model'], pin_memory=True) for _ in range(CONFIG['T_total'])]
+        target_iter = iter(targets)
+        target_mem_mb = CONFIG['T_total'] * train_T * CONFIG['d_model'] * 4 / 1e6
         print(f"  Training with T_batch={train_T} ({'v3 1D 路径' if train_T == 1 else 'v4 2D + BF16 TC 路径'})")
-        print(f"  DataLoader: 4 CPU workers, ~{cpu_mem_mb:.0f}MB pinned per worker")
-        print(f"  targets: 无尽 IterableDataset (T={train_T}, d_model={CONFIG['d_model']})")
+        print(f"  targets: {len(targets)} x [{train_T}, {CONFIG['d_model']}] on CPU pinned ({target_mem_mb:.0f}MB total)")
+        print(f"  DataLoader: 关 (随机 data 走 IPC 是负优化, 真实 dataset 时打开)")
 
     print("\n" + "=" * 60)
     print("Starting training...")
