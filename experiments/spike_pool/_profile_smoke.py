@@ -53,7 +53,7 @@ def profile_run(T: int, n_steps: int = 20, warmup: int = 5):
     print(f"{'='*70}")
     # 按 CUDA time 排序的 top kernels
     print(prof.key_averages().table(
-        sort_by="self_cuda_time_total", row_limit=20
+        sort_by="self_cuda_time_total", row_limit=50
     ))
 
     pool.shutdown()
