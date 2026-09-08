@@ -216,6 +216,27 @@ Coconut = g×1（零修订），DoT = 固定 K，LogicFlow 双旋钮。
 (b) 分离式——独立思维寄存器（r 可 > g，想久说短）作扩展项，
 E-T1 显示思维容量被块长锁死时升级。
 
+## 1.10 寄存器先例（2026-09-07）：ViT Registers = C5 的实证版 + 设计修正
+
+**先例**: Vision Transformers Need Registers（Darcet et al., Meta FAIR,
+arXiv:2309.16588, ICLR 2024 oral, 1200+ 引）。大 ViT 特征图伪影 =
+高范数离群 token（占全局计算的储物柜，污染低信息内容块）；修法 = r 个
+无内容可学习寄存器 → 高范数迁移、范数分布双峰变单峰、密集任务上涨。
+LLM 侧跟进：MuToR（NeurIPS 2025, arXiv:2505.10518）寄存器辅助
+decoder-only 多 token 预测；*"ViT Don't Need Trained Registers"*
+（NeurIPS 2025，寄存器或无需训练——对冻结解码器友好，待精读）。
+
+**对设计的三个修正**：
+1. **1.9 分叉改判**：一体式 (a) 让块 embedding 兼职思考空间 =
+   Darcet 病灶（content token 被全局计算劫持）的复刻。改为
+   **(a+) 块 embedding + r 专职思维寄存器交错去噪，寄存器不参与解码**
+   ——思维账本写寄存器，内容保持干净。C5 升级为实证必要设计。
+2. **S_k 的新家**：逻辑态 = LogicExtractor(寄存器)，不再池化内容
+   embedding——寄存器本来就是草稿纸。
+3. **免费诊断**：监控块 embedding 范数双峰性——高范数离群块出现 =
+   思考污染内容的早期警报（与 ‖V‖ 停机同族统计量）。
+   **C4 缓解新证据**：MuToR 证明寄存器辅助并行多 token 预测有效。
+
 ## 2. P0 缺口（不解决无法开工）
 
 
