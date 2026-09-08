@@ -41,23 +41,24 @@ teacher_collect.py
 
 dataset.py
   TrajectoryDataset: {ctx_embedding(题目末隐态), τ_clean r×d, mask}
-  σ 标定: 实测 τ 的逐维 std → σ_max = σ_data
-  加噪: τ_noisy = τ + σ_t·ε, σ_t ∈ logspace(0.05σ_data, σ_data, 8)
+  加噪（1.11 勘验后改用 ELF 式 rectified-flow 插值, 替代 DDPM 式 σ）:
+    z_t = t·τ_clean + (1−t)·ε·noise_scale,  t ~ logit_normal(-0.8, 0.8)
+  去噪器预测 x0 或 v=(x−z)/max(1−t,ε)（ELF 同款）
 
 denoiser.py
   小 transformer: 4 层, d=512, 8 头, 因果掩码(寄存器 t 只看 ≤t),
-  输入 = [τ_noisy + σ_embedding + ctx_embedding], 输出 = τ_clean 预测
+  输入 = [z_t + t_embedding + ctx_embedding], 输出 = τ_clean/v 预测
   参数量 ~5-10M（4090/5090 上分钟级一轮）
 
 train_et0.py
-  训练 → 报告: 各 σ_t 水平的 relative reconstruction error
+  训练 → 报告: 各 t 水平的 relative reconstruction error
   (||τ̂−τ||/||τ||) + 与两个朴素基线对比:
     B1: 全局均值预测 (下界)
     B2: 条件 copy: 直接返回 ctx 无关的 batch 均值轨迹 (下界)
 ```
 
 ### 门 G1（终止判据）
-- 中低噪声 (σ ≤ 0.5σ_data) 的重建误差显著低于 B1/B2（≥30% 相对改善）
+- 中低噪声 (t ≥ 0.5) 的重建误差显著低于 B1/B2（≥30% 相对改善）
 - 且重建的寄存器用线性探针可解码出中间数值（如"11"）——**思维不只是
   可压缩，是可定向恢复的**
 - 不过 → 换加噪族（token 级遮蔽腐蚀）重试一次 → 再不过换空间 → 终止
@@ -67,10 +68,11 @@ train_et0.py
 **问题**: Drifting 单步生成的思维轨迹，质量损失相对多步 FM 有多大？
 
 ```
-train_et2.py  两个目标同架构训练:
-  FM 分支:  flow matching 多步 (欧拉 8 步采样)
+train_et2.py  三个目标同架构训练 (1.11 勘验后升级三路对比):
+  FM 分支:    flow matching 多步 (欧拉 8 步, ELF 同款插值/v-pred)
   Drift 分支: L = ||f_θ(ε,ctx) − stopgrad(f_θ(ε,ctx) + ηV)||²,
               V = attention(τ_gen, 教师池) − τ_gen (median-heuristic 带宽)
+  FlowMap 分支: FMLM* 式 flow-map 蒸馏 (借 third_party/elf_star 实现)
   推演演化: 每 epoch 用当前 f_θ 重生成 25% 训练样本再漂移
 评估: 轨迹质量 = 去码探针(寄存器→数值)正确率 + 轨迹间多样性
 ```

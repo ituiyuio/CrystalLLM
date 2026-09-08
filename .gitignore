@@ -47,3 +47,4 @@ experiments/v49_pre/results/exp23_ckpts/
 experiments/v49_pre/exp24_ckpts/
 # BPE tokenized caches (regenerable via bpe_data_loader.build_bpe_loader)
 experiments/v49_pre/bpe_train_*.npy
+experiments/logicflow/third_party/

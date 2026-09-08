@@ -237,6 +237,37 @@ decoder-only 多 token 预测；*"ViT Don't Need Trained Registers"*
    思考污染内容的早期警报（与 ‖V‖ 停机同族统计量）。
    **C4 缓解新证据**：MuToR 证明寄存器辅助并行多 token 预测有效。
 
+## 1.11 ELF* 源码勘验（2026-09-07）：四个悬案定案 + 一处设计修正
+
+已克隆公开仓库 `Ugness/self-conditioned-fmlm`（ELF 后续论文
+2607.00714 官方实现，含 ELF stage-1 训练配置，KAIST）。四个悬案的答案：
+
+1. **潜空间构造** = 冻结 causal LLM 的 **last_hidden_state**（编码器
+   完全冻结、不改内部任何 op、bf16）。**潜变量天然带左因果性**
+   （causal decoder-only 编码器）——我们之前担心的"轨迹因果掩码"
+   由空间自带，D1 隐态手术路线被官方背书。
+2. **解码路径（修正 1.9 的一处设计假设）**：ELF **不用冻结 LLM 解码**
+   ——LLM 只是编码器（定义空间）；解码 = 去噪器骨干内的**训练式
+   per-position decoder 分支**，解码 = 一次并行 argmax，无自回归内环。
+   → C4 悬崖的官方答案 = 联合训练的解码头（我们 E-mini 的 P2 路径
+   升为主路径）。"冻结 LLM 解码"的表述从设计文档撤回。
+3. **插值/加噪公式**（替换玩具设计的 DDPM 式 σ 方案）：
+   `z_t = t·x0 + (1−t)·ε·noise_scale`（rectified-flow 线性插值），
+   t ~ logit-normal(-0.8, 0.8)，v-prediction `v=(x−z)/max(1−t,ε)`，
+   ODE 步进；`cond_seq_mask` 保条件位。
+4. **单步机制多了一个候选**：FMLM* = flow-map 蒸馏（压固定点迭代 +
+   流过程），OpenWebText 上 few-step SOTA。→ E-T2 升级三路对比：
+   **Drifting vs FMLM*-式 flow-map 蒸馏 vs 多步 FM**。C-1 声明措辞
+   调整为"首次将单步思维生成应用于思维轨迹（机制上 Drifting 与
+   flow-map 蒸馏对比择优）"。
+
+**其他可借**：self-conditioning 输入（z 与上次估计 concat 投影）、
+CFG token（可学 token + 时间嵌入携带 guidance scale）、Muon 优化器、
+GPT-2/105M 的规模设定与我们玩具完全同档。
+
+**仍需用户提供**：无。若手头有 ELF 原论文（2605.10938）作者的独立
+官方仓库（区别于本 ELF* 仓库）可再提供，但非必需。
+
 ## 2. P0 缺口（不解决无法开工）
 
 
