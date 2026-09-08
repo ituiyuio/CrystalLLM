@@ -74,6 +74,11 @@ multi-step quality at Y% of the compute.
 GPT-4 Turbo"（已降级为 RAG-QA 子集的参考点）、"7B 等效"（规模由 E2
 实际算力定）。
 
+**8x 的重新推导**（1.9 节）: 块级并行的加速比 ≈ g/K（g 个 token 的
+串行 forward 压缩为 K 次轨迹去噪）。g=32, K=4 → 名义 8x。论文中
+表述为"measured latency ratio at matched quality (≈ g/K minus
+overheads)"，由 E0 表格支撑，不再作裸数字宣称。
+
 ## 5. Intro 叙事弧（四段式）
 
 **P1 — 痛点（token 思考的三重税）**: CoT 让模型"说出思考"，但每个思考
