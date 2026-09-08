@@ -36,7 +36,37 @@
 RAG 对齐条件注入**。写论文/立项时必须以这个组合为贡献声明，否则会被
 reviewer 用 BD3-LM 一枪打死。
 
+## 1.5 补充定位（2026-09-07）：逻辑态链 = 内化推理（latent reasoning）的块粒度实例
+
+LogicFlow 的逻辑循环系统（S_k 链）本质上是对「CoT 算力浪费」问题的回答：
+中间推理不落成 token，而是压缩为内部状态。该方向已有直接先例，应写进
+related work 并作为第二贡献点：
+
+- **Coconut**（Hao et al., Meta, arXiv:2412.06769）：LLM 最后一层隐态直接
+  作为下一步输入（continuous thought），不落 token。在需要回溯的规划任务上
+  以更少 token 胜过 CoT；latent 思想可同时编码多个候选步骤（BFS 式叠加）。
+- **Recurrent Depth**（Geiping et al., arXiv:2502.05171, NeurIPS 2025）：
+  3.5B 深度循环 transformer，推理时在共享循环块内迭代任意深度，GSM8K/MMLU
+  胜过同尺寸 token-CoT 模型。
+- **Quiet-STaR**（Zelikman et al., arXiv:2403.09629）：逐 token 生成内部
+  rationale 参与后续预测。
+- 理论分析：**Reasoning by Superposition**（arXiv:2505.12514）从复杂度
+  视角解释 latent 思考的叠加优势。
+
+**设计影响**（spike_pool 检查表复用）：
+1. S_k 是向量态 → "逻辑"容量受 4096 维上限约束（向量态天花板第二次出现）。
+   建议 LogicExtractor 输出多寄存器/小矩阵态（如 r×d_logic，r=8~64），
+   Coconut 的 hidden-state-feedback 可作为 S_k 的替代实现。
+2. E4 实验（真实逻辑链 vs 零向量）因此升级为「内化思考在块粒度是否可
+   测量地工作」的判决实验——若通过，LogicFlow 的故事从"更快的模型"
+   升级为"内化思考的第一块级证据"。
+3. 诚实的边界：token 思考有三个结构性优势不会消失——无界串行步骤
+  （CoT 图灵完备 vs 固定深度电路上限）、可验证监督面（RLVR 建
+  在 token 上）、语言流形（预训练知识所在）。未来形态判断：
+  **System 1 内化、System 2 外化**——token 从实现细节变成接口。
+
 ## 2. P0 缺口（不解决无法开工）
+
 
 ### P0-1 潜空间-文本往返未定义（最大技术风险）
 SPEC 4.2 写 `H_k = T5Encoder(Z_k); Tokens_k = Decode(H_k)`——**T5 Encoder
